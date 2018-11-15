@@ -1,0 +1,14 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="expand-abstract-02.sch">
+
+  <scenario label="Expand an included abstract pattern">
+    <context>
+      <html:table xmlns:html="http://www.w3.org/1999/xhtml">
+          <html:tr>
+            <html:td/>
+          </html:tr>
+      </html:table>
+    </context>
+    <expect-report id="R1"/>
+    <expect-report id="R2"/>
+  </scenario>
+</description>

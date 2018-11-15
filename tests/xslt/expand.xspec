@@ -1,0 +1,37 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec"
+             xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+             xmlns:schxslt="http://dmaus.name/ns/schxslt"
+             stylesheet="../../src/xslt/expand.xsl">
+
+  <scenario label="Expanding an abstract pattern">
+    <context>
+      <sch:schema>
+        <sch:pattern abstract="true" id="table">
+          <sch:rule context="$table">
+            <sch:assert test="$row"/>
+          </sch:rule>
+          <sch:rule context="$row">
+            <sch:assert test="$entry"/>
+          </sch:rule>
+        </sch:pattern>
+        <sch:pattern is-a="table">
+          <sch:param name="table" value="table"/>
+          <sch:param name="row"   value="tr"/>
+          <sch:param name="entry" value="td"/>
+        </sch:pattern>
+      </sch:schema>
+    </context>
+    <expect label="by replacing the params">
+      <sch:schema>
+        <sch:pattern>
+          <sch:rule context="table">
+            <sch:assert test="tr"/>
+          </sch:rule>
+          <sch:rule context="tr">
+            <sch:assert test="td"/>
+          </sch:rule>
+        </sch:pattern>
+      </sch:schema>
+    </expect>
+  </scenario>
+</description>

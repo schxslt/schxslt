@@ -1,0 +1,14 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="svrl-name-01.sch"
+             xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+  <scenario label="The name element">
+    <context>
+      <document xmlns="" attr="value"/>
+    </context>
+    <expect-assert id="A01"/>
+    <expect-assert id="A02"/>
+    <expect label="expands into the name of the context node if no @path is present"
+            test="/svrl:schematron-output/svrl:failed-assert[@id = 'A01']/svrl:text = 'document'"/>
+    <expect label="expands into the name value of evaluating the expression in @path"
+            test="/svrl:schematron-output/svrl:failed-assert[@id = 'A02']/svrl:text = 'value'"/>
+  </scenario>
+</description>

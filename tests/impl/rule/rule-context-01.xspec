@@ -1,0 +1,31 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="rule-context-01.sch">
+  <scenario label="Rule context processing-instruction()">
+    <context>
+      <foobar xmlns="">
+        <?foobar ?>
+      </foobar>
+    </context>
+    <expect-assert id="assert-processing-instruction"/>
+  </scenario>
+  <scenario label="Rule context comment()">
+    <context>
+      <foobar xmlns="">
+        <!-- Foobar -->
+      </foobar>
+    </context>
+    <expect-assert id="assert-comment"/>
+  </scenario>
+  <scenario label="Rule context attribute">
+    <context>
+      <foobar xmlns="" foobar="foobar">
+      </foobar>
+    </context>
+    <expect-assert id="assert-attribute"/>
+  </scenario>
+  <scenario label="Rule context text()">
+    <context>
+      <foobar xmlns="" foobar="foobar">text</foobar>
+    </context>
+    <expect-assert id="assert-text"/>
+  </scenario>
+</description>

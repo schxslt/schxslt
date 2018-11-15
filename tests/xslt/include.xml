@@ -1,0 +1,5 @@
+<sch:pattern xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:id="pattern">
+  <sch:rule context="*">
+    <sch:assert test="false()"/>
+  </sch:rule>
+</sch:pattern>

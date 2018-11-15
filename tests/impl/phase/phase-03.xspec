@@ -1,0 +1,9 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="phase-03.sch">
+  <scenario label="No phase uses @defaultPhase">
+    <context>
+      <document/>
+    </context>
+    <expect-not-assert id="A01"/>
+    <expect-assert id="A02"/>
+  </scenario>
+</description>

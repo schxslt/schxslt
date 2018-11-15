@@ -1,0 +1,10 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="phase-02.sch">
+  <param name="phase" select="'#DEFAULT'"/>
+  <scenario label="Phase '#DEFAULT' executes the default phase">
+    <context>
+      <document/>
+    </context>
+    <expect-assert id="A01"/>
+    <expect-not-assert id="A02"/>
+  </scenario>
+</description>

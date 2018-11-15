@@ -1,0 +1,11 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="svrl-value-of-01.sch"
+             xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+  <scenario label="The value-of element">
+    <context>
+      <document xmlns="" attr="value"/>
+    </context>
+    <expect-assert id="A01"/>
+    <expect test="/svrl:schematron-output/svrl:failed-assert[@id = 'A01']/svrl:text = 'value'"
+            label="expands into the name value of evaluating the expression in @select"/>
+  </scenario>
+</description>

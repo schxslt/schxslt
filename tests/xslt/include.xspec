@@ -1,0 +1,35 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec"
+             xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+             xmlns:schxslt="http://dmaus.name/ns/schxslt"
+             stylesheet="../../src/xslt/include.xsl">
+  <scenario label="When a Schematron contains a sch:include">
+    <context>
+      <sch:schema queryBinding="xslt2">
+        <sch:include href="include.xml"/>
+      </sch:schema>
+    </context>
+    <expect label="the href attribute references a Schematron element to be included" test="exists(/sch:schema/sch:pattern)"/>
+  </scenario>
+  <scenario label="When a Schematron contains a sch:extends">
+    <scenario label="that references an document with an outermost element of the same name">
+      <context>
+        <sch:schema queryBinding="xslt2">
+          <sch:pattern>
+            <sch:extends href="include.xml"/>
+          </sch:pattern>
+        </sch:schema>
+      </context>
+      <expect label="the child nodes of this element are included" test="exists(/sch:schema/sch:pattern/sch:rule)"/>
+    </scenario>
+    <scenario label="that references an element of the same name">
+      <context>
+        <sch:schema queryBinding="xslt2">
+          <sch:pattern>
+            <sch:extends href="include.xml#pattern"/>
+          </sch:pattern>
+        </sch:schema>
+      </context>
+      <expect label="the child nodes of this element are included" test="exists(/sch:schema/sch:pattern/sch:rule)"/>
+    </scenario>
+  </scenario>
+</description>

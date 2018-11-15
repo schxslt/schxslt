@@ -1,0 +1,11 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="rule-order-01.sch">
+  <scenario label="Order of rules">
+    <context>
+      <document xmlns=""/>
+    </context>
+    <expect-not-assert id="A01"/>
+    <expect-not-assert id="A02"/>
+    <expect-not-assert id="A03"/>
+    <expect-not-assert id="A04"/>
+  </scenario>
+</description>
