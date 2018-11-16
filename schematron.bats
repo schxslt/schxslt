@@ -3,7 +3,7 @@
 #
 #         USAGE:  bats schematron.bats
 #
-#   DESCRIPTION:  Unit tests for 'Schematron/schematron-test' project
+#   DESCRIPTION:  Unit tests for SchXslt
 #
 #         INPUT:  N/A
 #
