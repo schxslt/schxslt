@@ -92,6 +92,10 @@ function xslt () {
     schematron pattern/expand-abstract-02.xspec
 }
 
+@test "pattern/expand-abstract-04.xspec" {
+    schematron pattern/expand-abstract-04.xspec
+}
+
 @test "include/include-01.xspec" {
     schematron include/include-01.xspec
 }
