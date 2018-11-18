@@ -31,15 +31,16 @@
        pattern. An abstract pattern shall not have a is-a attribute and shall have an id attribute.
   -->
   <xsl:template match="sch:pattern[@is-a]" >
+    <xsl:variable name="is-a" select="key('schxslt:abstract-patterns', @is-a)"/>
     <xsl:copy>
       <xsl:sequence select="@* except @is-a"/>
-      <xsl:apply-templates select="key('schxslt:abstract-patterns', @is-a)/node()" >
+      <xsl:apply-templates select="(if (not(@documents)) then $is-a/@documents else (), $is-a/node())" >
         <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select" >
+  <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents" >
     <xsl:param name="schxslt:params" as="element(sch:param)*" tunnel="yes"/>
     <xsl:attribute name="{name()}">
       <xsl:call-template name="schxslt:replace-params">
