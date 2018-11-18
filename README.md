@@ -1,4 +1,4 @@
-# SchXslt – An XSLT-based Schematron processor
+# SchXslt [ʃˈɛksl̩t] – An XSLT-based Schematron processor
 
 SchXslt is copyright (c) 2018 by David Maus <dmaus@dmaus.name> and
 released under the terms of the MIT license.
