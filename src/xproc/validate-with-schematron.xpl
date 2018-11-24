@@ -2,6 +2,7 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:schxslt="http://dmaus.name/ns/schxslt">
 
+
   <p:option name="phase" select="''"/>
 
   <p:input  port="source" primary="true"/>
@@ -16,39 +17,11 @@
 
   <p:serialization port="report" indent="true"/>
 
-  <p:group name="compile-schematron">
-    <p:output port="result">
-      <p:pipe step="compile" port="result"/>
-    </p:output>
+  <p:import href="compile-schematron.xpl"/>
 
-    <p:xslt>
-      <p:input port="source">
-        <p:pipe step="validate-with-schematron" port="schema"/>
-      </p:input>
-      <p:input port="stylesheet">
-        <p:document href="../xslt/include.xsl"/>
-      </p:input>
-      <p:input port="parameters">
-        <p:empty/>
-      </p:input>
-    </p:xslt>
-
-    <p:xslt>
-      <p:input port="stylesheet">
-        <p:document href="../xslt/expand.xsl"/>
-      </p:input>
-      <p:input port="parameters">
-        <p:empty/>
-      </p:input>
-    </p:xslt>
-
-    <p:xslt name="compile">
-      <p:with-param name="phase" select="$phase"/>
-      <p:input port="stylesheet">
-        <p:document href="../xslt/compile.xsl"/>
-      </p:input>
-    </p:xslt>
-  </p:group>
+  <schxslt:compile-schematron name="compile-schematron">
+    <p:with-option name="phase" select="$phase"/>
+  </schxslt:compile-schematron>
 
   <p:xslt name="validate">
     <p:input port="source">
