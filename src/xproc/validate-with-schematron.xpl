@@ -20,6 +20,9 @@
   <p:import href="compile-schematron.xpl"/>
 
   <schxslt:compile-schematron name="compile-schematron">
+    <p:input port="source">
+      <p:pipe step="validate-with-schematron" port="schema"/>
+    </p:input>
     <p:with-option name="phase" select="$phase"/>
   </schxslt:compile-schematron>
 
