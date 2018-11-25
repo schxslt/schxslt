@@ -3,6 +3,8 @@
 SchXslt is copyright (c) 2018 by David Maus <dmaus@dmaus.name> and
 released under the terms of the MIT license.
 
+[![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911)
+
 SchXslt is a conformant Schematron processor implemented entirely in
 XSLT. It translates a Schematron schema into a XSL transformation that
 outputs a SVRL report when applied to an instance document.
@@ -67,10 +69,18 @@ inclusions (e.g. A includes B which includes A) is performed.
 
 SchXslt also performs base URI fixup on the included elements[^1].
 
+```
+saxon -xsl:src/xslt/include.xsl -o:stage-1.sch </path/to/schematron>
+```
+
 ### Expand (src/xslt/expand.xsl)
 
 Abstract patterns and rules are instantiated and their respective
 definitions removed.
+
+```
+saxon -xsl:src/xslt/expand.xsl -o:stage-2.sch stage-1.sch
+```
 
 ### Compile (src/xslt/compile.xsl)
 
@@ -81,10 +91,34 @@ the selected phase. If no phase is requested the translation uses the
 value of the @defaultPhase attribute, if present. Otherwise it
 defaults to phase '#ALL' and validates all patterns.
 
+```
+saxon -xsl:src/xslt/compile.xsl -o:stage-3.xsl stage-2.sch [phase=myphase]
+```
+
 It is in error to request translation for a phase that is not defined
 in the schema. Translation also fails if the schema uses a query
 language binding other than 'xslt2', or still contains unprocessed
 includes, extends, abstract rules and abstract patterns.
+
+## Using XProc
+
+With an XProc 1.0 processor installed you can create the validation
+stylesheet with the step ```compile-schematron.xpl```.
+
+```
+calabash -i </path/to/schematron> -o:stage-3.xsl src/xproc/compile-schematron.xpl
+```
+
+Lastly, SchXslt comes with another XProc step
+```validate-with-schematron.xpl``` that performs schematron validation
+using SchXslt's stylesheets. To run it from the command line you have
+to pipe the document to validate in the input port ```source```, and
+the Schematron in the input port ```schema```. The step sends the
+validation report to the ```result``` output port.
+
+```
+calabash -i source=</path/to/document> -i schema=</path/to/schema> src/xproc/validate-with-schematron.xpl
+```
 
 ## Footnotes
 
