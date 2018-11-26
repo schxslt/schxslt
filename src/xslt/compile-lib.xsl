@@ -31,14 +31,14 @@
   <xsl:template name="schxslt:let-param">
     <xsl:param name="bindings" as="element(sch:let)*"/>
     <xsl:for-each select="$bindings">
-      <param name="{@name}" tunnel="yes"/>
+      <param name="{@name}"/>
     </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="schxslt:let-with-param">
     <xsl:param name="bindings" as="element(sch:let)*"/>
     <xsl:for-each select="distinct-values($bindings/@name)">
-      <with-param name="{.}" select="${.}" tunnel="yes"/>
+      <with-param name="{.}" select="${.}"/>
     </xsl:for-each>
   </xsl:template>
 

@@ -181,7 +181,11 @@
 
       <xsl:apply-templates select="sch:assert | sch:report"/>
 
-      <apply-templates select="node() | @*" mode="#current"/>
+      <apply-templates select="node() | @*" mode="#current">
+        <xsl:call-template name="schxslt:let-with-param">
+          <xsl:with-param name="bindings" select="$bindings"/>
+        </xsl:call-template>
+      </apply-templates>
 
     </template>
   </xsl:template>
