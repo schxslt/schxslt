@@ -307,6 +307,18 @@
       </xsl:message>
     </xsl:if>
 
+    <xsl:if test="$schematron/sch:pattern/sch:let">
+      <xsl:message terminate="yes">
+        The Schematron is not eligible for ex-post rule match selection. It contains let-bindings in sch:pattern.
+      </xsl:message>
+    </xsl:if>
+
+    <xsl:if test="$schematron/sch:pattern/@documents">
+      <xsl:message terminate="yes">
+        The Schematron is not eligible for ex-post rule match selection. It contains patterns with @documents attribute.
+      </xsl:message>
+    </xsl:if>
+
   </xsl:template>
 
   <xsl:template name="schxslt:copy-helper">
