@@ -2,7 +2,9 @@
   <scenario label="Scope of let bindings">
     <context>
       <document xmlns="">
-        <element/>
+        <foobar>
+          <element/>
+        </foobar>
       </document>
     </context>
     <expect-not-assert id="level0"/>
