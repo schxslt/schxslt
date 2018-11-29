@@ -44,6 +44,10 @@ function xslt () {
     schematron let/let-scope-01.xspec
 }
 
+@test "let/let-scope-02.xspec" {
+    schematron let/let-scope-02.xspec
+}
+
 @test "name/svrl-name-01.xspec" {
     schematron name/svrl-name-01.xspec
 }
