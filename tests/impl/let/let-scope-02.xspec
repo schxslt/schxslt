@@ -7,7 +7,7 @@
         </foobar>
       </document>
     </context>
-    <expect-assert id="A01"/>
-    <expect-assert id="A02"/>     
+    <expect-not-assert id="A01"/>
+    <expect-not-assert id="A02"/>     
   </scenario>
 </description>
