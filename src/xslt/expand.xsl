@@ -7,6 +7,14 @@
   <xsl:key name="schxslt:abstract-patterns" match="sch:pattern[@abstract = 'true']" use="@id"/>
   <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
 
+  <xsl:template match="sch:schema">
+    <xsl:copy>
+      <xsl:attribute name="xml:base" select="base-uri()"/>
+      <xsl:sequence select="@* except @xml:base"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
+  </xsl:template>
+
   <!-- Expand abstract rules and patters -->
   <xsl:template match="node() | @*">
     <xsl:copy>

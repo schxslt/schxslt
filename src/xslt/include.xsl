@@ -28,6 +28,14 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="sch:schema" mode="schxslt:include">
+    <xsl:copy>
+      <xsl:attribute name="xml:base" select="base-uri()"/>
+      <xsl:sequence select="@* except @xml:base"/>
+      <xsl:apply-templates mode="schxslt:include"/>
+    </xsl:copy>
+  </xsl:template>
+
   <xsl:template match="node() | @*" mode="schxslt:include">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*" mode="#current"/>
