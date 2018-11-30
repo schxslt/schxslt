@@ -336,7 +336,10 @@
         <xsl:value-of select="concat('@', name(.))"/>
       </xsl:when>
       <xsl:when test=". instance of processing-instruction()">
-        <xsl:value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)')"/>
+        <xsl:variable name="position">
+          <xsl:number level="single"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
       </xsl:when>
       <xsl:when test=". instance of comment()">
         <xsl:variable name="position">
