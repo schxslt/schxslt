@@ -243,6 +243,7 @@
       </xsl:message>
     </xsl:if>
 
+    <!-- Effective strategy -->
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'"/>
       <xsl:otherwise>
