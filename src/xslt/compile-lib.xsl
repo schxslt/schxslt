@@ -103,4 +103,48 @@
     </xsl:choose>
   </xsl:template>
 
+    <xsl:template name="schxslt:svrl-detailed-report">
+    <xsl:call-template name="schxslt:svrl-copy-properties"/>
+    <xsl:if test="text() | *">
+      <svrl:text>
+        <xsl:apply-templates select="node()"/>
+      </svrl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="schxslt:svrl-copy-properties">
+    <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
+
+    <xsl:for-each select="tokenize(@properties, ' ')">
+      <xsl:variable name="property" select="$schematron/sch:properties/sch:property[@id eq .]"/>
+      <svrl:property-reference property="{.}">
+        <xsl:sequence select="($property/@role, $property/@scheme)"/>
+        <svrl:text>
+          <xsl:apply-templates select="$property/node()"/>
+        </svrl:text>
+      </svrl:property-reference>
+    </xsl:for-each>
+  </xsl:template>
+
+  <!-- 5.4.6
+       Provides the names of nodes from the instance document to allow clearer assertions and diagnostics.  The optional
+       path attribute is an expression evaluated in the current context that returns a string that is the name of a
+       node. In the latter case, the name of the node is used.
+  -->
+  <xsl:template match="sch:name">
+    <value-of select="{if (@path) then @path else 'name()'}">
+      <xsl:sequence select="@xml:base"/>
+    </value-of>
+  </xsl:template>
+
+  <!-- 5.4.14
+       Finds or calculates values from the instance document to allow clearer assertions and diagnostics. The required
+       select attribute is an expression evaluated in the current context that returns a string.
+  -->
+  <xsl:template match="sch:value-of">
+    <value-of select="{@select}">
+      <xsl:sequence select="@xml:base"/>
+    </value-of>
+  </xsl:template>
+
 </xsl:transform>
