@@ -20,6 +20,14 @@
     </xsl:call-template>
   </xsl:variable>
 
+  <xsl:param name="strategy" as="xs:string">traditional</xsl:param>
+  <xsl:variable name="effective-strategy" as="xs:string">
+    <xsl:call-template name="schxslt:effective-strategy">
+      <xsl:with-param name="strategy" select="$strategy"/>
+      <xsl:with-param name="schematron" as="element(sch:schema)" select="sch:schema"/>
+    </xsl:call-template>
+  </xsl:variable>
+
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:compile">
       <xsl:with-param name="schematron" select="." tunnel="yes"/>
@@ -234,6 +242,15 @@
         The phase '<xsl:value-of select="$phase"/>' is not defined.
       </xsl:message>
     </xsl:if>
+
+    <xsl:choose>
+      <xsl:when test="$effective-strategy eq 'traditional'"/>
+      <xsl:otherwise>
+        <xsl:message terminate="yes">
+          The strategy '<xsl:value-of select="$effective-strategy"/>' is not defined.
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
 
     <!-- Abstract patterns -->
     <xsl:if test="$schematron/sch:pattern[@abstract]">
