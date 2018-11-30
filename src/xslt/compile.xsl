@@ -347,6 +347,12 @@
         </xsl:variable>
         <xsl:value-of select="concat('comment()[', $position, ']')"/>
       </xsl:when>
+      <xsl:when test=". instance of text()">
+        <xsl:variable name="position">
+          <xsl:number level="single"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('text()[', $position, ']')"/>
+      </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
   </xsl:template>
