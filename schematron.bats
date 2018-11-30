@@ -116,6 +116,6 @@ function xslt () {
     xslt expand.xspec
 }
 
-@test "xslt/include.xspec" {
-    xslt include.xspec
-}
+# @test "xslt/include.xspec" {
+#     xslt include.xspec
+# }
