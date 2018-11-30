@@ -310,39 +310,42 @@
   </xsl:template>
 
   <xsl:template name="schxslt:copy-helper">
-    <template name="schxslt:location" as="xs:string">
-      <param name="node" as="node()" select="."/>
-      <variable name="steps" as="xs:string*">
-        <for-each select="$node/ancestor-or-self::node()">
-          <call-template name="schxslt:location-step"/>
-        </for-each>
-      </variable>
-      <value-of select="concat('/', string-join($steps, '/'))"/>
-    </template>
+    <xsl:sequence select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
+    <xsl:sequence select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location-step']"/>
+  </xsl:template>
 
-    <template name="schxslt:location-step" as="xs:string?">
-      <choose>
-        <when test=". instance of element()">
-          <variable name="position">
-            <number level="single"/>
-          </variable>
-          <value-of select="concat(name(.), '[', $position, ']')"/>
-        </when>
-        <when test=". instance of attribute()">
-          <value-of select="concat('@', name(.))"/>
-        </when>
-        <when test=". instance of processing-instruction()">
-          <value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)')"/>
-        </when>
-        <when test=". instance of comment()">
-          <variable name="position">
-            <number level="single"/>
-          </variable>
-          <value-of select="concat('comment()[', $position, ']')"/>
-        </when>
-        <otherwise/>
-      </choose>
-    </template>
+  <xsl:template name="schxslt:location" as="xs:string">
+    <xsl:param name="node" as="node()" select="."/>
+    <xsl:variable name="steps" as="xs:string*">
+      <xsl:for-each select="$node/ancestor-or-self::node()">
+        <xsl:call-template name="schxslt:location-step"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:value-of select="concat('/', string-join($steps, '/'))"/>
+  </xsl:template>
+
+  <xsl:template name="schxslt:location-step" as="xs:string?">
+    <xsl:choose>
+      <xsl:when test=". instance of element()">
+        <xsl:variable name="position">
+          <xsl:number level="single"/>
+        </xsl:variable>
+        <xsl:value-of select="concat(name(.), '[', $position, ']')"/>
+      </xsl:when>
+      <xsl:when test=". instance of attribute()">
+        <xsl:value-of select="concat('@', name(.))"/>
+      </xsl:when>
+      <xsl:when test=". instance of processing-instruction()">
+        <xsl:value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)')"/>
+      </xsl:when>
+      <xsl:when test=". instance of comment()">
+        <xsl:variable name="position">
+          <xsl:number level="single"/>
+        </xsl:variable>
+        <xsl:value-of select="concat('comment()[', $position, ']')"/>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:transform>
