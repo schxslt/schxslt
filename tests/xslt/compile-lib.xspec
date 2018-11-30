@@ -1,4 +1,4 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../src/xslt/compile.xsl"
+<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../src/xslt/compile-lib.xsl"
              xmlns:html="http://www.w3.org/1999/xhtml"
              xmlns:schxslt="http://dmaus.name/ns/schxslt">
   <scenario label="Testing the schxslt:location template">
