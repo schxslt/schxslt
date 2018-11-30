@@ -5,7 +5,7 @@ released under the terms of the MIT license.
 
 [![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911)
 
-SchXslt is a conformant Schematron processor implemented entirely in
+SchXslt is a conforming Schematron processor implemented entirely in
 XSLT. It translates a Schematron schema into a XSL transformation that
 outputs a SVRL report when applied to an instance document.
 
