@@ -116,6 +116,10 @@ function xslt () {
     xslt expand.xspec
 }
 
+@test "xslt/compile-lib.xspec" {
+    xslt compile-lib.xspec
+}
+
 # @test "xslt/include.xspec" {
 #     xslt include.xspec
 # }
