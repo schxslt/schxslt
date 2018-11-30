@@ -25,7 +25,7 @@ function setup () {
 }
 
 function schematron () {
-    run xspec -s ${BATS_CWD}/tests/impl/${1}
+    run vendor/xspec/bin/xspec.sh -s ${BATS_CWD}/tests/impl/${1}
     echo "${output}"
     [ "${status}" -eq 0 ]
     [[ "${output}" =~ "failed: 0" ]]
@@ -33,7 +33,7 @@ function schematron () {
 }
 
 function xslt () {
-    run xspec ${BATS_CWD}/tests/xslt/${1}
+    run vendor/xspec/bin/xspec.sh ${BATS_CWD}/tests/xslt/${1}
     echo "${output}"
     [ "${status}" -eq 0 ]
     [[ "${output}" =~ "failed: 0" ]]
