@@ -48,7 +48,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents | sch:name/@path" >
+  <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents | sch:name/@path | sch:let/@value">
     <xsl:param name="schxslt:params" as="element(sch:param)*" tunnel="yes"/>
     <xsl:attribute name="{name()}">
       <xsl:call-template name="schxslt:replace-params">
