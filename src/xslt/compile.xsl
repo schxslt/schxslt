@@ -88,12 +88,7 @@
             </svrl:ns-prefix-in-attribute-values>
           </xsl:for-each>
 
-          <xsl:choose>
-            <xsl:when test="$effective-strategy eq 'traditional'">
-              <sequence select="$report"/>
-            </xsl:when>
-            <xsl:otherwise/>
-          </xsl:choose>
+          <apply-templates select="$report" mode="schxslt:unwrap-report"/>
 
         </svrl:schematron-output>
       </template>
@@ -211,9 +206,8 @@
 
           <svrl:fired-rule>
             <xsl:sequence select="(@id, @context, @role, @flag)"/>
+            <xsl:apply-templates select="sch:assert | sch:report"/>
           </svrl:fired-rule>
-
-          <xsl:apply-templates select="sch:assert | sch:report"/>
 
           <apply-templates select="node() | @*" mode="#current"/>
 

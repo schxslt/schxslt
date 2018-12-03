@@ -64,6 +64,18 @@
   <xsl:template name="schxslt:copy-helper">
     <xsl:sequence select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
     <xsl:sequence select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location-step']"/>
+    <xsl:sequence select="document('')/xsl:transform/xsl:template[@mode = 'schxslt:unwrap-report']"/>
+  </xsl:template>
+
+  <xsl:template match="node()" mode="schxslt:unwrap-report">
+    <xsl:sequence select="."/>
+  </xsl:template>
+
+  <xsl:template match="svrl:fired-rule" mode="schxslt:unwrap-report">
+    <xsl:copy>
+      <xsl:sequence select="@* except @schxslt:*"/>
+    </xsl:copy>
+    <xsl:sequence select="*"/>
   </xsl:template>
 
   <xsl:template name="schxslt:location" as="xs:string">
