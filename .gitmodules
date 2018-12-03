@@ -1,3 +1,6 @@
 [submodule "vendor/xspec"]
 	path = vendor/xspec
 	url = https://github.com/dmj/xspec.git
+[submodule "vendor/xproc-xspec"]
+	path = vendor/xproc-xspec
+	url = git@github.com:dmj/xproc-xspec.git
