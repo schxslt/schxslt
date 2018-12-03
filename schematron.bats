@@ -93,7 +93,7 @@ function xslt () {
 }
 
 @test "pattern/expand-abstract-03.xspec" {
-    schematron pattern/expand-abstract-02.xspec
+    schematron pattern/expand-abstract-03.xspec
 }
 
 @test "pattern/expand-abstract-04.xspec" {
