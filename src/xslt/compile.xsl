@@ -204,6 +204,14 @@
         </template>
 
       </xsl:when>
+      <xsl:when test="$effective-strategy eq 'ex-post'">
+        <template match="{@context}" mode="validate" priority="{count(following::sch:rule)}">
+          <xsl:call-template name="schxslt:rule-template-body">
+            <xsl:with-param name="bindings" select="$bindings"/>
+          </xsl:call-template>
+          <xsl:next-match/>
+        </template>
+      </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
 
