@@ -71,11 +71,18 @@
     <xsl:sequence select="."/>
   </xsl:template>
 
-  <xsl:template match="svrl:fired-rule" mode="schxslt:unwrap-report">
+  <xsl:template match="svrl:fired-rule" mode="schxslt:unwrap-report" priority="1">
     <xsl:copy>
       <xsl:sequence select="@* except @schxslt:*"/>
     </xsl:copy>
     <xsl:sequence select="*"/>
+  </xsl:template>
+
+  <xsl:template match="svrl:*[@schxslt:*]" mode="schxslt:unwrap-report" priority="0">
+    <xsl:copy>
+      <xsl:sequence select="@* except @schxslt:*"/>
+      <xsl:sequence select="*"/>
+    </xsl:copy>
   </xsl:template>
 
   <!-- Create the body of a rule template -->
@@ -91,7 +98,7 @@
       <xsl:with-param name="bindings" select="sch:let"/>
     </xsl:call-template>
 
-    <svrl:fired-rule>
+    <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
       <xsl:sequence select="(@id, @context, @role, @flag)"/>
       <xsl:apply-templates select="sch:assert | sch:report"/>
     </svrl:fired-rule>

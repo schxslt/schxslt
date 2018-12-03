@@ -68,10 +68,24 @@
         </xsl:call-template>
 
         <variable name="report" as="element()*">
-          <xsl:call-template name="schxslt:dispatch-patterns">
-            <xsl:with-param name="patterns" as="element(sch:pattern)*" select="$active-patterns"/>
-            <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
-          </xsl:call-template>
+          <xsl:choose>
+            <xsl:when test="$effective-strategy eq 'traditional'">
+              <xsl:call-template name="schxslt:dispatch-patterns">
+                <xsl:with-param name="patterns" as="element(sch:pattern)*" select="$active-patterns"/>
+                <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$effective-strategy eq 'ex-post'">
+              <xsl:for-each select="$active-patterns">
+                <svrl:active-pattern schxslt:pattern="{generate-id()}">
+                  <xsl:sequence select="@id | @documents | @role"/>
+                  <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
+                </svrl:active-pattern>
+              </xsl:for-each>
+              <apply-templates select="/" mode="validate"/>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
         </variable>
 
         <svrl:schematron-output>
@@ -88,8 +102,19 @@
             </svrl:ns-prefix-in-attribute-values>
           </xsl:for-each>
 
-          <apply-templates select="$report" mode="schxslt:unwrap-report"/>
-
+          <xsl:choose>
+            <xsl:when test="$effective-strategy eq 'traditional'">
+              <apply-templates select="$report" mode="schxslt:unwrap-report"/>
+            </xsl:when>
+            <xsl:when test="$effective-strategy eq 'ex-post'">
+              <for-each select="$report[self::svrl:active-pattern]">
+                <apply-templates select="." mode="schxslt:unwrap-report"/>
+                <for-each-group select="$report[self::svrl:fired-rule[@schxslt:pattern = current()/@schxslt:pattern]]" group-by="@schxslt:context">
+                  <apply-templates select="." mode="schxslt:unwrap-report"/>
+                </for-each-group>
+              </for-each>
+            </xsl:when>
+          </xsl:choose>
         </svrl:schematron-output>
       </template>
 
@@ -182,6 +207,11 @@
         </xsl:for-each>
 
       </xsl:when>
+      <xsl:when test="$effective-strategy eq 'ex-post'">
+        <xsl:apply-templates select="$patterns/sch:rule">
+          <xsl:with-param name="bindings" select="$bindings"/>
+        </xsl:apply-templates>
+      </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
 
@@ -209,7 +239,7 @@
           <xsl:call-template name="schxslt:rule-template-body">
             <xsl:with-param name="bindings" select="$bindings"/>
           </xsl:call-template>
-          <xsl:next-match/>
+          <next-match/>
         </template>
       </xsl:when>
       <xsl:otherwise/>
@@ -269,6 +299,18 @@
     <!-- Effective strategy -->
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'"/>
+      <xsl:when test="$effective-strategy eq 'ex-post'">
+        <xsl:if test="exists($schematron/sch:pattern/sch:let)">
+          <xsl:message terminate="yes">
+            A Schematron that contains a sch:pattern with a sch:let is not eligible for ex-post rule match selection.
+          </xsl:message>
+        </xsl:if>
+        <xsl:if test="exists($schematron/sch:pattern/@documents)">
+          <xsl:message terminate="yes">
+            A Schematron that contains a @documents attribute on a sch:pattern is not eligible for ex-post rule match selection.
+          </xsl:message>
+        </xsl:if>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:message terminate="yes">
           The strategy '<xsl:value-of select="$effective-strategy"/>' is not defined.
