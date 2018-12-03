@@ -78,6 +78,25 @@
     <xsl:sequence select="*"/>
   </xsl:template>
 
+  <!-- Create the body of a rule template -->
+  <xsl:template name="schxslt:rule-template-body">
+    <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
+
+    <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
+    <xsl:call-template name="schxslt:let-param">
+      <xsl:with-param name="bindings" select="$bindings"/>
+    </xsl:call-template>
+
+    <xsl:call-template name="schxslt:let-variable">
+      <xsl:with-param name="bindings" select="sch:let"/>
+    </xsl:call-template>
+
+    <svrl:fired-rule>
+      <xsl:sequence select="(@id, @context, @role, @flag)"/>
+      <xsl:apply-templates select="sch:assert | sch:report"/>
+    </svrl:fired-rule>
+  </xsl:template>
+
   <xsl:template name="schxslt:location" as="xs:string">
     <xsl:param name="node" as="node()" select="."/>
     <xsl:variable name="steps" as="xs:string*">
