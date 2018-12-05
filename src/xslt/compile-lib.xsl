@@ -161,7 +161,7 @@
     <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
 
     <xsl:for-each select="tokenize(@properties, ' ')">
-      <xsl:variable name="property" select="$schematron/sch:properties/sch:property[@id eq .]"/>
+      <xsl:variable name="property" select="$schematron/sch:properties/sch:property[@id eq current()]"/>
       <svrl:property-reference property="{.}">
         <xsl:sequence select="($property/@role, $property/@scheme)"/>
         <svrl:text>
