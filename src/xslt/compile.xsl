@@ -123,7 +123,9 @@
   </xsl:template>
 
   <xd:doc>
-    <xd:desc>Create validation dispatch</xd:desc>
+    <xd:desc>
+      <xd:p>Create instructions in the validation stylesheet that dispatch the validation.</xd:p>
+    </xd:desc>
     <xd:param name="patterns">Sequence of active patterns</xd:param>
     <xd:param name="bindings">Variable bindings in scope of the current <xd:b>phase</xd:b></xd:param>
   </xd:doc>
