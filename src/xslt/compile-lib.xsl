@@ -147,7 +147,8 @@
     </xsl:choose>
   </xsl:template>
 
-    <xsl:template name="schxslt:svrl-detailed-report">
+  <xsl:template name="schxslt:svrl-detailed-report">
+    <xsl:call-template name="schxslt:svrl-copy-diagnostics"/>
     <xsl:call-template name="schxslt:svrl-copy-properties"/>
     <xsl:if test="text() | *">
       <svrl:text>
@@ -167,6 +168,19 @@
           <xsl:apply-templates select="$property/node()"/>
         </svrl:text>
       </svrl:property-reference>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="schxslt:svrl-copy-diagnostics">
+    <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
+
+    <xsl:for-each select="tokenize(@diagnostics, ' ')">
+      <xsl:variable name="diagnostic" select="$schematron/sch:diagnostics/sch:diagnostic[@id eq current()]"/>
+      <svrl:diagnostic-reference diagnostic="{.}">
+        <svrl:text>
+          <xsl:apply-templates select="$diagnostic/node()"/>
+        </svrl:text>
+      </svrl:diagnostic-reference>
     </xsl:for-each>
   </xsl:template>
 
