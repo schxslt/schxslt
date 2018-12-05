@@ -68,24 +68,10 @@
         </xsl:call-template>
 
         <variable name="report" as="element()*">
-          <xsl:choose>
-            <xsl:when test="$effective-strategy eq 'traditional'">
-              <xsl:call-template name="schxslt:dispatch-patterns">
-                <xsl:with-param name="patterns" as="element(sch:pattern)*" select="$active-patterns"/>
-                <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="$effective-strategy eq 'ex-post'">
-              <xsl:for-each select="$active-patterns">
-                <svrl:active-pattern schxslt:pattern="{generate-id()}">
-                  <xsl:sequence select="@id | @documents | @role"/>
-                  <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
-                </svrl:active-pattern>
-              </xsl:for-each>
-              <apply-templates select="/" mode="validate"/>
-            </xsl:when>
-            <xsl:otherwise/>
-          </xsl:choose>
+          <xsl:call-template name="schxslt:dispatch-patterns">
+            <xsl:with-param name="patterns" as="element(sch:pattern)*" select="$active-patterns"/>
+            <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
+          </xsl:call-template>
         </variable>
 
         <svrl:schematron-output>
@@ -149,6 +135,21 @@
             </xsl:call-template>
           </call-template>
         </xsl:for-each>
+
+      </xsl:when>
+      <xsl:when test="$effective-strategy eq 'ex-post'">
+
+        <xsl:for-each select="$patterns">
+          <svrl:active-pattern schxslt:pattern="{generate-id()}">
+            <xsl:sequence select="@id | @documents | @role"/>
+            <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
+          </svrl:active-pattern>
+        </xsl:for-each>
+        <apply-templates select="/" mode="validate">
+          <xsl:call-template name="schxslt:let-with-param">
+            <xsl:with-param name="bindings" select="$bindings"/>
+          </xsl:call-template>
+        </apply-templates>
 
       </xsl:when>
       <xsl:otherwise/>
