@@ -3,6 +3,7 @@
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+               xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="http://dmaus.name/ns/schxslt">
@@ -121,6 +122,11 @@
 
   </xsl:template>
 
+  <xd:doc>
+    <xd:desc>Create validation dispatch</xd:desc>
+    <xd:param name="patterns">Sequence of active patterns</xd:param>
+    <xd:param name="bindings">Variable bindings in scope of the current <xd:b>phase</xd:b></xd:param>
+  </xd:doc>
   <xsl:template name="schxslt:dispatch-patterns">
     <xsl:param name="patterns" as="element(sch:pattern)*" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
