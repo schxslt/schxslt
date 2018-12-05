@@ -3,6 +3,7 @@
                 xmlns:schxslt="http://dmaus.name/ns/schxslt">
 
   <p:option name="phase" select="''"/>
+  <p:option name="strategy" select="'traditional'"/>
 
   <p:input  port="source" primary="true"/>
   <p:output port="result" primary="true"/>
@@ -29,6 +30,7 @@
 
   <p:xslt name="compile">
     <p:with-param name="phase" select="$phase"/>
+    <p:with-param name="strategy" select="$strategy"/>
     <p:input port="stylesheet">
       <p:document href="../xslt/compile.xsl"/>
     </p:input>

@@ -4,6 +4,7 @@
 
 
   <p:option name="phase" select="''"/>
+  <p:option name="strategy" select="'traditional'"/>
 
   <p:input  port="source" primary="true"/>
   <p:input  port="schema"/>
@@ -24,6 +25,7 @@
       <p:pipe step="validate-with-schematron" port="schema"/>
     </p:input>
     <p:with-option name="phase" select="$phase"/>
+    <p:with-option name="strategy" select="$strategy"/>
   </schxslt:compile-schematron>
 
   <p:xslt name="validate">
