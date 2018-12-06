@@ -2,6 +2,7 @@
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+               xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="http://dmaus.name/ns/schxslt">
@@ -147,6 +148,11 @@
     </xsl:choose>
   </xsl:template>
 
+  <xd:doc>
+    <xd:desc>
+      <xd:p>Create a detailed SVRL report for a failed assert or successful report.</xd:p>
+    </xd:desc>
+  </xd:doc>
   <xsl:template name="schxslt:svrl-detailed-report">
     <xsl:call-template name="schxslt:svrl-copy-diagnostics"/>
     <xsl:call-template name="schxslt:svrl-copy-properties"/>
@@ -157,6 +163,11 @@
     </xsl:if>
   </xsl:template>
 
+  <xd:doc>
+    <xd:desc>
+      <xd:p>Copy the content of a referenced Schematron property to the SVRL report.</xd:p>
+    </xd:desc>
+  </xd:doc>
   <xsl:template name="schxslt:svrl-copy-properties">
     <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
 
@@ -171,6 +182,11 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xd:doc>
+    <xd:desc>
+      <xd:p>Copy the content of a referenced Schematron diagnostic to the SVRL report.</xd:p>
+    </xd:desc>
+  </xd:doc>
   <xsl:template name="schxslt:svrl-copy-diagnostics">
     <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
 
@@ -184,21 +200,35 @@
     </xsl:for-each>
   </xsl:template>
 
-  <!-- 5.4.6
-       Provides the names of nodes from the instance document to allow clearer assertions and diagnostics.  The optional
-       path attribute is an expression evaluated in the current context that returns a string that is the name of a
-       node. In the latter case, the name of the node is used.
-  -->
+  <xd:doc>
+    <xd:desc>
+      <xd:p>
+        Provides the names of nodes from the instance document to allow clearer assertions and diagnostics.  The
+        optional path attribute is an expression evaluated in the current context that returns a string that is the name
+        of a node. In the latter case, the name of the node is used.
+      </xd:p>
+      <xd:p>
+        The Schematron name element is translated into the xsl:value-of element.
+      </xd:p>
+    </xd:desc>
+  </xd:doc>
   <xsl:template match="sch:name">
     <value-of select="{if (@path) then @path else 'name()'}">
       <xsl:sequence select="@xml:base"/>
     </value-of>
   </xsl:template>
 
-  <!-- 5.4.14
-       Finds or calculates values from the instance document to allow clearer assertions and diagnostics. The required
-       select attribute is an expression evaluated in the current context that returns a string.
-  -->
+  <xd:doc>
+    <xd:desc>
+      <xd:p>
+        Finds or calculates values from the instance document to allow clearer assertions and diagnostics. The required
+        select attribute is an expression evaluated in the current context that returns a string.
+      </xd:p>
+      <xd:p>
+        The Schematron value-of element is translated into the xsl:value-of element.
+      </xd:p>
+    </xd:desc>
+  </xd:doc>
   <xsl:template match="sch:value-of">
     <value-of select="{@select}">
       <xsl:sequence select="@xml:base"/>
