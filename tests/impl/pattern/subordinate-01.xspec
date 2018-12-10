@@ -1,0 +1,9 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="subordinate-01.sch">
+  <scenario label="Searching a pattern in subordinate documents">
+    <context>
+      <document xmlns=""/>
+    </context>
+    <expect-not-assert id="A1"/>
+    <expect-assert id="A2"/>
+  </scenario>
+</description>
