@@ -191,7 +191,7 @@
             </xsl:call-template>
 
             <svrl:active-pattern>
-              <xsl:sequence select="@id | @documents | @role"/>
+              <xsl:sequence select="@id | @role"/>
               <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
             </svrl:active-pattern>
 
