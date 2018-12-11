@@ -6,4 +6,9 @@
       <assert test="self::document" id="A2"/>
     </rule>
   </pattern>
+  <pattern documents="('subordinate-01.sch', 'subordinate-01.xspec')">
+    <rule context="/*">
+      <assert test="true()"/>
+    </rule>
+  </pattern>
 </schema>
