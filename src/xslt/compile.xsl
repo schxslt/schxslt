@@ -195,7 +195,7 @@
               <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
             </svrl:active-pattern>
 
-            <variable name="instances">
+            <variable name="instances" as="item()*">
               <xsl:choose>
                 <xsl:when test="@documents">
                   <for-each select="{@documents}">
