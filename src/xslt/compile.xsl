@@ -190,11 +190,6 @@
               <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
             </xsl:call-template>
 
-            <svrl:active-pattern>
-              <xsl:sequence select="@id | @role"/>
-              <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
-            </svrl:active-pattern>
-
             <variable name="instances" as="item()*">
               <xsl:choose>
                 <xsl:when test="@documents">
@@ -208,11 +203,19 @@
               </xsl:choose>
             </variable>
 
-            <apply-templates mode="{generate-id(.)}" select="$instances">
-              <xsl:call-template name="schxslt:let-with-param">
-                <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
-              </xsl:call-template>
-            </apply-templates>
+            <for-each select="$instances">
+              <svrl:active-pattern>
+                <xsl:sequence select="@id | @role"/>
+                <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
+              </svrl:active-pattern>
+
+              <apply-templates mode="{generate-id(.)}" select=".">
+                <xsl:call-template name="schxslt:let-with-param">
+                  <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
+                </xsl:call-template>
+              </apply-templates>
+
+            </for-each>
 
           </template>
 
