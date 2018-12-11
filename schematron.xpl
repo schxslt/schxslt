@@ -5,11 +5,14 @@
 
   <p:output port="result" sequence="true"/>
 
+  <p:option name="filter" select="'.*\.xspec$'"/>
+
   <p:import href="vendor/xproc-xspec/library.xpl"/>
 
   <p:directory-list path="tests/impl"/>
   <p:viewport match="/c:directory/c:directory">
-    <p:directory-list include-filter=".*\.xspec$">
+    <p:directory-list>
+      <p:with-option name="include-filter" select="$filter"/>
       <p:with-option name="path" select="resolve-uri(c:directory/@name, base-uri(c:directory))"/>
     </p:directory-list>
   </p:viewport>
