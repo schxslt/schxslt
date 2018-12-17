@@ -316,9 +316,9 @@
     <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
 
     <!-- Supported query bindings -->
-    <xsl:if test="lower-case($schematron/@queryBinding) ne 'xslt2'">
+    <xsl:if test="not($effective-queryBinding = ('xslt2'))">
       <xsl:message terminate="yes">
-        The query binding language '<xsl:value-of select="($schematron/@queryBinding, 'xslt')[1]"/>' is not supported.
+        The query binding language '<xsl:value-of select="$effective-queryBinding"/>' is not supported.
       </xsl:message>
     </xsl:if>
 
