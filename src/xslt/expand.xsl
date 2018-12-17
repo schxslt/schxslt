@@ -1,7 +1,7 @@
 <xsl:transform version="2.0"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-               xmlns:schxslt="http://dmaus.name/ns/schxslt"
+               xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:key name="schxslt:abstract-patterns" match="sch:pattern[@abstract = 'true']" use="@id"/>

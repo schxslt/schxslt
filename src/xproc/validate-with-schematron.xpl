@@ -1,6 +1,6 @@
 <p:declare-step version="1.0" name="validate-with-schematron" type="schxslt:validate-with-schematron"
                 xmlns:p="http://www.w3.org/ns/xproc"
-                xmlns:schxslt="http://dmaus.name/ns/schxslt">
+                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
 
   <p:option name="phase" select="''"/>

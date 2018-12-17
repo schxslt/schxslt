@@ -5,7 +5,7 @@
                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-               xmlns:schxslt="http://dmaus.name/ns/schxslt">
+               xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
   <xsl:template name="schxslt:effective-phase" as="xs:string">
     <xsl:param name="phase" as="xs:string" required="yes"/>

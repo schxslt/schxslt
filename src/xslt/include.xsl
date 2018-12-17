@@ -3,7 +3,7 @@
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-               xmlns:schxslt="http://dmaus.name/ns/schxslt">
+               xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:include">

@@ -6,7 +6,7 @@
                xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-               xmlns:schxslt="http://dmaus.name/ns/schxslt">
+               xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
   <xsl:output indent="yes"/>

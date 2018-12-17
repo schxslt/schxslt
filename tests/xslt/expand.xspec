@@ -1,6 +1,6 @@
 <description xmlns="http://www.jenitennison.com/xslt/xspec"
              xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-             xmlns:schxslt="http://dmaus.name/ns/schxslt"
+             xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
              stylesheet="../../src/xslt/expand.xsl">
 
   <scenario label="Expanding an abstract pattern">
