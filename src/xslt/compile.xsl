@@ -53,7 +53,7 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <transform version="2.0">
+    <transform version="{if ($effective-queryBinding eq 'xslt2') then '2.0' else '3.0'}">
       <xsl:for-each select="$schematron/sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
@@ -316,7 +316,7 @@
     <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
 
     <!-- Supported query bindings -->
-    <xsl:if test="not($effective-queryBinding = ('xslt2'))">
+    <xsl:if test="not($effective-queryBinding = ('xslt2', 'xslt3'))">
       <xsl:message terminate="yes">
         The query binding language '<xsl:value-of select="$effective-queryBinding"/>' is not supported.
       </xsl:message>
