@@ -29,9 +29,10 @@
     </xsl:call-template>
   </xsl:variable>
 
+  <xsl:param name="queryBinding" as="xs:string" select="(sch:schema/@queryBinding, 'xslt1')[1]"/>
   <xsl:variable name="effective-queryBinding" as="xs:string">
     <xsl:call-template name="schxslt:effective-queryBinding">
-      <xsl:with-param name="queryBinding" as="xs:string" select="(sch:schema/@queryBinding, 'xslt1')[1]"/>
+      <xsl:with-param name="queryBinding" as="xs:string" select="$queryBinding"/>
       <xsl:with-param name="schematron" as="element(sch:schema)" select="sch:schema"/>
     </xsl:call-template>
   </xsl:variable>
