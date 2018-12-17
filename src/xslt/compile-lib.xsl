@@ -26,6 +26,12 @@
     <xsl:value-of select="$strategy"/>
   </xsl:template>
 
+  <xsl:template name="schxslt:effective-queryBinding">
+    <xsl:param name="queryBinding" as="xs:string" required="yes"/>
+    <xsl:param name="schematron" as="element(sch:schema)" select="."/>
+    <xsl:value-of select="lower-case($queryBinding)"/>
+  </xsl:template>
+
   <xsl:template name="schxslt:let-variable">
     <xsl:param name="bindings" as="element(sch:let)*"/>
     <xsl:for-each select="$bindings">
