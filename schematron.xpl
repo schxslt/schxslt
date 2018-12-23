@@ -6,6 +6,7 @@
   <p:output port="result" sequence="true"/>
 
   <p:option name="filter" select="'.*\.xspec$'"/>
+  <p:option name="strategy" select="'traditional'"/>
 
   <p:import href="vendor/xproc-xspec/library.xpl"/>
 
@@ -23,6 +24,7 @@
       <p:with-option name="href" select="resolve-uri(c:file/@name, base-uri(c:file))"/>
     </p:load>
     <run:xspec-schematron>
+      <p:with-param name="strategy" select="$strategy"/>
       <p:with-option name="XSpecHome" select="resolve-uri('vendor/xspec/', static-base-uri())"/>
       <p:with-option name="SchematronXsltInclude" select="resolve-uri('src/xslt/include.xsl', static-base-uri())"/>
       <p:with-option name="SchematronXsltExpand" select="resolve-uri('src/xslt/expand.xsl', static-base-uri())"/>
