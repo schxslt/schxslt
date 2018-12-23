@@ -268,30 +268,23 @@
     <xsl:param name="ident" as="xs:string" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
-    <xsl:choose>
-      <xsl:when test="$effective-strategy eq 'traditional'">
+    <template match="{@context}" mode="{$ident}" priority="{count(following::sch:rule)}">
 
-        <template match="{@context}" mode="{$ident}" priority="{count(following::sch:rule)}">
+      <xsl:call-template name="schxslt:rule-template-body">
+        <xsl:with-param name="bindings" select="$bindings"/>
+      </xsl:call-template>
 
-          <xsl:call-template name="schxslt:rule-template-body">
-            <xsl:with-param name="bindings" select="$bindings"/>
-          </xsl:call-template>
-
+      <xsl:choose>
+        <xsl:when test="$effective-strategy eq 'traditional'">
           <apply-templates select="node() | @*" mode="#current"/>
-
-        </template>
-
-      </xsl:when>
-      <xsl:when test="$effective-strategy eq 'ex-post'">
-        <template match="{@context}" mode="{$ident}" priority="{count(following::sch:rule)}">
-          <xsl:call-template name="schxslt:rule-template-body">
-            <xsl:with-param name="bindings" select="$bindings"/>
-          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$effective-strategy eq 'ex-post'">
           <next-match/>
-        </template>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+
+    </template>
 
   </xsl:template>
 
