@@ -21,7 +21,7 @@
     </xsl:call-template>
   </xsl:variable>
 
-  <xsl:param name="strategy" as="xs:string">traditional</xsl:param>
+  <xsl:param name="strategy" as="xs:string">ex-post</xsl:param>
   <xsl:variable name="effective-strategy" as="xs:string">
     <xsl:call-template name="schxslt:effective-strategy">
       <xsl:with-param name="strategy" select="$strategy"/>
