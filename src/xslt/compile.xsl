@@ -54,6 +54,13 @@
       </xsl:call-template>
     </xsl:variable>
 
+    <xsl:variable name="template-body" as="element()*">
+      <xsl:call-template name="schxslt:handle-patterns">
+        <xsl:with-param name="patterns" as="element(sch:pattern)*" select="$active-patterns"/>
+        <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
+      </xsl:call-template>
+    </xsl:variable>
+
     <transform version="{if ($effective-queryBinding eq 'xslt2') then '2.0' else '3.0'}">
       <xsl:for-each select="$schematron/sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
@@ -113,10 +120,7 @@
         </svrl:schematron-output>
       </template>
 
-      <xsl:call-template name="schxslt:handle-patterns">
-        <xsl:with-param name="patterns" as="element(sch:pattern)*" select="$active-patterns"/>
-        <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
-      </xsl:call-template>
+      <xsl:sequence select="$template-body"/>
 
       <xsl:call-template name="schxslt:copy-helper"/>
 
