@@ -271,7 +271,7 @@
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'">
 
-        <template match="{@context}" mode="{$ident}" priority="{count(following-sibling::*)}">
+        <template match="{@context}" mode="{$ident}" priority="{count(following::sch:rule)}">
 
           <xsl:call-template name="schxslt:rule-template-body">
             <xsl:with-param name="bindings" select="$bindings"/>
