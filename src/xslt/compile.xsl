@@ -108,15 +108,7 @@
               <xsl:sequence select="(@prefix, @uri)"/>
             </svrl:ns-prefix-in-attribute-values>
           </xsl:for-each>
-
-          <xsl:choose>
-            <xsl:when test="$effective-strategy eq 'traditional'">
-              <apply-templates select="$report/*" mode="schxslt:unwrap-report"/>
-            </xsl:when>
-            <xsl:when test="$effective-strategy eq 'ex-post'">
-              <apply-templates select="$report/*" mode="schxslt:unwrap-report"/>
-            </xsl:when>
-          </xsl:choose>
+          <sequence select="$report/*"/>
         </svrl:schematron-output>
       </template>
 

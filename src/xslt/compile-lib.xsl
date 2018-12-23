@@ -71,7 +71,6 @@
   <xsl:template name="schxslt:copy-helper">
     <xsl:sequence select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
     <xsl:sequence select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location-step']"/>
-    <xsl:sequence select="document('')/xsl:transform/xsl:template[@mode = 'schxslt:unwrap-report']"/>
   </xsl:template>
 
   <xsl:function name="schxslt:pattern-grouping-key" as="xs:string">
@@ -79,16 +78,6 @@
     <xsl:value-of select="if ($effective-strategy eq 'traditional') then generate-id($pattern) else string-join((generate-id($pattern/sch:let), $pattern/@xml:base, $pattern/@documents), ' ')"/>
   </xsl:function>
 
-  <xsl:template match="node()" mode="schxslt:unwrap-report">
-    <xsl:sequence select="."/>
-  </xsl:template>
-
-  <xsl:template match="svrl:*[@schxslt:*]" mode="schxslt:unwrap-report" priority="0">
-    <xsl:copy>
-      <xsl:sequence select="@* except @schxslt:*"/>
-      <xsl:sequence select="*"/>
-    </xsl:copy>
-  </xsl:template>
 
   <!-- Create the body of a rule template -->
   <xsl:template name="schxslt:rule-template-body">
@@ -109,14 +98,14 @@
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'ex-post'">
         <if test="empty($schxslt:fired-rules[@schxslt:context = generate-id(current())][@schxslt:pattern = '{generate-id(..)}'])">
-          <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
+          <svrl:fired-rule>
             <xsl:sequence select="(@id, @context, @role, @flag)"/>
           </svrl:fired-rule>
           <xsl:apply-templates select="sch:assert | sch:report"/>
         </if>
       </xsl:when>
       <xsl:otherwise>
-        <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
+        <svrl:fired-rule>
           <xsl:sequence select="(@id, @context, @role, @flag)"/>
         </svrl:fired-rule>
         <xsl:apply-templates select="sch:assert | sch:report"/>
