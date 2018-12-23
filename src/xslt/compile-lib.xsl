@@ -115,19 +115,22 @@
       <xsl:with-param name="bindings" select="sch:let"/>
     </xsl:call-template>
 
-    <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
-      <xsl:sequence select="(@id, @context, @role, @flag)"/>
-      <xsl:choose>
-        <xsl:when test="$effective-strategy eq 'ex-post'">
-          <if test="empty($schxslt:fired-rules[@schxslt:context = generate-id()][schxslt:pattern = {generate-id(..)}])">
+    <xsl:choose>
+      <xsl:when test="$effective-strategy eq 'ex-post'">
+        <if test="empty($schxslt:fired-rules[@schxslt:context = generate-id()][schxslt:pattern = {generate-id(..)}])">
+          <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
+            <xsl:sequence select="(@id, @context, @role, @flag)"/>
             <xsl:apply-templates select="sch:assert | sch:report"/>
-          </if>
-        </xsl:when>
-        <xsl:otherwise>
+          </svrl:fired-rule>
+        </if>
+      </xsl:when>
+      <xsl:otherwise>
+        <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
+          <xsl:sequence select="(@id, @context, @role, @flag)"/>
           <xsl:apply-templates select="sch:assert | sch:report"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </svrl:fired-rule>
+        </svrl:fired-rule>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="schxslt:location" as="xs:string">
