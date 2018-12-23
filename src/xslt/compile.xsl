@@ -134,13 +134,6 @@
 
   </xsl:template>
 
-  <xd:doc>
-    <xd:desc>
-      <xd:p>Create instructions in the validation template that correspond to sch:pattern.</xd:p>
-    </xd:desc>
-    <xd:param name="patterns">Sequence of active patterns</xd:param>
-    <xd:param name="bindings">Variable bindings in scope of the current <xd:b>phase</xd:b></xd:param>
-  </xd:doc>
   <xsl:template name="schxslt:handle-patterns">
     <xsl:param name="patterns" as="element(sch:pattern)*" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
@@ -206,13 +199,6 @@
     </template>
   </xsl:template>
 
-  <xd:doc>
-    <xd:desc>
-      <xd:p>Create instruction in the validation template that checks one rule.</xd:p>
-    </xd:desc>
-    <xd:param name="bindings">Variable bindings in scope of the current <xd:b>phase</xd:b> or
-    <xd:b>pattern</xd:b>.</xd:param>
-  </xd:doc>
   <xsl:template match="sch:rule">
     <xsl:param name="ident" as="xs:string" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
