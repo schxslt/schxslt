@@ -187,19 +187,19 @@
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'">
 
-        <xsl:for-each select="$patterns">
+        <xsl:for-each-group select="$patterns" group-by="generate-id(.)">
 
           <xsl:call-template name="schxslt:pattern-template">
-            <xsl:with-param name="ident" select="generate-id()"/>
+            <xsl:with-param name="ident" select="current-grouping-key()"/>
             <xsl:with-param name="bindings" select="$bindings"/>
           </xsl:call-template>
 
           <xsl:apply-templates select="sch:rule">
-            <xsl:with-param name="ident" select="generate-id()"/>
+            <xsl:with-param name="ident" select="current-grouping-key()"/>
             <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
           </xsl:apply-templates>
 
-        </xsl:for-each>
+        </xsl:for-each-group>
 
       </xsl:when>
       <xsl:when test="$effective-strategy eq 'ex-post'">
