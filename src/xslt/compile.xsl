@@ -84,10 +84,15 @@
         </xsl:call-template>
 
         <variable name="report" as="element()*">
-          <xsl:call-template name="schxslt:dispatch-patterns">
-            <xsl:with-param name="patterns" as="element(sch:pattern)*" select="$active-patterns"/>
-            <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
-          </xsl:call-template>
+          <svrl:schematron-output>
+            <xsl:for-each select="$template-body/@name">
+              <call-template name="{.}">
+                <xsl:call-template name="schxslt:let-with-param">
+                  <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
+                </xsl:call-template>
+              </call-template>
+            </xsl:for-each>
+          </svrl:schematron-output>
         </variable>
 
         <svrl:schematron-output>
@@ -106,15 +111,10 @@
 
           <xsl:choose>
             <xsl:when test="$effective-strategy eq 'traditional'">
-              <apply-templates select="$report" mode="schxslt:unwrap-report"/>
+              <apply-templates select="$report/*" mode="schxslt:unwrap-report"/>
             </xsl:when>
             <xsl:when test="$effective-strategy eq 'ex-post'">
-              <for-each select="$report[self::svrl:active-pattern]">
-                <apply-templates select="." mode="schxslt:unwrap-report"/>
-                <for-each-group select="$report[self::svrl:fired-rule[@schxslt:pattern = current()/@schxslt:pattern]]" group-by="@schxslt:context">
-                  <apply-templates select="." mode="schxslt:unwrap-report"/>
-                </for-each-group>
-              </for-each>
+              <apply-templates select="$report/*" mode="schxslt:unwrap-report"/>
             </xsl:when>
           </xsl:choose>
         </svrl:schematron-output>
@@ -207,10 +207,22 @@
 
       </xsl:when>
       <xsl:when test="$effective-strategy eq 'ex-post'">
-        <xsl:apply-templates select="$patterns/sch:rule">
-          <xsl:with-param name="ident" select="'validate'"/>
-          <xsl:with-param name="bindings" select="$bindings"/>
-        </xsl:apply-templates>
+
+        <xsl:for-each-group select="$patterns" group-by="string-join((generate-id(sch:let), @documents), ' ')">
+          <xsl:variable name="ident" select="generate-id()"/>
+
+          <xsl:call-template name="schxslt:pattern-template">
+            <xsl:with-param name="ident" select="$ident"/>
+            <xsl:with-param name="bindings" select="$bindings"/>
+          </xsl:call-template>
+
+          <xsl:apply-templates select="current-group()/sch:rule">
+            <xsl:with-param name="ident" select="$ident"/>
+            <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
+          </xsl:apply-templates>
+
+        </xsl:for-each-group>
+
       </xsl:when>
       <xsl:otherwise/>
     </xsl:choose>
@@ -345,16 +357,16 @@
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'"/>
       <xsl:when test="$effective-strategy eq 'ex-post'">
-        <xsl:if test="exists($schematron/sch:pattern/sch:let)">
-          <xsl:message terminate="yes">
-            A Schematron that contains a sch:pattern with a sch:let is not eligible for ex-post rule match selection.
-          </xsl:message>
-        </xsl:if>
-        <xsl:if test="exists($schematron/sch:pattern/@documents)">
-          <xsl:message terminate="yes">
-            A Schematron that contains a @documents attribute on a sch:pattern is not eligible for ex-post rule match selection.
-          </xsl:message>
-        </xsl:if>
+        <!-- <xsl:if test="exists($schematron/sch:pattern/sch:let)"> -->
+        <!--   <xsl:message terminate="yes"> -->
+        <!--     A Schematron that contains a sch:pattern with a sch:let is not eligible for ex-post rule match selection. -->
+        <!--   </xsl:message> -->
+        <!-- </xsl:if> -->
+        <!-- <xsl:if test="exists($schematron/sch:pattern/@documents)"> -->
+        <!--   <xsl:message terminate="yes"> -->
+        <!--     A Schematron that contains a @documents attribute on a sch:pattern is not eligible for ex-post rule match selection. -->
+        <!--   </xsl:message> -->
+        <!-- </xsl:if> -->
       </xsl:when>
       <xsl:otherwise>
         <xsl:message terminate="yes">

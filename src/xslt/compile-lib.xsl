@@ -79,10 +79,12 @@
   </xsl:template>
 
   <xsl:template match="svrl:fired-rule" mode="schxslt:unwrap-report" priority="1">
-    <xsl:copy>
-      <xsl:sequence select="@* except @schxslt:*"/>
-    </xsl:copy>
-    <xsl:sequence select="*"/>
+    <xsl:if test="not(preceding-sibling::svrl:fired-rule[@schxslt:context = current()/@schxslt:context][@schxslt:pattern = current()/@schxslt:pattern])">
+      <xsl:copy>
+        <xsl:sequence select="@* except @schxslt:*"/>
+      </xsl:copy>
+      <xsl:sequence select="*"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="svrl:*[@schxslt:*]" mode="schxslt:unwrap-report" priority="0">
