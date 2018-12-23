@@ -76,7 +76,7 @@
 
   <xsl:function name="schxslt:pattern-grouping-key" as="xs:string">
     <xsl:param name="pattern" as="element(sch:pattern)"/>
-    <xsl:value-of select="if ($effective-strategy eq 'traditional') then generate-id($pattern) else string-join((generate-id($pattern/sch:let), $pattern/@documents), ' ')"/>
+    <xsl:value-of select="if ($effective-strategy eq 'traditional') then generate-id($pattern) else string-join((generate-id($pattern/sch:let), $pattern/@xml:base, $pattern/@documents), ' ')"/>
   </xsl:function>
 
   <xsl:template match="node()" mode="schxslt:unwrap-report">
