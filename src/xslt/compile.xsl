@@ -145,45 +145,20 @@
     <xsl:param name="patterns" as="element(sch:pattern)*" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
-    <xsl:choose>
-      <xsl:when test="$effective-strategy eq 'traditional'">
+    <xsl:for-each-group select="$patterns" group-by="schxslt:pattern-grouping-key(.)">
+      <xsl:variable name="ident" select="generate-id()"/>
 
-        <xsl:for-each-group select="$patterns" group-by="schxslt:pattern-grouping-key(.)">
-          <xsl:variable name="ident" select="generate-id()"/>
+      <xsl:call-template name="schxslt:pattern-template">
+        <xsl:with-param name="ident" select="$ident"/>
+        <xsl:with-param name="bindings" select="$bindings"/>
+      </xsl:call-template>
 
-          <xsl:call-template name="schxslt:pattern-template">
-            <xsl:with-param name="ident" select="$ident"/>
-            <xsl:with-param name="bindings" select="$bindings"/>
-          </xsl:call-template>
+      <xsl:apply-templates select="current-group()/sch:rule">
+        <xsl:with-param name="ident" select="$ident"/>
+        <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
+      </xsl:apply-templates>
 
-          <xsl:apply-templates select="current-group()/sch:rule">
-            <xsl:with-param name="ident" select="$ident"/>
-            <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
-          </xsl:apply-templates>
-
-        </xsl:for-each-group>
-
-      </xsl:when>
-      <xsl:when test="$effective-strategy eq 'ex-post'">
-
-        <xsl:for-each-group select="$patterns" group-by="schxslt:pattern-grouping-key(.)">
-          <xsl:variable name="ident" select="generate-id()"/>
-
-          <xsl:call-template name="schxslt:pattern-template">
-            <xsl:with-param name="ident" select="$ident"/>
-            <xsl:with-param name="bindings" select="$bindings"/>
-          </xsl:call-template>
-
-          <xsl:apply-templates select="current-group()/sch:rule">
-            <xsl:with-param name="ident" select="$ident"/>
-            <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
-          </xsl:apply-templates>
-
-        </xsl:for-each-group>
-
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
+    </xsl:for-each-group>
 
   </xsl:template>
 
