@@ -195,6 +195,7 @@
           </xsl:call-template>
 
           <xsl:apply-templates select="sch:rule">
+            <xsl:with-param name="ident" select="generate-id()"/>
             <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
           </xsl:apply-templates>
 
@@ -203,6 +204,7 @@
       </xsl:when>
       <xsl:when test="$effective-strategy eq 'ex-post'">
         <xsl:apply-templates select="$patterns/sch:rule">
+          <xsl:with-param name="ident" select="'validate'"/>
           <xsl:with-param name="bindings" select="$bindings"/>
         </xsl:apply-templates>
       </xsl:when>
@@ -263,12 +265,13 @@
     <xd:b>pattern</xd:b>.</xd:param>
   </xd:doc>
   <xsl:template match="sch:rule">
+    <xsl:param name="ident" as="xs:string" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'">
 
-        <template match="{@context}" mode="{generate-id(..)}" priority="{count(following-sibling::*)}">
+        <template match="{@context}" mode="{$ident}" priority="{count(following-sibling::*)}">
 
           <xsl:call-template name="schxslt:rule-template-body">
             <xsl:with-param name="bindings" select="$bindings"/>
@@ -280,7 +283,7 @@
 
       </xsl:when>
       <xsl:when test="$effective-strategy eq 'ex-post'">
-        <template match="{@context}" mode="validate" priority="{count(following::sch:rule)}">
+        <template match="{@context}" mode="{$ident}" priority="{count(following::sch:rule)}">
           <xsl:call-template name="schxslt:rule-template-body">
             <xsl:with-param name="bindings" select="$bindings"/>
           </xsl:call-template>
