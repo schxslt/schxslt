@@ -148,7 +148,7 @@
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'">
 
-        <xsl:for-each-group select="$patterns" group-by="generate-id(.)">
+        <xsl:for-each-group select="$patterns" group-by="schxslt:pattern-grouping-key(.)">
           <xsl:variable name="ident" select="generate-id()"/>
 
           <xsl:call-template name="schxslt:pattern-template">
@@ -166,7 +166,7 @@
       </xsl:when>
       <xsl:when test="$effective-strategy eq 'ex-post'">
 
-        <xsl:for-each-group select="$patterns" group-by="string-join((generate-id(sch:let), @documents), ' ')">
+        <xsl:for-each-group select="$patterns" group-by="schxslt:pattern-grouping-key(.)">
           <xsl:variable name="ident" select="generate-id()"/>
 
           <xsl:call-template name="schxslt:pattern-template">

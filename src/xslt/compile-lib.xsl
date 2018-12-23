@@ -74,6 +74,11 @@
     <xsl:sequence select="document('')/xsl:transform/xsl:template[@mode = 'schxslt:unwrap-report']"/>
   </xsl:template>
 
+  <xsl:function name="schxslt:pattern-grouping-key" as="xs:string">
+    <xsl:param name="pattern" as="element(sch:pattern)"/>
+    <xsl:value-of select="if ($effective-strategy eq 'traditional') then generate-id($pattern) else string-join((generate-id($pattern/sch:let), $pattern/@documents), ' ')"/>
+  </xsl:function>
+
   <xsl:template match="node()" mode="schxslt:unwrap-report">
     <xsl:sequence select="."/>
   </xsl:template>
