@@ -190,6 +190,7 @@
         <xsl:for-each select="$patterns">
 
           <xsl:call-template name="schxslt:pattern-template">
+            <xsl:with-param name="ident" select="generate-id()"/>
             <xsl:with-param name="bindings" select="$bindings"/>
           </xsl:call-template>
 
@@ -211,9 +212,10 @@
   </xsl:template>
 
   <xsl:template name="schxslt:pattern-template">
+    <xsl:param name="ident" as="xs:string" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
-    <template name="{generate-id(.)}">
+    <template name="{$ident}">
       <xsl:sequence select="@xml:base"/>
 
       <xsl:call-template name="schxslt:let-param">
@@ -242,7 +244,7 @@
           <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
         </svrl:active-pattern>
 
-        <apply-templates mode="{generate-id(.)}" select=".">
+        <apply-templates mode="{$ident}" select=".">
           <xsl:call-template name="schxslt:let-with-param">
             <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
           </xsl:call-template>
