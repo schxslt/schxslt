@@ -83,15 +83,6 @@
     <xsl:sequence select="."/>
   </xsl:template>
 
-  <xsl:template match="svrl:fired-rule" mode="schxslt:unwrap-report" priority="1">
-    <xsl:if test="not(preceding-sibling::svrl:fired-rule[@schxslt:context = current()/@schxslt:context][@schxslt:pattern = current()/@schxslt:pattern])">
-      <xsl:copy>
-        <xsl:sequence select="@* except @schxslt:*"/>
-      </xsl:copy>
-      <xsl:sequence select="*"/>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template match="svrl:*[@schxslt:*]" mode="schxslt:unwrap-report" priority="0">
     <xsl:copy>
       <xsl:sequence select="@* except @schxslt:*"/>
@@ -120,15 +111,15 @@
         <if test="empty($schxslt:fired-rules[@schxslt:context = generate-id(current())][@schxslt:pattern = '{generate-id(..)}'])">
           <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
             <xsl:sequence select="(@id, @context, @role, @flag)"/>
-            <xsl:apply-templates select="sch:assert | sch:report"/>
           </svrl:fired-rule>
+          <xsl:apply-templates select="sch:assert | sch:report"/>
         </if>
       </xsl:when>
       <xsl:otherwise>
         <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
           <xsl:sequence select="(@id, @context, @role, @flag)"/>
-          <xsl:apply-templates select="sch:assert | sch:report"/>
         </svrl:fired-rule>
+        <xsl:apply-templates select="sch:assert | sch:report"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
