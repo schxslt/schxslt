@@ -136,49 +136,6 @@
 
   <xd:doc>
     <xd:desc>
-      <xd:p>Create instructions in the validation stylesheet that dispatch the validation.</xd:p>
-    </xd:desc>
-    <xd:param name="patterns">Sequence of active patterns</xd:param>
-    <xd:param name="bindings">Variable bindings in scope of the current <xd:b>phase</xd:b></xd:param>
-  </xd:doc>
-  <xsl:template name="schxslt:dispatch-patterns">
-    <xsl:param name="patterns" as="element(sch:pattern)*" required="yes"/>
-    <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
-
-    <xsl:choose>
-      <xsl:when test="$effective-strategy eq 'traditional'">
-
-        <xsl:for-each select="$patterns">
-          <call-template name="{generate-id(.)}">
-            <xsl:call-template name="schxslt:let-with-param">
-              <xsl:with-param name="bindings" select="$bindings"/>
-            </xsl:call-template>
-          </call-template>
-        </xsl:for-each>
-
-      </xsl:when>
-      <xsl:when test="$effective-strategy eq 'ex-post'">
-
-        <xsl:for-each select="$patterns">
-          <svrl:active-pattern schxslt:pattern="{generate-id()}">
-            <xsl:sequence select="@id | @documents | @role"/>
-            <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
-          </svrl:active-pattern>
-        </xsl:for-each>
-        <apply-templates select="/" mode="validate">
-          <xsl:call-template name="schxslt:let-with-param">
-            <xsl:with-param name="bindings" select="$bindings"/>
-          </xsl:call-template>
-        </apply-templates>
-
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-
-  </xsl:template>
-
-  <xd:doc>
-    <xd:desc>
       <xd:p>Create instructions in the validation template that correspond to sch:pattern.</xd:p>
     </xd:desc>
     <xd:param name="patterns">Sequence of active patterns</xd:param>
@@ -356,18 +313,7 @@
     <!-- Effective strategy -->
     <xsl:choose>
       <xsl:when test="$effective-strategy eq 'traditional'"/>
-      <xsl:when test="$effective-strategy eq 'ex-post'">
-        <!-- <xsl:if test="exists($schematron/sch:pattern/sch:let)"> -->
-        <!--   <xsl:message terminate="yes"> -->
-        <!--     A Schematron that contains a sch:pattern with a sch:let is not eligible for ex-post rule match selection. -->
-        <!--   </xsl:message> -->
-        <!-- </xsl:if> -->
-        <!-- <xsl:if test="exists($schematron/sch:pattern/@documents)"> -->
-        <!--   <xsl:message terminate="yes"> -->
-        <!--     A Schematron that contains a @documents attribute on a sch:pattern is not eligible for ex-post rule match selection. -->
-        <!--   </xsl:message> -->
-        <!-- </xsl:if> -->
-      </xsl:when>
+      <xsl:when test="$effective-strategy eq 'ex-post'"/>
       <xsl:otherwise>
         <xsl:message terminate="yes">
           The strategy '<xsl:value-of select="$effective-strategy"/>' is not defined.
