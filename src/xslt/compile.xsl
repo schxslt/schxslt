@@ -214,7 +214,12 @@
           <apply-templates select="node() | @*" mode="#current"/>
         </xsl:when>
         <xsl:when test="$effective-strategy eq 'ex-post'">
-          <next-match/>
+          <next-match>
+            <with-param name="schxslt:fired-rules" as="element(svrl:fired-rule)*">
+              <sequence select="$schxslt:fired-rules"/>
+              <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}"/>
+            </with-param>
+          </next-match>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>

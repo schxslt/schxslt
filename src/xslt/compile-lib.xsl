@@ -104,6 +104,9 @@
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
     <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
+    <xsl:if test="$effective-strategy eq 'ex-post'">
+      <param name="schxslt:fired-rules" as="element(svrl:fired-rule)*"/>
+    </xsl:if>
     <xsl:call-template name="schxslt:let-param">
       <xsl:with-param name="bindings" select="$bindings"/>
     </xsl:call-template>
@@ -114,7 +117,16 @@
 
     <svrl:fired-rule schxslt:context="{{generate-id()}}" schxslt:pattern="{generate-id(..)}">
       <xsl:sequence select="(@id, @context, @role, @flag)"/>
-      <xsl:apply-templates select="sch:assert | sch:report"/>
+      <xsl:choose>
+        <xsl:when test="$effective-strategy eq 'ex-post'">
+          <if test="empty($schxslt:fired-rules[@schxslt:context = generate-id()][schxslt:pattern = {generate-id(..)}])">
+            <xsl:apply-templates select="sch:assert | sch:report"/>
+          </if>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="sch:assert | sch:report"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </svrl:fired-rule>
   </xsl:template>
 
