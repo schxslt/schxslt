@@ -21,11 +21,10 @@
     </xsl:choose>
   </xsl:function>
 
-  <xsl:template name="schxslt:effective-queryBinding">
-    <xsl:param name="queryBinding" as="xs:string" required="yes"/>
-    <xsl:param name="schematron" as="element(sch:schema)" select="."/>
+  <xsl:function name="schxslt:effective-queryBinding" as="xs:string">
+    <xsl:param name="queryBinding" as="xs:string"/>
     <xsl:value-of select="lower-case($queryBinding)"/>
-  </xsl:template>
+  </xsl:function>
 
   <xsl:template name="schxslt:let-variable">
     <xsl:param name="bindings" as="element(sch:let)*"/>
