@@ -93,21 +93,20 @@
 
           <xsl:for-each-group select="$active-patterns" group-by="schxslt:pattern-grouping-key(.)">
             <xsl:variable name="ident" select="generate-id()"/>
-            <xsl:for-each select="current-group()">
-              <xsl:variable name="pattern" as="element(sch:pattern)" select="."/>
-              <for-each select="$report/schxslt:active-pattern-group[@ident = '{$ident}']/schxslt:active-document">
+            <for-each select="$report/schxslt:active-pattern-group[@ident = '{$ident}']/schxslt:active-document">
+              <xsl:for-each select="current-group()">
                 <svrl:active-pattern document="{{@href}}">
-                  <xsl:sequence select="$pattern/@id | $pattern/@role"/>
-                  <xsl:if test="$pattern/sch:title"><xsl:attribute name="name" select="$pattern/sch:title"/></xsl:if>
+                  <xsl:sequence select="@id | @role"/>
+                  <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
                 </svrl:active-pattern>
-                <for-each select="svrl:fired-rule[@schxslt:pattern = '{generate-id($pattern)}']">
+                <for-each select="svrl:fired-rule[@schxslt:pattern = '{generate-id()}']">
                   <copy>
                     <sequence select="@* except @schxslt:*"/>
                   </copy>
                   <sequence select="*"/>
                 </for-each>
-              </for-each>
-            </xsl:for-each>
+              </xsl:for-each>
+            </for-each>
           </xsl:for-each-group>
         </svrl:schematron-output>
       </template>
