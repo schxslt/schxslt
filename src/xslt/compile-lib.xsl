@@ -7,18 +7,19 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
-  <xsl:template name="schxslt:effective-phase" as="xs:string">
-    <xsl:param name="phase" as="xs:string" required="yes"/>
-    <xsl:param name="schematron" as="element(sch:schema)" select="."/>
+  <xsl:function name="schxslt:effective-phase" as="xs:string">
+    <xsl:param name="schema" as="element(sch:schema)"/>
+    <xsl:param name="phase" as="xs:string"/>
+
     <xsl:choose>
       <xsl:when test="$phase = ('#DEFAULT', '')">
-        <xsl:value-of select="($schematron/@defaultPhase, '#ALL')[1]"/>
+        <xsl:value-of select="($schema/@defaultPhase, '#ALL')[1]"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$phase"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
+  </xsl:function>
 
   <xsl:template name="schxslt:effective-strategy">
     <xsl:param name="strategy" as="xs:string" required="yes"/>

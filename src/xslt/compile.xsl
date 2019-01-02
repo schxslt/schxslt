@@ -14,12 +14,7 @@
   <xsl:include href="compile-lib.xsl"/>
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
-  <xsl:variable name="effective-phase" as="xs:string">
-    <xsl:call-template name="schxslt:effective-phase">
-      <xsl:with-param name="phase" select="$phase"/>
-      <xsl:with-param name="schematron" as="element(sch:schema)" select="sch:schema"/>
-    </xsl:call-template>
-  </xsl:variable>
+  <xsl:variable name="effective-phase" as="xs:string" select="schxslt:effective-phase(sch:schema, $phase)"/>
 
   <xsl:param name="strategy" as="xs:string">ex-post</xsl:param>
   <xsl:variable name="effective-strategy" as="xs:string">
