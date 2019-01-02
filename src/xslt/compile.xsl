@@ -32,11 +32,7 @@
 
     <xsl:call-template name="schxslt:assert-prerequisites"/>
 
-    <xsl:variable name="active-patterns" as="element(sch:pattern)*">
-      <xsl:call-template name="schxslt:active-patterns">
-        <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
-      </xsl:call-template>
-    </xsl:variable>
+    <xsl:variable name="active-patterns" as="element(sch:pattern)+" select="schxslt:active-patterns($schematron, $effective-phase)"/>
 
     <xsl:variable name="template-body" as="element()*">
       <xsl:call-template name="schxslt:handle-patterns">

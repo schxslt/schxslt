@@ -49,18 +49,19 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="schxslt:active-patterns">
-    <xsl:param name="phase" as="xs:string" required="yes"/>
-    <xsl:param name="schematron" as="element(sch:schema)" tunnel="yes"/>
+  <xsl:function name="schxslt:active-patterns" as="element(sch:pattern)+">
+    <xsl:param name="schema" as="element(sch:schema)"/>
+    <xsl:param name="phase" as="xs:string"/>
+
     <xsl:choose>
       <xsl:when test="$phase eq '#ALL'">
-        <xsl:sequence select="$schematron/sch:pattern"/>
+        <xsl:sequence select="$schema/sch:pattern"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:sequence select="$schematron/sch:pattern[@id = $schematron/sch:phase[@id eq $phase]/sch:active/@pattern]"/>
+        <xsl:sequence select="$schema/sch:pattern[@id = $schema/sch:phase[@id eq $phase]/sch:active/@pattern]"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
+  </xsl:function>
 
   <xsl:template name="schxslt:copy-helper">
     <xsl:sequence select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
