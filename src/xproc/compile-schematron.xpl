@@ -3,7 +3,7 @@
                 xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
   <p:option name="phase" select="''"/>
-  <p:option name="strategy" select="'traditional'"/>
+  <p:option name="strategy" select="'ex-post'"/>
 
   <p:input  port="source" primary="true"/>
   <p:output port="result" primary="true"/>
