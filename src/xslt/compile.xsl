@@ -66,11 +66,13 @@
         <variable name="report" as="element()*">
           <svrl:schematron-output>
             <xsl:for-each select="$template-body/@name">
-              <call-template name="{.}">
-                <xsl:call-template name="schxslt:let-with-param">
-                  <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
-                </xsl:call-template>
-              </call-template>
+              <schxslt:active-pattern-group ident="{.}">
+                <call-template name="{.}">
+                  <xsl:call-template name="schxslt:let-with-param">
+                    <xsl:with-param name="bindings" as="element(sch:let)*" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
+                  </xsl:call-template>
+                </call-template>
+              </schxslt:active-pattern-group>
             </xsl:for-each>
           </svrl:schematron-output>
         </variable>
@@ -88,7 +90,25 @@
               <xsl:sequence select="(@prefix, @uri)"/>
             </svrl:ns-prefix-in-attribute-values>
           </xsl:for-each>
-          <sequence select="$report/*"/>
+
+          <xsl:for-each-group select="$active-patterns" group-by="schxslt:pattern-grouping-key(.)">
+            <xsl:variable name="ident" select="generate-id()"/>
+            <xsl:for-each select="current-group()">
+              <xsl:variable name="pattern" as="element(sch:pattern)" select="."/>
+              <for-each select="$report/schxslt:active-pattern-group[@ident = '{$ident}']/schxslt:active-document">
+                <svrl:active-pattern document="{{@href}}">
+                  <xsl:sequence select="$pattern/@id | $pattern/@role"/>
+                  <xsl:if test="$pattern/sch:title"><xsl:attribute name="name" select="$pattern/sch:title"/></xsl:if>
+                </svrl:active-pattern>
+                <for-each select="svrl:fired-rule[@schxslt:pattern = '{generate-id($pattern)}']">
+                  <copy>
+                    <sequence select="@* except @schxslt:*"/>
+                  </copy>
+                  <sequence select="*"/>
+                </for-each>
+              </for-each>
+            </xsl:for-each>
+          </xsl:for-each-group>
         </svrl:schematron-output>
       </template>
 
@@ -155,16 +175,15 @@
       </variable>
 
       <for-each select="$instances">
-        <svrl:active-pattern>
-          <xsl:sequence select="@id | @role"/>
-          <xsl:if test="sch:title"><xsl:attribute name="name" select="sch:title"/></xsl:if>
-        </svrl:active-pattern>
+        <schxslt:active-document href="{{base-uri(.)}}">
 
-        <apply-templates mode="{$ident}" select=".">
-          <xsl:call-template name="schxslt:let-with-param">
-            <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
-          </xsl:call-template>
-        </apply-templates>
+          <apply-templates mode="{$ident}" select=".">
+            <xsl:call-template name="schxslt:let-with-param">
+              <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
+            </xsl:call-template>
+          </apply-templates>
+
+        </schxslt:active-document>
 
       </for-each>
 

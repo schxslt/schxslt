@@ -93,17 +93,17 @@
     <xsl:choose>
       <xsl:when test="$strategy eq 'ex-post'">
         <if test="empty($schxslt:fired-rules[@schxslt:context = generate-id(current())][@schxslt:pattern = '{generate-id(..)}'])">
-          <svrl:fired-rule>
+          <svrl:fired-rule schxslt:pattern="{generate-id(..)}">
             <xsl:sequence select="(@id, @context, @role, @flag)"/>
+            <xsl:apply-templates select="sch:assert | sch:report"/>
           </svrl:fired-rule>
-          <xsl:apply-templates select="sch:assert | sch:report"/>
         </if>
       </xsl:when>
       <xsl:otherwise>
-        <svrl:fired-rule>
+        <svrl:fired-rule schxslt:pattern="{generate-id(..)}">
           <xsl:sequence select="(@id, @context, @role, @flag)"/>
+          <xsl:apply-templates select="sch:assert | sch:report"/>
         </svrl:fired-rule>
-        <xsl:apply-templates select="sch:assert | sch:report"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
