@@ -21,12 +21,6 @@
     </xsl:choose>
   </xsl:function>
 
-  <xsl:template name="schxslt:effective-strategy">
-    <xsl:param name="strategy" as="xs:string" required="yes"/>
-    <xsl:param name="schematron" as="element(sch:schema)" select="."/>
-    <xsl:value-of select="$strategy"/>
-  </xsl:template>
-
   <xsl:template name="schxslt:effective-queryBinding">
     <xsl:param name="queryBinding" as="xs:string" required="yes"/>
     <xsl:param name="schematron" as="element(sch:schema)" select="."/>
@@ -76,7 +70,7 @@
 
   <xsl:function name="schxslt:pattern-grouping-key" as="xs:string">
     <xsl:param name="pattern" as="element(sch:pattern)"/>
-    <xsl:value-of select="if ($effective-strategy eq 'traditional') then generate-id($pattern) else string-join((generate-id($pattern/sch:let), $pattern/@xml:base, $pattern/@documents), ' ')"/>
+    <xsl:value-of select="if ($strategy eq 'traditional') then generate-id($pattern) else string-join((generate-id($pattern/sch:let), $pattern/@xml:base, $pattern/@documents), ' ')"/>
   </xsl:function>
 
 
@@ -85,7 +79,7 @@
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
     <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
-    <xsl:if test="$effective-strategy eq 'ex-post'">
+    <xsl:if test="$strategy eq 'ex-post'">
       <param name="schxslt:fired-rules" as="element(svrl:fired-rule)*"/>
     </xsl:if>
     <xsl:call-template name="schxslt:let-param">
@@ -97,7 +91,7 @@
     </xsl:call-template>
 
     <xsl:choose>
-      <xsl:when test="$effective-strategy eq 'ex-post'">
+      <xsl:when test="$strategy eq 'ex-post'">
         <if test="empty($schxslt:fired-rules[@schxslt:context = generate-id(current())][@schxslt:pattern = '{generate-id(..)}'])">
           <svrl:fired-rule>
             <xsl:sequence select="(@id, @context, @role, @flag)"/>

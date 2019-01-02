@@ -17,12 +17,6 @@
   <xsl:variable name="effective-phase" as="xs:string" select="schxslt:effective-phase(sch:schema, $phase)"/>
 
   <xsl:param name="strategy" as="xs:string">ex-post</xsl:param>
-  <xsl:variable name="effective-strategy" as="xs:string">
-    <xsl:call-template name="schxslt:effective-strategy">
-      <xsl:with-param name="strategy" select="$strategy"/>
-      <xsl:with-param name="schematron" as="element(sch:schema)" select="sch:schema"/>
-    </xsl:call-template>
-  </xsl:variable>
 
   <xsl:param name="queryBinding" as="xs:string" select="(sch:schema/@queryBinding, 'xslt1')[1]"/>
   <xsl:variable name="effective-queryBinding" as="xs:string">
@@ -197,10 +191,10 @@
       </xsl:call-template>
 
       <xsl:choose>
-        <xsl:when test="$effective-strategy eq 'traditional'">
+        <xsl:when test="$strategy eq 'traditional'">
           <apply-templates select="node() | @*" mode="#current"/>
         </xsl:when>
-        <xsl:when test="$effective-strategy eq 'ex-post'">
+        <xsl:when test="$strategy eq 'ex-post'">
           <next-match>
             <with-param name="schxslt:fired-rules" as="element(svrl:fired-rule)*">
               <sequence select="$schxslt:fired-rules"/>
@@ -266,11 +260,11 @@
 
     <!-- Effective strategy -->
     <xsl:choose>
-      <xsl:when test="$effective-strategy eq 'traditional'"/>
-      <xsl:when test="$effective-strategy eq 'ex-post'"/>
+      <xsl:when test="$strategy eq 'traditional'"/>
+      <xsl:when test="$strategy eq 'ex-post'"/>
       <xsl:otherwise>
         <xsl:message terminate="yes">
-          The strategy '<xsl:value-of select="$effective-strategy"/>' is not defined.
+          The strategy '<xsl:value-of select="$strategy"/>' is not defined.
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
