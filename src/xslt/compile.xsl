@@ -96,6 +96,7 @@
     <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
       <xsl:sequence select="(@xml:base, ../@xml:base)"/>
 
+      <!-- Check if a context node was already matched by a rule of the current pattern. -->
       <param name="schxslt:rules" as="element(schxslt:rule)*"/>
       <xsl:call-template name="schxslt:let-param">
         <xsl:with-param name="bindings" as="element(sch:let)*" select="$bindings"/>
