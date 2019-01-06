@@ -19,8 +19,8 @@
   <xsl:variable name="effective-phase" select="schxslt:effective-phase(sch:schema, $phase)" as="xs:string"/>
   <xsl:variable name="active-patterns" select="schxslt:active-patterns(sch:schema, $effective-phase)" as="element(sch:pattern)+"/>
 
-  <xsl:variable name="validation-template-body" as="element(xsl:template)+">
-    <xsl:call-template name="schxslt:validation-template-body">
+  <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
+    <xsl:call-template name="schxslt:validation-stylesheet-body">
       <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
       <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:schema/sch:phase[@id eq $effective-phase]/sch:let"/>
     </xsl:call-template>
@@ -57,7 +57,7 @@
                 <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:phase[@id eq $effective-phase]/sch:let"/>
               </xsl:call-template>
             </xsl:variable>
-            <xsl:for-each select="$validation-template-body/@name">
+            <xsl:for-each select="$validation-stylesheet-body/@name">
               <call-template name="{.}">
                 <xsl:sequence select="$bindings"/>
               </call-template>
@@ -82,7 +82,7 @@
         <apply-templates mode="#current" select="@* | node()"/>
       </template>
 
-      <xsl:sequence select="$validation-template-body"/>
+      <xsl:sequence select="$validation-stylesheet-body"/>
       <xsl:sequence select="document('compile-functions.xsl')//xsl:function[@name = 'schxslt:location']"/>
 
     </transform>

@@ -31,7 +31,7 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="schxslt:validation-template-body">
+  <xsl:template name="schxslt:validation-stylesheet-body">
     <xsl:param name="patterns" as="element(sch:pattern)+"/>
     <xsl:param name="bindings" as="element(sch:let)*"/>
 
