@@ -89,11 +89,11 @@
   </xsl:template>
 
   <xsl:template name="schxslt:process-report">
-    <!-- The variable $report is assumed to be in scope in the validation stylesheet -->
-    <variable name="report" as="element()+">
-      <for-each select="$report/schxslt:pattern">
+    <xsl:param name="report-variable-name" as="xs:string" required="yes"/>
+    <variable name="{$report-variable-name}" as="element()+">
+      <for-each select="${$report-variable-name}/schxslt:pattern">
         <sequence select="*"/>
-        <sequence select="$report/schxslt:rule[@pattern = current()/@id]/*"/>
+        <sequence select="${$report-variable-name}/schxslt:rule[@pattern = current()/@id]/*"/>
       </for-each>
     </variable>
   </xsl:template>

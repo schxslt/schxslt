@@ -9,6 +9,7 @@
   <xsl:template name="svrl:schematron-output">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="phase" as="xs:string" required="yes"/>
+    <xsl:param name="report-variable-name" as="xs:string" required="yes"/>
 
     <svrl:schematron-output>
       <xsl:sequence select="$schema/@schemaVersion"/>
@@ -24,7 +25,7 @@
         </svrl:ns-prefix-in-attribute-values>
       </xsl:for-each>
 
-      <sequence select="$report"/>
+      <sequence select="${$report-variable-name}"/>
 
     </svrl:schematron-output>
   </xsl:template>

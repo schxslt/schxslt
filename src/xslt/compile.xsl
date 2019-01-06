@@ -65,11 +65,14 @@
           </schxslt:report>
         </variable>
 
-        <xsl:call-template name="schxslt:process-report"/>
+        <xsl:call-template name="schxslt:process-report">
+          <xsl:with-param name="report-variable-name" as="xs:string">report</xsl:with-param>
+        </xsl:call-template>
 
         <xsl:call-template name="svrl:schematron-output">
           <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
           <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
+          <xsl:with-param name="report-variable-name" as="xs:string">report</xsl:with-param>
         </xsl:call-template>
 
       </template>
