@@ -83,7 +83,7 @@
       </template>
 
       <xsl:sequence select="$validation-stylesheet-body"/>
-      <xsl:sequence select="document('compile-functions.xsl')//xsl:function[@name = 'schxslt:location']"/>
+      <xsl:sequence select="document('location.xsl')//xsl:function[@name = 'schxslt:location']"/>
 
     </transform>
 

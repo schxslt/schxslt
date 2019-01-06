@@ -1,7 +1,7 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../src/xslt/compile-functions.xsl"
+<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../src/xslt/location.xsl"
              xmlns:html="http://www.w3.org/1999/xhtml"
              xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
-  <scenario label="Testing the schxslt:location template">
+  <scenario label="Testing the schxslt:location function">
     <scenario label="when called with an element as location node">
       <call function="schxslt:location">
         <param name="node" as="node()" select="html:p[2]">
