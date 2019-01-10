@@ -1,8 +1,0 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="let-rule-context-01.sch">
-  <scenario label="Test pattern variable in rule context expression">
-    <context>
-      <element xmlns="" attr="bar"/>
-    </context>
-    <expect-assert id="A-01"/>
-  </scenario>
-</description>
