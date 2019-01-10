@@ -9,8 +9,8 @@
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
   <xsl:output indent="yes"/>
 
-  <xsl:include href="compile/templates.xsl"/>
   <xsl:include href="compile/functions.xsl"/>
+  <xsl:include href="compile/templates.xsl"/>
   <xsl:include href="compile/report.xsl"/>
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
