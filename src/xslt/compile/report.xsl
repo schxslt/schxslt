@@ -19,6 +19,13 @@
       <xsl:if test="$schema/sch:title">
         <xsl:attribute name="title" select="$schema/sch:title"/>
       </xsl:if>
+      <xsl:for-each select="$schema/sch:p">
+        <svrl:text>
+          <xsl:sequence select="(@id, @class, @icon)"/>
+          <xsl:apply-templates select="node()"/>
+        </svrl:text>
+      </xsl:for-each>
+
       <xsl:for-each select="$schema/sch:ns">
         <svrl:ns-prefix-in-attribute-values>
           <xsl:sequence select="(@prefix, @uri)"/>
