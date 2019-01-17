@@ -5,8 +5,6 @@ and released under the terms of the MIT license.
 
 [![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911)
 
-<img src="docs/three-stage-process.svg" style="float: right;">
-
 SchXslt is a conforming Schematron processor implemented entirely in
 XSLT. It operates as a three-stage transformation process that
 translates a Schematron to an XSLT validation stylesheet. This
