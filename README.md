@@ -1,26 +1,23 @@
 # SchXslt [ʃˈɛksl̩t] – An XSLT-based Schematron processor
 
-SchXslt is copyright (c) 2018 by David Maus <dmaus@dmaus.name> and
-released under the terms of the MIT license.
+SchXslt is copyright (c) 2018,2019 by David Maus &lt;dmaus@dmaus.name&lt;
+and released under the terms of the MIT license.
 
 [![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911)
 
+<img src="docs/three-stage-process.svg" style="float: right;">
+
 SchXslt is a conforming Schematron processor implemented entirely in
-XSLT. It translates a Schematron schema into a XSL transformation that
-outputs a SVRL report when applied to an instance document.
+XSLT. It operates as a three-stage transformation process that
+translates a Schematron to an XSLT validation stylesheet. This
+stylesheet outputs a validation report in the Schematron Validation
+Report Language (SVRL) when applied to an instance document.
 
-With this respect it operates much like the Rick Jelliffe's "skeleton"
-XSLT implementation. It differs from the "skeleton" in the following
-parts:
-
-  * It only supports XSLT2 as query language binding and requires a
-    XSLT processor supporting XSLT 2.0 or higher.
-
-  * It aims at a strict implementation of ISO Schematron 2016 and
-    comes with a suite of XSpec-based tests.
-
-Other than that it should in general be possible to use SchXslt as a
-drop-in replacement of the "skeleton" implementation. 
+With this respect it operates much like the
+["skeleton" implementation](https://github.com/schematron/schematron)
+by Rick Jelliffe and others. It differes from the "skeleton" in that
+it only supports XSLT 2 aus query language binding and requires an
+XSLT processor supporting XSLT 2.0 or higher.
 
 The following table lists the skeleton stylesheets and their SchXslt
 counterparts.
@@ -67,7 +64,7 @@ Incorporates all external definitions referenced by sch:include and
 sch:extends. The inclusion is recursive, but no check for circular
 inclusions (e.g. A includes B which includes A) is performed.
 
-SchXslt also performs base URI fixup on the included elements[^1].
+SchXslt also performs base URI fixup on the included elements.
 
 ```
 saxon -xsl:src/xslt/include.xsl -o:stage-1.sch </path/to/schematron>
