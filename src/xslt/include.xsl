@@ -4,13 +4,22 @@
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
-
+  
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc><p>Entry point for recursive inclusion</p></desc>
+  </doc>
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:include">
       <xsl:with-param name="schematron" select="."/>
     </xsl:call-template>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Perform inclusions recursively</p>
+    </desc>
+    <param name="schematron">Current schema document</param>
+  </doc>
   <xsl:template name="schxslt:include">
     <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
     <xsl:variable name="result" as="element(sch:schema)">
@@ -27,7 +36,12 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
+  
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Keep base URI of outermost element</p>
+    </desc>
+  </doc>
   <xsl:template match="sch:schema" mode="schxslt:include">
     <xsl:copy>
       <xsl:attribute name="xml:base" select="base-uri()"/>
@@ -36,18 +50,22 @@
     </xsl:copy>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Copy all other elements</p>
+    </desc>
+  </doc>
   <xsl:template match="node() | @*" mode="schxslt:include">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 
-  <!-- 5.4.3
-       An extends attribute with an href attribute shall reference external declarations. The href attribute is an IRI
-       reference to an external well-formed XML document or to an element in external well-formed XML document that is
-       Schematron element of the same type as the parent element of the extends element. The contents of that referenced
-       element shall be inserted in place of the extends element.
-  -->
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Replace with contents of external definition</p>
+    </desc>
+  </doc>
   <xsl:template match="sch:extends[@href]" mode="schxslt:include">
     <xsl:variable name="extends" select="doc(resolve-uri(@href, base-uri(.)))"/>
     <xsl:variable name="element" select="if ($extends instance of element()) then $extends else $extends/*"/>
@@ -62,10 +80,11 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- 5.4.4
-       The required href attribute shall be an IRI reference to a well-formed XML document or to an element in a
-       well-formed XML document
-  -->
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Replace with external definition</p>
+    </desc>
+  </doc>
   <xsl:template match="sch:include" mode="schxslt:include">
     <xsl:variable name="include" select="doc(resolve-uri(@href, base-uri(.)))"/>
     <xsl:variable name="element" select="if ($include instance of element()) then $include else $include/*"/>
