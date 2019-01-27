@@ -3,7 +3,6 @@
                 xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
   <p:option name="phase" select="''"/>
-  <p:option name="strategy" select="'ex-post'"/>
 
   <p:input  port="source" primary="true"/>
   <p:output port="result" primary="true"/>
@@ -30,7 +29,6 @@
 
   <p:xslt name="compile">
     <p:with-param name="phase" select="$phase"/>
-    <p:with-param name="strategy" select="$strategy"/>
     <p:input port="stylesheet">
       <p:document href="../xslt/compile.xsl"/>
     </p:input>
