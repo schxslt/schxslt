@@ -81,14 +81,9 @@
   </doc>
   <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents | sch:name/@path | sch:let/@value">
     <xsl:param name="schxslt:params" as="element(sch:param)*" tunnel="yes"/>
-    <xsl:attribute name="{name()}">
-      <xsl:call-template name="schxslt:replace-params">
-        <xsl:with-param name="src" select="."/>
-        <xsl:with-param name="params" select="$schxslt:params"/>
-      </xsl:call-template>
-    </xsl:attribute>
+    <xsl:attribute name="{name()}" select="schxslt:replace-params(., $schxslt:params)"/>
   </xsl:template>
-  
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Replace placeholders in property value</p>
@@ -97,19 +92,17 @@
     <param name="src">Property value</param>
     <return>Property value with all placeholders replaced</return>
   </doc>
-  <xsl:template name="schxslt:replace-params" as="xs:string?">
-    <xsl:param name="params" as="element(sch:param)*" required="yes"/>
-    <xsl:param name="src" as="xs:string" required="yes"/>
+  <xsl:function name="schxslt:replace-params" as="xs:string?">
+    <xsl:param name="src" as="xs:string"/>
+    <xsl:param name="params" as="element(sch:param)*"/>
     <xsl:choose>
       <xsl:when test="empty($params)">
         <xsl:value-of select="$src"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="schxslt:replace-params">
-          <xsl:with-param name="params" select="$params[position() > 1]"/>
-          <xsl:with-param name="src" select="replace($src, concat('(\W*)\$', $params[1]/@name, '(\W*)'), concat('$1', $params[1]/@value, '$2'))"/>
-        </xsl:call-template>
+        <xsl:variable name="src" select="replace($src, concat('(\W*)\$', $params[1]/@name, '(\W*)'), concat('$1', $params[1]/@value, '$2'))"/>
+        <xsl:value-of select="schxslt:replace-params($src, $params[position() > 1])"/>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
+  </xsl:function>
 </xsl:transform>
