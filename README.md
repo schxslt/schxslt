@@ -29,7 +29,7 @@ to the right documents.
 This step can be skipped if the Schematron does not reference external 
 definitions.
 
-The responsilbe stylesheet is [include.xsl](src/xslt/include.xsl).
+The responsible stylesheet is [include.xsl](src/xslt/include.xsl).
 
 ```
 saxon -xsl:src/xslt/include.xsl -o:stage-1.sch </path/to/schematron>
@@ -42,7 +42,7 @@ Abstract patterns and rules are instantiated.
 This step can be skipped if the Schematron does not define abstract 
 patterns or rules.
 
-The responsilbe stylesheet is [expand.xsl](src/xslt/expand.xsl).
+The responsible stylesheet is [expand.xsl](src/xslt/expand.xsl).
 
 ```
 saxon -xsl:src/xslt/expand.xsl -o:stage-2.sch stage-1.sch
@@ -53,11 +53,11 @@ saxon -xsl:src/xslt/expand.xsl -o:stage-2.sch stage-1.sch
 Compiles an XSLT 2.0 validation stylesheet that creates an SVRL report 
 document.
 
-The responsilbe stylesheets is [compile.xsl](src/xslt/compile.xsl).
+The responsible stylesheet is [compile.xsl](src/xslt/compile.xsl).
 
 This stylesheet takes an optional argument 'phase' to validate in the selected 
 phase. If no phase is requested the value of the @defaultPhase attribute is 
-used if present. Otherwise it defaults to phase '#ALL' and validates 
+used if present. Otherwise, it defaults to phase '#ALL' and validates 
 all patterns.
 
 ```
