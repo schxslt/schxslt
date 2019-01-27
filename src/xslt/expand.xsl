@@ -7,6 +7,11 @@
   <xsl:key name="schxslt:abstract-patterns" match="sch:pattern[@abstract = 'true']" use="@id"/>
   <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Keep base URI of outermost element</p>
+    </desc>
+  </doc>
   <xsl:template match="sch:schema">
     <xsl:copy>
       <xsl:attribute name="xml:base" select="base-uri()"/>
@@ -15,29 +20,49 @@
     </xsl:copy>
   </xsl:template>
 
-  <!-- Expand abstract rules and patters -->
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Copy all other elements</p>
+    </desc>
+  </doc>
   <xsl:template match="node() | @*">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*"/>
     </xsl:copy>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Remove abstract patterns</p>
+    </desc>
+  </doc>
   <xsl:template match="sch:pattern[@abstract = 'true']" />
+
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Remove abstract rules</p>
+    </desc>
+  </doc>
   <xsl:template match="sch:rule[@abstract = 'true']"    />
 
-  <!-- 5.4.3
-       Abstract rules are named lists of assertions without a context expression. An extends element with a rule
-       attribute shall reference an abstract rule. The current rule uses all the assertions from the abstract rule it
-       extends.
-  -->
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Instantiate abstract rule</p>
+      <p>
+        The current rule uses all the assertions from the abstract rule it
+        extends.
+      </p>
+    </desc>
+  </doc>
   <xsl:template match="sch:extends[@rule]" >
     <xsl:sequence select="key('schxslt:abstract-rules', @rule)/node()"/>
   </xsl:template>
 
-  <!-- 5.4.9
-       When a pattern element has the attribute abstract with a value true, then the pattern defines an abstract
-       pattern. An abstract pattern shall not have a is-a attribute and shall have an id attribute.
-  -->
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Instantiate abstract pattern</p>
+    </desc>
+  </doc>
   <xsl:template match="sch:pattern[@is-a]" >
     <xsl:variable name="is-a" select="key('schxslt:abstract-patterns', @is-a)"/>
     <xsl:copy>
@@ -48,6 +73,12 @@
     </xsl:copy>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Replace placeholders in abstract pattern instances</p>
+    </desc>
+    <param name="schxslt:params">Placeholders</param>
+  </doc>
   <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents | sch:name/@path | sch:let/@value">
     <xsl:param name="schxslt:params" as="element(sch:param)*" tunnel="yes"/>
     <xsl:attribute name="{name()}">
@@ -57,7 +88,15 @@
       </xsl:call-template>
     </xsl:attribute>
   </xsl:template>
-
+  
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Replace placeholders in property value</p>
+    </desc>
+    <param name="params">Sequence of placeholders</param>
+    <param name="src">Property value</param>
+    <return>Property value with all placeholders replaced</return>
+  </doc>
   <xsl:template name="schxslt:replace-params" as="xs:string?">
     <xsl:param name="params" as="element(sch:param)*" required="yes"/>
     <xsl:param name="src" as="xs:string" required="yes"/>
