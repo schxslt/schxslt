@@ -4,6 +4,13 @@
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Return path to node</p>
+    </desc>
+    <param name="node">Node</param>
+    <return>Path to node</return>
+  </doc>
   <xsl:function name="schxslt:location" as="xs:string">
     <xsl:param name="node" as="node()"/>
     <xsl:variable name="segments" as="xs:string*">
