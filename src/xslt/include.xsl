@@ -97,6 +97,4 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template match="text()"/>
-
 </xsl:transform>
