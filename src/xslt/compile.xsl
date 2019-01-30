@@ -89,6 +89,13 @@
 
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Return rule template</p>
+    </desc>
+    <param name="mode">Template mode</param>
+    <param name="bindings">Sequence of active variable bindings</param>
+  </doc>
   <xsl:template match="sch:rule">
     <xsl:param name="mode" as="xs:string" required="yes"/>
     <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
@@ -125,7 +132,14 @@
     </template>
 
   </xsl:template>
-
+  
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Return body of validation stylesheet</p>
+    </desc>
+    <param name="patterns">Sequence of active patterns</param>
+    <param name="bindings">Sequence of active variable bindings</param>
+  </doc>
   <xsl:template name="schxslt:validation-stylesheet-body">
     <xsl:param name="patterns" as="element(sch:pattern)+"/>
     <xsl:param name="bindings" as="element(sch:let)*"/>
@@ -183,6 +197,12 @@
 
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Normalize SVRL report</p>
+    </desc>
+    <param name="report-variable-name">Name of variable holding the intermediate report</param>
+  </doc>
   <xsl:template name="schxslt:process-report">
     <xsl:param name="report-variable-name" as="xs:string" required="yes"/>
     <variable name="{$report-variable-name}" as="element()+">
