@@ -30,4 +30,15 @@
     </run:xspec-schematron>
   </p:for-each>
 
+  <p:wrap-sequence wrapper="reports" wrapper-prefix="x" wrapper-namespace="http://www.jenitennison.com/xslt/xspec"/>
+
+  <p:xslt>
+    <p:input port="stylesheet">
+      <p:document href="tests/format-report.xsl"/>
+    </p:input>
+    <p:input port="parameters">
+      <p:empty/>
+    </p:input>
+  </p:xslt>
+
 </p:declare-step>
