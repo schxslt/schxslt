@@ -15,7 +15,7 @@
     </desc>
     <param name="schema">Schematron</param>
     <param name="phase">Effective phase</param>
-    <param name="report-variable-name">Name of the report variable</param>
+    <param name="report-variable-name">Name of the variable holding the intermediary report</param>
   </doc>
   <xsl:template name="svrl:schematron-output">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
