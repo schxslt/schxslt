@@ -6,7 +6,14 @@
                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
+  
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Compile preprocessed Schematron to validation stylesheet</p>
+    </desc>
+    <param name="phase">Validation phase</param>
+  </doc>
+  
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
   <xsl:output indent="yes"/>
 
