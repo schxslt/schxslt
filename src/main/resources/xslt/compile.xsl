@@ -29,7 +29,6 @@
   <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
     <xsl:call-template name="schxslt:validation-stylesheet-body">
       <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
-      <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:schema/sch:phase[@id eq $effective-phase]/sch:let"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -47,7 +46,7 @@
       <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
 
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="bindings" select="sch:let"/>
+        <xsl:with-param name="bindings" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       </xsl:call-template>
 
       <template match="/">
@@ -59,15 +58,8 @@
 
         <variable name="report" as="element(schxslt:report)">
           <schxslt:report>
-            <xsl:variable name="bindings" as="element(xsl:with-param)*">
-              <xsl:call-template name="schxslt:let-with-param">
-                <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:phase[@id eq $effective-phase]/sch:let"/>
-              </xsl:call-template>
-            </xsl:variable>
             <xsl:for-each select="$validation-stylesheet-body/@name">
-              <call-template name="{.}">
-                <xsl:sequence select="$bindings"/>
-              </call-template>
+              <call-template name="{.}"/>
             </xsl:for-each>
           </schxslt:report>
         </variable>
@@ -101,20 +93,15 @@
       <p>Return rule template</p>
     </desc>
     <param name="mode">Template mode</param>
-    <param name="bindings">Sequence of active variable bindings</param>
   </doc>
   <xsl:template match="sch:rule">
     <xsl:param name="mode" as="xs:string" required="yes"/>
-    <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
     <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
       <xsl:sequence select="(@xml:base, ../@xml:base)"/>
 
       <!-- Check if a context node was already matched by a rule of the current pattern. -->
       <param name="schxslt:rules" as="element(schxslt:rule)*"/>
-      <xsl:call-template name="schxslt:let-param">
-        <xsl:with-param name="bindings" as="element(sch:let)*" select="$bindings"/>
-      </xsl:call-template>
 
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
@@ -145,11 +132,9 @@
       <p>Return body of validation stylesheet</p>
     </desc>
     <param name="patterns">Sequence of active patterns</param>
-    <param name="bindings">Sequence of active variable bindings</param>
   </doc>
   <xsl:template name="schxslt:validation-stylesheet-body">
     <xsl:param name="patterns" as="element(sch:pattern)+"/>
-    <xsl:param name="bindings" as="element(sch:let)*"/>
 
     <xsl:for-each-group select="$patterns" group-by="string-join((generate-id(sch:let), base-uri(.), @documents), '&lt;')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
@@ -157,9 +142,6 @@
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
 
-        <xsl:call-template name="schxslt:let-param">
-          <xsl:with-param name="bindings" select="$bindings"/>
-        </xsl:call-template>
         <xsl:call-template name="schxslt:let-variable">
           <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
         </xsl:call-template>
@@ -186,18 +168,13 @@
             </schxslt:pattern>
           </xsl:for-each>
 
-          <apply-templates mode="{$mode}" select=".">
-            <xsl:call-template name="schxslt:let-with-param">
-              <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
-            </xsl:call-template>
-          </apply-templates>
+          <apply-templates mode="{$mode}" select="."/>
         </for-each>
 
       </template>
 
       <xsl:apply-templates select="current-group()/sch:rule">
         <xsl:with-param name="mode" as="xs:string" select="$mode"/>
-        <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, current-group()/sch:let)"/>
       </xsl:apply-templates>
 
     </xsl:for-each-group>

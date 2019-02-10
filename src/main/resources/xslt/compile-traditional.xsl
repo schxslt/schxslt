@@ -21,7 +21,6 @@
   <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
     <xsl:call-template name="schxslt:validation-stylesheet-body">
       <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
-      <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:schema/sch:phase[@id eq $effective-phase]/sch:let"/>
     </xsl:call-template>
   </xsl:variable>
 
@@ -39,27 +38,16 @@
       <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
 
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="bindings" select="sch:let"/>
+        <xsl:with-param name="bindings" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       </xsl:call-template>
 
       <template match="/">
         <xsl:sequence select="sch:phase[@id eq $effective-phase]/@xml:base"/>
 
-        <xsl:call-template name="schxslt:let-variable">
-          <xsl:with-param name="bindings" select="sch:phase[@id eq $effective-phase]/sch:let"/>
-        </xsl:call-template>
-
         <variable name="report" as="element(schxslt:report)">
           <schxslt:report>
-            <xsl:variable name="bindings" as="element(xsl:with-param)*">
-              <xsl:call-template name="schxslt:let-with-param">
-                <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:phase[@id eq $effective-phase]/sch:let"/>
-              </xsl:call-template>
-            </xsl:variable>
             <xsl:for-each select="$validation-stylesheet-body/@name">
-              <call-template name="{.}">
-                <xsl:sequence select="$bindings"/>
-              </call-template>
+              <call-template name="{.}"/>
             </xsl:for-each>
           </schxslt:report>
         </variable>
@@ -90,20 +78,12 @@
 
   <xsl:template name="schxslt:validation-stylesheet-body">
     <xsl:param name="patterns" as="element(sch:pattern)+"/>
-    <xsl:param name="bindings" as="element(sch:let)*"/>
 
     <xsl:for-each select="$patterns">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
 
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
-
-        <xsl:call-template name="schxslt:let-param">
-          <xsl:with-param name="bindings" select="$bindings"/>
-        </xsl:call-template>
-        <xsl:call-template name="schxslt:let-variable">
-          <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
-        </xsl:call-template>
 
         <variable name="documents" as="item()+">
           <xsl:choose>
@@ -123,18 +103,13 @@
             <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
           </xsl:call-template>
 
-          <apply-templates mode="{$mode}" select=".">
-            <xsl:call-template name="schxslt:let-with-param">
-              <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
-            </xsl:call-template>
-          </apply-templates>
+          <apply-templates mode="{$mode}" select="."/>
         </for-each>
 
       </template>
 
       <xsl:apply-templates select="sch:rule">
         <xsl:with-param name="mode" as="xs:string" select="$mode"/>
-        <xsl:with-param name="bindings" as="element(sch:let)*" select="($bindings, sch:let)"/>
       </xsl:apply-templates>
 
     </xsl:for-each>
@@ -143,14 +118,9 @@
 
   <xsl:template match="sch:rule">
     <xsl:param name="mode" as="xs:string" required="yes"/>
-    <xsl:param name="bindings" as="element(sch:let)*" required="yes"/>
 
     <template match="{@context}" priority="{count(following-sibling::sch:rule)}" mode="{$mode}">
       <xsl:sequence select="(@xml:base, ../@xml:base)"/>
-
-      <xsl:call-template name="schxslt:let-param">
-        <xsl:with-param name="bindings" as="element(sch:let)*" select="$bindings"/>
-      </xsl:call-template>
 
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
