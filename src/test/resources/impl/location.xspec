@@ -1,4 +1,4 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../src/xslt/compile/location.xsl"
+<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../main/resources/xslt/compile/location.xsl"
              xmlns:html="http://www.w3.org/1999/xhtml"
              xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
   <scenario label="Testing the schxslt:location function">
