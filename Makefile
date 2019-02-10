@@ -6,10 +6,6 @@ else
 	CALABASH=calabash
 endif
 
-.PHONY: clean
-clean:
-	rm tests/impl/*/*.sch.xsl
-
 .PHONY: test
 test:
-	${CALABASH} schematron.xpl
+	${CALABASH} src/test/resources/runner.xpl

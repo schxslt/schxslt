@@ -7,9 +7,9 @@
 
   <p:option name="filter" select="'.*\.xspec$'"/>
 
-  <p:import href="vendor/xproc-xspec/library.xpl"/>
+  <p:import href="../../../vendor/xproc-xspec/library.xpl"/>
 
-  <p:directory-list path="tests/impl"/>
+  <p:directory-list path="spec"/>
   <p:viewport match="/c:directory/c:directory">
     <p:directory-list>
       <p:with-option name="include-filter" select="$filter"/>
@@ -23,10 +23,10 @@
       <p:with-option name="href" select="resolve-uri(c:file/@name, base-uri(c:file))"/>
     </p:load>
     <run:xspec-schematron>
-      <p:with-option name="XSpecHome" select="resolve-uri('vendor/xspec/', static-base-uri())"/>
-      <p:with-option name="SchematronXsltInclude" select="resolve-uri('src/xslt/include.xsl', static-base-uri())"/>
-      <p:with-option name="SchematronXsltExpand" select="resolve-uri('src/xslt/expand.xsl', static-base-uri())"/>
-      <p:with-option name="SchematronXsltCompile" select="resolve-uri('src/xslt/compile.xsl', static-base-uri())"/>
+      <p:with-option name="XSpecHome" select="resolve-uri('../../../vendor/xspec/', static-base-uri())"/>
+      <p:with-option name="SchematronXsltInclude" select="resolve-uri('../../main/resources/xslt/include.xsl', static-base-uri())"/>
+      <p:with-option name="SchematronXsltExpand" select="resolve-uri('../../main/resources/xslt/expand.xsl', static-base-uri())"/>
+      <p:with-option name="SchematronXsltCompile" select="resolve-uri('../../main/resources/xslt/compile.xsl', static-base-uri())"/>
     </run:xspec-schematron>
   </p:for-each>
 
@@ -34,7 +34,7 @@
 
   <p:xslt>
     <p:input port="stylesheet">
-      <p:document href="tests/format-report.xsl"/>
+      <p:document href="format-report.xsl"/>
     </p:input>
     <p:input port="parameters">
       <p:empty/>

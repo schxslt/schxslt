@@ -62,4 +62,25 @@
     </xsl:choose>
   </xsl:function>
 
+  <xsl:function name="schxslt:rename-variable" as="xs:string">
+    <xsl:param name="expression" as="xs:string"/>
+    <xsl:param name="from" as="xs:string"/>
+    <xsl:param name="to" as="xs:string"/>
+
+    <xsl:variable name="quote">"</xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="contains($expression, '$')">
+        <xsl:variable name="head" select="substring-before($expression, '$')"/>
+        <xsl:variable name="tail" select="substring-after($expression, '$')"/>
+        <xsl:variable name="in-string-expr-p" as="xs:boolean" select="count(tokenize($head, '[''$quote]')) mod 2 eq 0"/>
+        <xsl:variable name="head" select="if ($in-string-expr-p) then $head else replace($head, concat('(\W*)\$', $from, '(\W*)'), concat('$1', $to, '$2'))"/>
+        <xsl:sequence select="($head, schxslt:rename-variable($tail, $from, $to))"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$expression"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
 </xsl:transform>
