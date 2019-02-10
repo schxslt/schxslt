@@ -1,0 +1,8 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="rule-context-02.sch">
+  <scenario label="Rule context contains pattern scoped variable">
+    <context>
+      <document/>
+    </context>
+    <expect-assert id="A01"/>
+  </scenario>
+</description>
