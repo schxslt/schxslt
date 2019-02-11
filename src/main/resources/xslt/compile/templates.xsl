@@ -3,7 +3,6 @@
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
-               xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -11,7 +10,7 @@
   <xsl:template match="sch:assert">
     <if test="not({@test})">
       <xsl:sequence select="@xml:base"/>
-      <xsl:call-template name="svrl:failed-assert">
+      <xsl:call-template name="schxslt:handle-failed-assert">
         <xsl:with-param name="assert" as="element(sch:assert)" select="."/>
       </xsl:call-template>
     </if>
@@ -20,7 +19,7 @@
   <xsl:template match="sch:report">
     <if test="{@test}">
       <xsl:sequence select="@xml:base"/>
-      <xsl:call-template name="svrl:successful-report">
+      <xsl:call-template name="schxslt:handle-successful-report">
         <xsl:with-param name="report" as="element(sch:report)" select="."/>
       </xsl:call-template>
     </if>

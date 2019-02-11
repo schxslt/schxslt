@@ -3,7 +3,6 @@
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
-               xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
@@ -68,7 +67,7 @@
           <xsl:with-param name="report-variable-name" as="xs:string">report</xsl:with-param>
         </xsl:call-template>
 
-        <xsl:call-template name="svrl:schematron-output">
+        <xsl:call-template name="schxslt:handle-schematron-output">
           <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
           <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
           <xsl:with-param name="report-variable-name" as="xs:string">report</xsl:with-param>
@@ -110,7 +109,7 @@
       <if test="empty($schxslt:rules[@pattern = '{generate-id(..)}'])">
         <if test="empty($schxslt:rules[@pattern = '{generate-id(..)}'][@context = generate-id(current())])">
           <schxslt:rule pattern="{generate-id(..)}@{{base-uri(.)}}">
-            <xsl:call-template name="svrl:fired-rule">
+            <xsl:call-template name="schxslt:handle-fired-rule">
               <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
             </xsl:call-template>
             <xsl:apply-templates select="sch:assert | sch:report"/>
@@ -162,7 +161,7 @@
         <for-each select="$documents">
           <xsl:for-each select="current-group()">
             <schxslt:pattern id="{generate-id()}@{{base-uri(.)}}">
-              <xsl:call-template name="svrl:active-pattern">
+              <xsl:call-template name="schxslt:handle-active-pattern">
                 <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
               </xsl:call-template>
             </schxslt:pattern>
