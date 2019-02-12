@@ -30,7 +30,7 @@
   <p:xslt name="compile">
     <p:with-param name="phase" select="$phase"/>
     <p:input port="stylesheet">
-      <p:document href="../xslt/compile.xsl"/>
+      <p:document href="../xslt/compile-for-svrl.xsl"/>
     </p:input>
   </p:xslt>
 
