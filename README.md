@@ -53,7 +53,7 @@ saxon -xsl:src/main/resources/xslt/expand.xsl -o:stage-2.sch stage-1.sch
 Compiles an XSLT 2.0 validation stylesheet that creates an SVRL report 
 document.
 
-The responsible stylesheet is [compile.xsl](src/main/resources/xslt/compile.xsl).
+The responsible stylesheet is [compile-for-svrl.xsl](src/main/resources/xslt/compile-for-svrl.xsl).
 
 This stylesheet takes an optional argument 'phase' to validate in the selected 
 phase. If no phase is requested the value of the @defaultPhase attribute is 
