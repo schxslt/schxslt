@@ -16,9 +16,8 @@
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
   <xsl:output indent="yes"/>
 
-  <xsl:include href="compile/functions.xsl"/>
-  <xsl:include href="compile/templates.xsl"/>
-  <xsl:include href="compile/report.xsl"/>
+  <xsl:include href="functions.xsl"/>
+  <xsl:include href="templates.xsl"/>
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
@@ -81,7 +80,7 @@
       </template>
 
       <xsl:sequence select="$validation-stylesheet-body"/>
-      <xsl:sequence select="document('compile/location.xsl')//xsl:function[@name = 'schxslt:location']"/>
+      <xsl:sequence select="document('location.xsl')//xsl:function[@name = 'schxslt:location']"/>
 
     </transform>
 

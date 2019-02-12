@@ -26,7 +26,7 @@
       <p:with-option name="XSpecHome" select="resolve-uri('../../../vendor/xspec/', static-base-uri())"/>
       <p:with-option name="SchematronXsltInclude" select="resolve-uri('../../main/resources/xslt/include.xsl', static-base-uri())"/>
       <p:with-option name="SchematronXsltExpand" select="resolve-uri('../../main/resources/xslt/expand.xsl', static-base-uri())"/>
-      <p:with-option name="SchematronXsltCompile" select="resolve-uri('../../main/resources/xslt/compile.xsl', static-base-uri())"/>
+      <p:with-option name="SchematronXsltCompile" select="resolve-uri('../../main/resources/xslt/compile-for-svrl.xsl', static-base-uri())"/>
     </run:xspec-schematron>
   </p:for-each>
 

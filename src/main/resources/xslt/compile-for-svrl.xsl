@@ -5,10 +5,8 @@
                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>Templates in the svrl: namespace create portions of the validation stylesheet that generate SVRL output.</desc>
-  </doc>
+
+  <xsl:import href="compile/compile-2.0.xsl"/>
   
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
