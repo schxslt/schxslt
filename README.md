@@ -61,7 +61,7 @@ used if present. Otherwise, it defaults to phase '#ALL' and validates
 all patterns.
 
 ```
-saxon -xsl:src/main/resources/xslt/compile.xsl -o:stage-3.xsl stage-2.sch [phase=myphase]
+saxon -xsl:src/main/resources/xslt/compile-for-svrl.xsl -o:stage-3.xsl stage-2.sch [phase=myphase]
 ```
 
 ## Using XProc
