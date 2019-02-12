@@ -33,9 +33,27 @@
 
   </p:group>
 
+  <p:group name="test-impl">
+
+    <p:output  port="result" sequence="true" primary="true"/>
+
+    <p:directory-list path="impl" include-filter=".*\.xspec$"/>
+    <p:for-each>
+      <p:iteration-source select="//c:file"/>
+      <p:load>
+        <p:with-option name="href" select="resolve-uri(c:file/@name, base-uri(c:file))"/>
+      </p:load>
+      <run:xspec-xslt>
+        <p:with-option name="XSpecHome" select="resolve-uri('../../../vendor/xspec/', static-base-uri())"/>
+      </run:xspec-xslt>
+    </p:for-each>
+    
+  </p:group>
+
   <p:wrap-sequence wrapper="reports" wrapper-prefix="x" wrapper-namespace="http://www.jenitennison.com/xslt/xspec">
     <p:input port="source">
       <p:pipe step="test-spec" port="result"/>
+      <p:pipe step="test-impl" port="result"/>
     </p:input>
   </p:wrap-sequence>
 
