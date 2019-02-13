@@ -5,14 +5,14 @@
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Compile preprocessed Schematron to validation stylesheet</p>
     </desc>
     <param name="phase">Validation phase</param>
   </doc>
-  
+
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
   <xsl:output indent="yes"/>
 
@@ -42,6 +42,17 @@
 
       <xsl:sequence select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
       <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
+
+      <!-- See https://github.com/dmj/schxslt/issues/25 -->
+      <xsl:variable name="global-bindings" as="element(sch:let)*" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
+      <xsl:if test="count($global-bindings) ne count(distinct-values($global-bindings/@name))">
+        <xsl:message terminate="yes">
+          Compilation aborted because of variable name conflicts:
+          <xsl:for-each-group select="$global-bindings" group-by="@name">
+            <xsl:value-of select="current-grouping-key()"/> (<xsl:value-of select="current-group()/../local-name()" separator=", "/>)
+          </xsl:for-each-group>
+        </xsl:message>
+      </xsl:if>
 
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="bindings" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
@@ -124,7 +135,7 @@
     </template>
 
   </xsl:template>
-  
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Return body of validation stylesheet</p>
