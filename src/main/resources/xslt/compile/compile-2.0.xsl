@@ -55,7 +55,7 @@
       </xsl:if>
 
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="bindings" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
+        <xsl:with-param name="bindings" select="$global-bindings"/>
       </xsl:call-template>
 
       <template match="/">
