@@ -153,6 +153,7 @@
       <xsl:variable name="diagnostic" select="$schema/sch:diagnostics/sch:diagnostic[@id eq current()]"/>
       <svrl:diagnostic-reference diagnostic="{.}">
         <svrl:text>
+          <xsl:sequence select="$diagnostic/@*"/>
           <xsl:apply-templates select="$diagnostic/node()"/>
         </svrl:text>
       </svrl:diagnostic-reference>
