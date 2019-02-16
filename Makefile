@@ -9,3 +9,7 @@ endif
 .PHONY: test
 test:
 	${CALABASH} src/test/resources/runner.xpl
+
+.PHONY: clean
+clean:
+	rm -vf src/test/resources/spec/*/*.sch.xsl
