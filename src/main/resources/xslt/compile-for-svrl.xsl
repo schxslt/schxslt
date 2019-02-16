@@ -111,8 +111,8 @@
     </desc>
   </doc>
   <xsl:template name="schxslt:handle-detailed-report">
-    <xsl:call-template name="schxslt:handle-copy-diagnostics"/>
-    <xsl:call-template name="schxslt:handle-copy-properties"/>
+    <xsl:call-template name="schxslt:copy-diagnostics"/>
+    <xsl:call-template name="schxslt:copy-properties"/>
     <xsl:if test="text() | *">
       <svrl:text>
         <xsl:apply-templates select="node()"/>
@@ -126,7 +126,7 @@
     </desc>
     <param name="schema">Schematron</param>
   </doc>
-  <xsl:template name="schxslt:handle-copy-properties">
+  <xsl:template name="schxslt:copy-properties">
     <xsl:param name="schema" as="element(sch:schema)" tunnel="yes"/>
 
     <xsl:for-each select="tokenize(@properties, ' ')">
@@ -146,7 +146,7 @@
     </desc>
     <param name="schema">Schematron</param>
   </doc>
-  <xsl:template name="schxslt:handle-copy-diagnostics">
+  <xsl:template name="schxslt:copy-diagnostics">
     <xsl:param name="schema" as="element(sch:schema)" tunnel="yes"/>
 
     <xsl:for-each select="tokenize(@diagnostics, ' ')">
