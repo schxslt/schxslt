@@ -1,25 +1,17 @@
-<!-- Perform inclusions as per 5.4.3 and 5.4.3 -->
 <xsl:transform version="2.0" exclude-result-prefixes="#all"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
-  
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc><p>Entry point for recursive inclusion</p></desc>
-  </doc>
+
+  <!-- Entry for recursive inclusion -->
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:include">
       <xsl:with-param name="schematron" select="."/>
     </xsl:call-template>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Perform inclusions recursively</p>
-    </desc>
-    <param name="schematron">Current schema document</param>
-  </doc>
+  <!-- Recursive inclusion -->
   <xsl:template name="schxslt:include">
     <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
     <xsl:variable name="result" as="element(sch:schema)">
@@ -36,12 +28,8 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Keep base URI of outermost element</p>
-    </desc>
-  </doc>
+
+  <!-- Copy outermost element and keep it's base URI -->
   <xsl:template match="sch:schema" mode="schxslt:include">
     <xsl:copy>
       <xsl:attribute name="xml:base" select="base-uri()"/>
@@ -50,22 +38,14 @@
     </xsl:copy>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Copy all other elements</p>
-    </desc>
-  </doc>
+  <!-- Copy all other elements -->
   <xsl:template match="node() | @*" mode="schxslt:include">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Replace with contents of external definition</p>
-    </desc>
-  </doc>
+  <!-- Replace with contents of external definition -->
   <xsl:template match="sch:extends[@href]" mode="schxslt:include">
     <xsl:variable name="extends" select="doc(resolve-uri(@href, base-uri(.)))"/>
     <xsl:variable name="element" select="if ($extends instance of element()) then $extends else $extends/*"/>
@@ -80,11 +60,7 @@
     </xsl:if>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Replace with external definition</p>
-    </desc>
-  </doc>
+  <!-- Replace with external definition -->
   <xsl:template match="sch:include" mode="schxslt:include">
     <xsl:variable name="include" select="doc(resolve-uri(@href, base-uri(.)))"/>
     <xsl:variable name="element" select="if ($include instance of element()) then $include else $include/*"/>
