@@ -84,7 +84,12 @@ public class Task extends org.apache.tools.ant.Task
 
     private void validate (final File file)
     {
-        if (this.validator.validate(file) == false) {
+        Result report = this.validator.validate(file);
+        for (String message: report.getValidationMessages()) {
+            log(message, Project.MSG_WARN);
+        }
+
+        if (report.isValid() == false) {
             String message = "The file '" + this.file + "' is invalid";
             log(message, Project.MSG_ERR);
             throw new BuildException(message);

@@ -58,21 +58,16 @@ public class Schematron
         this.validator = compiler.compile(this.loadDocument(schema), phase);
     }
 
-    public boolean validate (final File file)
+    public Result validate (final File file)
     {
         DOMResult target = new DOMResult();
         DOMSource source = new DOMSource(this.loadDocument(file));
         try {
             this.validator.newTransformer().transform(source, target);
             Document report = (Document)target.getNode();
-            NodeList asserts = report.getElementsByTagNameNS("http://purl.oclc.org/dsdl/svrl", "failed-assert");
-            NodeList reports = report.getElementsByTagNameNS("http://purl.oclc.org/dsdl/svrl", "successful-report");
 
-            if (asserts.getLength() == 0 && reports.getLength() == 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return new Result(report);
+            
         } catch (TransformerException e) {
             throw new RuntimeException("Unable to apply validation stylesheet");
         }
