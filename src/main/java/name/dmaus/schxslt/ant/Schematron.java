@@ -48,46 +48,14 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
-import java.net.URL;
-import java.net.URI;
-import java.net.URISyntaxException;
-
 public class Schematron
 {
-    private final TransformerFactory factory = TransformerFactory.newInstance();
-    private final URIResolver resolver = new Resolver();
-
     private Templates validator;
 
     public Schematron (final File schema, final String phase)
     {
-
-        factory.setURIResolver(this.resolver);
-        try {
-
-            Transformer stepInclude = createSchematronTransformer("/xslt/include.xsl");
-            Transformer stepExpand = createSchematronTransformer("/xslt/expand.xsl");
-            Transformer stepCompile = createSchematronTransformer("/xslt/compile-for-svrl.xsl");
-
-            DOMSource srcInclude = new DOMSource(this.loadDocument(schema));
-            DOMResult dstInclude = new DOMResult();
-            stepInclude.transform(srcInclude, dstInclude);
-
-            DOMSource srcExpand = new DOMSource(dstInclude.getNode());
-            DOMResult dstExpand = new DOMResult();
-            stepExpand.transform(srcExpand, dstExpand);
-
-            DOMSource srcCompile = new DOMSource(dstExpand.getNode());
-            DOMResult dstCompile = new DOMResult();
-
-            stepCompile.setParameter("phase", phase);
-            stepCompile.transform(srcCompile, dstCompile);
-
-            this.validator = TransformerFactory.newInstance().newTemplates(new DOMSource(dstCompile.getNode()));
-
-        } catch (TransformerException e) {
-            throw new RuntimeException("Unable to compile validation stylesheet");
-        }
+        Compiler compiler = new Compiler();
+        this.validator = compiler.compile(this.loadDocument(schema), phase);
     }
 
     public boolean validate (final File file)
@@ -120,40 +88,6 @@ public class Schematron
             throw new RuntimeException("Unable to load document '" + file + "'");
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Unable to load document '" + file + "'");
-        }
-    }
-
-    private Transformer createSchematronTransformer (final String filename) throws TransformerException
-    {
-        Source source = this.resolver.resolve(filename, null);
-        return factory.newTransformer(source);
-    }
-
-    private class Resolver implements URIResolver
-    {
-        public Source resolve (String href, String base) throws TransformerException
-        {
-            URI baseUri;
-            URI hrefUri;
-            try {
-
-                if (base == null || base.isEmpty()) {
-                    baseUri = new URI("");
-                } else {
-                    baseUri = new URI(base.substring(1 + base.indexOf("!")));
-                }
-
-                hrefUri = baseUri.resolve(href);
-
-                String systemId = getClass().getResource(hrefUri.toString()).toString();
-                Source source = new StreamSource(getClass().getResourceAsStream(hrefUri.toString()));
-                source.setSystemId(systemId);
-
-                return source;
-
-            } catch (URISyntaxException e) {
-                throw new TransformerException(e);
-            }
         }
     }
 }
