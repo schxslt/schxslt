@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package name.dmaus.schxslt.ant;
+package name.dmaus.schxslt;
 
 import javax.xml.transform.Templates;
 
@@ -51,7 +51,7 @@ public class Compiler
         this.factory.setURIResolver(this.resolver);
     }
 
-    public Templates compile (final Document schema, final String phase)
+    public Templates compile (final Source schema, final String phase)
     {
         try {
 
@@ -59,9 +59,8 @@ public class Compiler
             Transformer stepExpand = createSchematronTransformer("/xslt/expand.xsl");
             Transformer stepCompile = createSchematronTransformer("/xslt/compile-for-svrl.xsl");
 
-            DOMSource srcInclude = new DOMSource(schema);
             DOMResult dstInclude = new DOMResult();
-            stepInclude.transform(srcInclude, dstInclude);
+            stepInclude.transform(schema, dstInclude);
 
             DOMSource srcExpand = new DOMSource(dstInclude.getNode());
             DOMResult dstExpand = new DOMResult();
@@ -70,7 +69,10 @@ public class Compiler
             DOMSource srcCompile = new DOMSource(dstExpand.getNode());
             DOMResult dstCompile = new DOMResult();
 
-            stepCompile.setParameter("phase", phase);
+            if (phase != null) {
+                stepCompile.setParameter("phase", phase);
+            }
+
             stepCompile.transform(srcCompile, dstCompile);
             return factory.newTemplates(new DOMSource(dstCompile.getNode()));
 

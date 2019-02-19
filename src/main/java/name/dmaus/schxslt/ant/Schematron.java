@@ -24,6 +24,8 @@
 
 package name.dmaus.schxslt.ant;
 
+import name.dmaus.schxslt.Compiler;
+
 import java.io.IOException;
 import java.io.File;
 
@@ -55,7 +57,7 @@ public class Schematron
     public Schematron (final File schema, final String phase)
     {
         Compiler compiler = new Compiler();
-        this.validator = compiler.compile(this.loadDocument(schema), phase);
+        this.validator = compiler.compile(new DOMSource(this.loadDocument(schema)), phase);
     }
 
     public Result validate (final File file)

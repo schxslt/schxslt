@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package name.dmaus.schxslt.ant;
+package name.dmaus.schxslt;
 
 import java.net.URL;
 import java.net.URI;
