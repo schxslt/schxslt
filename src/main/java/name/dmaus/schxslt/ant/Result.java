@@ -31,6 +31,17 @@ import org.w3c.dom.NodeList;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.transform.stream.StreamResult;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+
+import javax.xml.transform.dom.DOMSource;
+
 public class Result
 {
     private final Document report;
@@ -57,6 +68,20 @@ public class Result
     public boolean isValid ()
     {
         return this.messages.isEmpty();
+    }
+
+    public void saveAs (final File file)
+    {
+        try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(this.report);
+            StreamResult result = new StreamResult(file);
+
+            transformer.transform(source, result);
+
+        } catch (TransformerException e) {
+            throw new RuntimeException("Unable to save validation report to file '" + file + "'");
+        }
     }
 
     private void readMessages (NodeList nodes)

@@ -33,6 +33,7 @@ public class Task extends org.apache.tools.ant.Task
 {
     private File file;
     private File schema;
+    private File report;
 
     private String phase = "#ALL";
 
@@ -53,6 +54,11 @@ public class Task extends org.apache.tools.ant.Task
     public void setFile (File file)
     {
         this.file = file;
+    }
+
+    public void setReport (File report)
+    {
+        this.report = report;
     }
 
     public void execute () throws BuildException
@@ -87,6 +93,10 @@ public class Task extends org.apache.tools.ant.Task
         Result report = this.validator.validate(file);
         for (String message: report.getValidationMessages()) {
             log(message, Project.MSG_WARN);
+        }
+
+        if (this.report != null) {
+            report.saveAs(this.report);
         }
 
         if (report.isValid() == false) {
