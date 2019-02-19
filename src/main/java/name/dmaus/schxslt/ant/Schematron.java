@@ -83,7 +83,7 @@ public class Schematron
             stepCompile.setParameter("phase", phase);
             stepCompile.transform(srcCompile, dstCompile);
 
-            this.validator = factory.newTemplates(new DOMSource(dstCompile.getNode()));
+            this.validator = TransformerFactory.newInstance().newTemplates(new DOMSource(dstCompile.getNode()));
 
         } catch (TransformerException e) {
             throw new RuntimeException("Unable to compile validation stylesheet");
