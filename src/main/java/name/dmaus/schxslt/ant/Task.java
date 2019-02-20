@@ -67,7 +67,7 @@ public class Task extends org.apache.tools.ant.Task
             throw new BuildException("You must provide the file to be validated in the 'file' attribute");
         }
         if (this.schema == null) {
-            throw new BuildException("You must provide the schema in the 'schema' attribute");
+            throw new BuildException("You must provide the file containing the schema in the 'schema' attribute");
         }
         if (!this.file.exists() || !this.file.canRead()) {
             throw new BuildException("Unable to read " + this.file);
