@@ -83,3 +83,19 @@ validation report to the ```result``` output port.
 ```
 calabash -i source=</path/to/document> -i schema=</path/to/schema> src/main/resources/xproc/validate-with-schematron.xpl
 ```
+
+## Testsuite
+
+SchXslt comes with a set of [https://github.com/xspec/xspec](XSpec) definitions that test internals
+of the processor ([test/resources/impl](src/test/resources/impl)) and SchXslt against the ISO
+specification ([test/resources/spec](src/test/resources/spec)).
+
+The [test runner](src/test/resources/runner.xpl) relies on
+[XProc XSpec](https://github.com/dmj/xproc-xspec) and [XSpec](https://github.com/xspec/xspec) to be
+installed as Git submodules in the [lib/](lib/) directory.
+
+To execute the test suite run the runner with Calabash.
+
+```
+calabash src/test/resources/runner.xpl
+```
