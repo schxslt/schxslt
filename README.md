@@ -43,6 +43,8 @@ It supports the following options:
     </tbody>
 </table>
 
+## Example
+
 ```
 <project name="Test" basedir="." default="build">
   <taskdef name="schematron" classname="name.dmaus.schxslt.ant.Task" classpath="/path/to/schxslt-ant.jar"/>
