@@ -1,3 +1,6 @@
 [submodule "lib/xproc-xspec"]
 	path = lib/xproc-xspec
 	url = https://github.com/dmj/xproc-xspec.git
+[submodule "lib/xspec"]
+	path = lib/xspec
+	url = https://github.com/xspec/xspec.git
