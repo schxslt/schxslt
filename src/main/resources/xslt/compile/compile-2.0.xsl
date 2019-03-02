@@ -32,7 +32,7 @@
 
   <xsl:template match="sch:schema">
 
-    <transform version="2.0">
+    <transform version="{schxslt:xslt-version(.)}">
       <xsl:for-each select="sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
