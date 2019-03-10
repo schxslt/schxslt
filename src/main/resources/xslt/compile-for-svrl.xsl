@@ -7,7 +7,7 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="compile/compile-2.0.xsl"/>
-  
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Create SVRL report</p>
@@ -72,7 +72,7 @@
       <xsl:sequence select="($rule/@id, $rule/@context, $rule/@role, $rule/@flag)"/>
     </svrl:fired-rule>
   </xsl:template>
-  
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Report a failed assert</p>
@@ -119,7 +119,17 @@
       </svrl:text>
     </xsl:if>
   </xsl:template>
-  
+
+  <xsl:template name="schxslt:handle-property">
+    <xsl:param name="property" as="element(sch:property)"/>
+    <svrl:property-reference property="{.}">
+      <xsl:sequence select="($property/@role, $property/@scheme)"/>
+      <svrl:text>
+        <xsl:apply-templates select="$property/node()"/>
+      </svrl:text>
+    </svrl:property-reference>
+  </xsl:template>
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Copy Schematron properties to SVRL</p>
@@ -130,13 +140,9 @@
     <xsl:param name="schema" as="element(sch:schema)" tunnel="yes"/>
 
     <xsl:for-each select="tokenize(@properties, ' ')">
-      <xsl:variable name="property" select="$schema/sch:properties/sch:property[@id eq current()]"/>
-      <svrl:property-reference property="{.}">
-        <xsl:sequence select="($property/@role, $property/@scheme)"/>
-        <svrl:text>
-          <xsl:apply-templates select="$property/node()"/>
-        </svrl:text>
-      </svrl:property-reference>
+      <xsl:call-template name="schxslt:handle-property">
+        <xsl:with-param name="property" select="$schema/sch:properties/sch:property[@id eq current()]"/>
+      </xsl:call-template>
     </xsl:for-each>
   </xsl:template>
 
