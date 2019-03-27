@@ -24,6 +24,10 @@
 
 package name.dmaus.schxslt.ant;
 
+import name.dmaus.schxslt.Compiler;
+import name.dmaus.schxslt.Result;
+import name.dmaus.schxslt.Schematron;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
