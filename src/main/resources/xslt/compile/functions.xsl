@@ -67,7 +67,7 @@
 
     <xsl:if test="lower-case($schema/@queryBinding) ne 'xslt2'">
       <xsl:message terminate="yes">
-        The query language '<xsl:value-of select="($schema/@queryBinding, 'xslt')[1]"/> is not supported.
+        The query language '<xsl:value-of select="($schema/@queryBinding, 'xslt')[1]"/>' is not supported.
       </xsl:message>
     </xsl:if>
 
