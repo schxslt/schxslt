@@ -24,8 +24,11 @@
 
 package name.dmaus.schxslt;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -58,31 +61,49 @@ public class Schematron
         this.validator = compiler.compile(new DOMSource(this.loadDocument(schema)), phase);
     }
 
+    public Result validate (final InputStream input)
+    {
+        return validate(new DOMSource(this.loadDocument(input)));
+    }
+
     public Result validate (final File file)
     {
+        return validate(new DOMSource(this.loadDocument(file)));
+    }
+
+    public Result validate (final DOMSource source)
+    {
         DOMResult target = new DOMResult();
-        DOMSource source = new DOMSource(this.loadDocument(file));
         try {
             this.validator.newTransformer().transform(source, target);
             Document report = (Document)target.getNode();
 
             return new Result(report);
-            
+
         } catch (TransformerException e) {
             throw new RuntimeException("Unable to apply validation stylesheet");
+        }
+    }
+
+    private Document loadDocument (final InputStream input)
+    {
+        try {
+            return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(input);
+        } catch (SAXException e) {
+            throw new RuntimeException("Unable to parse XML document");
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to parse XML document");
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Unable to parse XML document");
         }
     }
 
     private Document loadDocument (final File file)
     {
         try {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
-        } catch (SAXException e) {
-            throw new RuntimeException("Unable to load document '" + file + "'");
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to load document '" + file + "'");
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Unable to load document '" + file + "'");
+            return loadDocument(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Unable to open file '" + file.getAbsolutePath() + "'");
         }
     }
 }
