@@ -42,7 +42,7 @@ public class Configuration
     public Configuration ()
     {
         options.addOption("p", "phase", true, "Validation phase");
-        options.addRequiredOption("d", "document", true, "Path to document");
+        options.addOption("d", "document", true, "Path to document");
         options.addRequiredOption("s", "schematron", true, "Path to schema");
     }
 

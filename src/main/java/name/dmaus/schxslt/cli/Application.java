@@ -28,6 +28,7 @@ import name.dmaus.schxslt.Result;
 import name.dmaus.schxslt.Schematron;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class Application
 {
@@ -37,30 +38,23 @@ public class Application
         configuration.parse(args);
 
         Schematron schematron = new Schematron(configuration.getSchematron(), configuration.getPhase());
-        Application application = new Application(schematron);
 
         if (configuration.hasDocument()) {
-            File document = configuration.getDocument();
-            System.out.print(document.getAbsolutePath());
-            if (application.isValid(document)) {
-                System.out.println(":valid");
+            File input = configuration.getDocument();
+            Result res = schematron.validate(input);
+            if (res.isValid()) {
+                System.out.format("%s:valid:%n", input.getAbsolutePath());
             } else {
-                System.out.println(":invalid");
+                System.out.format("%s:invalid:%n", input.getAbsolutePath());
+            }
+        } else {
+            InputStream input = System.in;
+            Result res = schematron.validate(input);
+            if (res.isValid()) {
+                System.out.format("<stdin>:valid:%n");
+            } else {
+                System.out.format("<stdin>:invalid:%n");
             }
         }
-    }
-
-    private Schematron schematron;
-    private Result result;
-
-    public Application (Schematron schematron)
-    {
-        this.schematron = schematron;
-    }
-
-    public boolean isValid (File document)
-    {
-        result = schematron.validate(document);
-        return result.isValid();
     }
 }
