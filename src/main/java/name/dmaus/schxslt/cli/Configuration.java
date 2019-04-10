@@ -50,6 +50,9 @@ public class Configuration
     {
         try {
             arguments = parser.parse(options, args);
+            if (arguments.getArgList().size() > 0) {
+                throw new ParseException("Excess arguments on command line");
+            }
         } catch (ParseException e) {
             System.err.println(e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
