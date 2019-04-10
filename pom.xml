@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>name.dmaus.schxslt</groupId>
   <artifactId>schxslt</artifactId>
-  <version>1.0.0</version>
+  <version>1.1-SNAPSHOT</version>
 
   <name>SchXslt</name>
   <description>An XSLT-based Schematron processor</description>
@@ -27,12 +27,12 @@
   </developers>
 
   <scm>
-    <url>https://github.com/dmj/schxslt</url>
-    <connection>scm:git:https://github.com/dmj/schxslt.git</connection>
+    <url>https://github.com/schxslt/schxslt</url>
+    <connection>scm:git:https://github.com/schxslt/schxslt.git</connection>
   </scm>
 
   <issueManagement>
-    <url>https://github.com/dmj/schxslt/issues</url>
+    <url>https://github.com/schxslt/schxslt/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
 
