@@ -38,23 +38,36 @@ public class Application
         configuration.parse(args);
 
         Schematron schematron = new Schematron(configuration.getSchematron(), configuration.getPhase());
+        Application application = new Application(schematron);
 
         if (configuration.hasDocument()) {
-            File input = configuration.getDocument();
-            Result res = schematron.validate(input);
-            if (res.isValid()) {
-                System.out.format("%s:valid:%n", input.getAbsolutePath());
-            } else {
-                System.out.format("%s:invalid:%n", input.getAbsolutePath());
-            }
+            application.execute(configuration.getDocument());
         } else {
-            InputStream input = System.in;
-            Result res = schematron.validate(input);
-            if (res.isValid()) {
-                System.out.format("<stdin>:valid:%n");
-            } else {
-                System.out.format("<stdin>:invalid:%n");
-            }
+            application.execute(System.in);
         }
+    }
+
+    private Schematron schematron;
+
+    public Application (Schematron schematron)
+    {
+        this.schematron = schematron;
+    }
+
+    public void execute (final File input)
+    {
+        Result result = schematron.validate(input);
+        printResult(result, input.getAbsolutePath());
+    }
+
+    public void execute (final InputStream input)
+    {
+        Result result = schematron.validate(input);
+        printResult(result, "<stdin>");
+    }
+
+    private void printResult (final Result result, final String filename)
+    {
+        System.out.format("[%s] %s%n", result.isValid() ? "valid" : "invalid", filename);
     }
 }
