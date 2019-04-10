@@ -2,21 +2,14 @@
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
+               xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:import href="compile/compile-2.0.xsl"/>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Create SVRL report</p>
-    </desc>
-    <param name="schema">Schematron</param>
-    <param name="phase">Effective phase</param>
-    <param name="report-variable-name">Name of the variable holding the intermediary report</param>
-  </doc>
-  <xsl:template name="schxslt:handle-schematron-output">
+  <xsl:template name="schxslt-api:report">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="phase" as="xs:string" required="yes"/>
 
@@ -46,39 +39,21 @@
     </svrl:schematron-output>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Report an active pattern</p>
-    </desc>
-    <param name="pattern">Active pattern</param>
-  </doc>
-  <xsl:template name="schxslt:handle-active-pattern">
+  <xsl:template name="schxslt-api:active-pattern">
     <xsl:param name="pattern" as="element(sch:pattern)" required="yes"/>
     <svrl:active-pattern documents="{{base-uri(.)}}">
       <xsl:sequence select="($pattern/@id, $pattern/@role)"/>
     </svrl:active-pattern>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Report a fired rule</p>
-    </desc>
-    <param name="rule">Fired rule</param>
-  </doc>
-  <xsl:template name="schxslt:handle-fired-rule">
+  <xsl:template name="schxslt-api:fired-rule">
     <xsl:param name="rule" as="element(sch:rule)" required="yes"/>
     <svrl:fired-rule>
       <xsl:sequence select="($rule/@id, $rule/@context, $rule/@role, $rule/@flag)"/>
     </svrl:fired-rule>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Report a failed assert</p>
-    </desc>
-    <param name="assert">Failed assert</param>
-  </doc>
-  <xsl:template name="schxslt:handle-failed-assert">
+  <xsl:template name="schxslt-api:failed-assert">
     <xsl:param name="assert" as="element(sch:assert)" required="yes"/>
     <svrl:failed-assert location="{{schxslt:location({($assert/@subject, $assert/../@subject, '.')[1]})}}">
       <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id, $assert/@test)"/>
@@ -88,13 +63,7 @@
     </svrl:failed-assert>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Report successful report</p>
-    </desc>
-    <param name="report">Successful report</param>
-  </doc>
-  <xsl:template name="schxslt:handle-successful-report">
+  <xsl:template name="schxslt-api:successful-report">
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
     <svrl:successful-report location="{{schxslt:location({($report/@subject, $report/../@subject, '.')[1]})}}">
       <xsl:sequence select="($report/@role, $report/@flag, $report/@id, $report/@test)"/>

@@ -5,7 +5,7 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- Create part of the validation stylesheet that creates the report -->
-  <xsl:template name="schxslt-api:report-header">
+  <xsl:template name="schxslt-api:report">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="phase" as="xs:string" required="yes"/>
   </xsl:template>
