@@ -43,6 +43,7 @@ public class Configuration
     {
         options.addOption("p", "phase", true, "Validation phase");
         options.addOption("d", "document", true, "Path to document");
+        options.addOption("r", "repl", false, "Run as REPL");
         options.addRequiredOption("s", "schematron", true, "Path to schema");
     }
 
@@ -59,6 +60,11 @@ public class Configuration
             formatter.printHelp("name.dmaus.schxslt.cli.Main", options, true);
             System.exit(1);
         }
+    }
+
+    public boolean isRepl ()
+    {
+        return arguments.hasOption("r");
     }
 
     public boolean hasDocument ()

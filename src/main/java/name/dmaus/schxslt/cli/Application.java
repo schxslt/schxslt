@@ -28,6 +28,8 @@ import name.dmaus.schxslt.Result;
 import name.dmaus.schxslt.Schematron;
 
 import java.io.File;
+import java.io.Console;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class Application
@@ -42,6 +44,8 @@ public class Application
 
         if (configuration.hasDocument()) {
             application.execute(configuration.getDocument());
+        } else if (configuration.isRepl()) {
+            application.execute(System.console());
         } else {
             application.execute(System.in);
         }
@@ -64,6 +68,34 @@ public class Application
     {
         Result result = schematron.validate(input);
         printResult(result, "<stdin>");
+    }
+
+    public void execute (final Console console)
+    {
+        if (console == null) {
+            return;
+        }
+
+        while (true) {
+            InputStream input = readConsole(console);
+            Result result = schematron.validate(input);
+            printResult(result, "<stdin>");
+        }
+    }
+
+    private InputStream readConsole (final Console console)
+    {
+        StringBuffer buf = new StringBuffer();
+        String line;
+
+        do {
+            line = console.readLine();
+            if (line != null) {
+                buf.append(line);
+            }
+        } while (line != null);
+
+        return new ByteArrayInputStream(buf.toString().getBytes());
     }
 
     private void printResult (final Result result, final String filename)
