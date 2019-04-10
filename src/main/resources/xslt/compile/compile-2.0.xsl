@@ -73,14 +73,17 @@
           </schxslt:report>
         </variable>
 
-        <xsl:call-template name="schxslt:process-report">
-          <xsl:with-param name="report-variable-name" as="xs:string">report</xsl:with-param>
-        </xsl:call-template>
+        <!-- Unwrap the intermediary report -->
+        <variable name="schxslt:report" as="element()+">
+          <for-each select="$report/schxslt:pattern">
+            <sequence select="*"/>
+            <sequence select="$report/schxslt:rule[@pattern = current()/@id]/*"/>
+          </for-each>
+        </variable>
 
         <xsl:call-template name="schxslt:handle-schematron-output">
           <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
           <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
-          <xsl:with-param name="report-variable-name" as="xs:string">report</xsl:with-param>
         </xsl:call-template>
 
       </template>
@@ -189,22 +192,6 @@
 
     </xsl:for-each-group>
 
-  </xsl:template>
-
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Normalize SVRL report</p>
-    </desc>
-    <param name="report-variable-name">Name of variable holding the intermediate report</param>
-  </doc>
-  <xsl:template name="schxslt:process-report">
-    <xsl:param name="report-variable-name" as="xs:string" required="yes"/>
-    <variable name="{$report-variable-name}" as="element()+">
-      <for-each select="${$report-variable-name}/schxslt:pattern">
-        <sequence select="*"/>
-        <sequence select="${$report-variable-name}/schxslt:rule[@pattern = current()/@id]/*"/>
-      </for-each>
-    </variable>
   </xsl:template>
 
 </xsl:transform>
