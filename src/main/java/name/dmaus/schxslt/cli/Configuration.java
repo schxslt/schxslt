@@ -54,6 +54,9 @@ public class Configuration
             if (arguments.getArgList().size() > 0) {
                 throw new ParseException("Excess arguments on command line");
             }
+            if (hasDocument() && isRepl()) {
+                throw new ParseException("Cannot run a REPL when a document is provided");
+            }
         } catch (ParseException e) {
             System.err.println(e.getMessage());
             HelpFormatter formatter = new HelpFormatter();
