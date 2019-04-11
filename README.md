@@ -84,6 +84,18 @@ validation report to the ```result``` output port.
 calabash -i source=</path/to/document> -i schema=</path/to/schema> src/main/resources/xproc/validate-with-schematron.xpl
 ```
 
+## The callback API
+
+SchXslt lets you customize the parts of the validation stylesheet that
+report on active patterns, fired rule, failed assertions, and
+successful reports. The compiler calls named templates in the
+```https://doi.org/10.5281/zenodo.1495494#api``` namespace that are
+expected to create the part of the validation stylesheet that handles
+respective reporting.
+
+You can find the API documentation in the [docs/api](docs/api/index.html)
+directory.
+
 ## Testsuite
 
 SchXslt comes with a set of [https://github.com/xspec/xspec](XSpec) definitions that test internals
