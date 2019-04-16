@@ -50,11 +50,15 @@ public class Resolver implements URIResolver
 
             hrefUri = baseUri.resolve(href);
 
-            String systemId = getClass().getResource(hrefUri.toString()).toString();
-            Source source = new StreamSource(getClass().getResourceAsStream(hrefUri.toString()));
-            source.setSystemId(systemId);
+            URL systemId = getClass().getResource(hrefUri.toString());
 
-            return source;
+            if (systemId != null) {
+                Source source = new StreamSource(getClass().getResourceAsStream(hrefUri.toString()));
+                source.setSystemId(systemId.toString());
+
+                return source;
+            }
+            return null;
 
         } catch (URISyntaxException e) {
             throw new TransformerException(e);
