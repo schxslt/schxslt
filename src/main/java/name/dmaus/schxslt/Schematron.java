@@ -71,7 +71,7 @@ public class Schematron
         return validate(new DOMSource(this.loadDocument(file)));
     }
 
-    public Result validate (final DOMSource source)
+    public Result validate (final Source source)
     {
         DOMResult target = new DOMResult();
         try {
