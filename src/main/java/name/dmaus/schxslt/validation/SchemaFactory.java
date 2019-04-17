@@ -40,6 +40,8 @@ import name.dmaus.schxslt.Schematron;
 public class SchemaFactory extends javax.xml.validation.SchemaFactory
 {
     private boolean secureProcessing = false;
+    private Object accessExternalSchema = null;
+    private Object accessExternalDtd = null;
 
     private ErrorHandler errors;
     private LSResourceResolver resources;
@@ -82,8 +84,25 @@ public class SchemaFactory extends javax.xml.validation.SchemaFactory
 
         Schematron schematron = new Schematron(schemas[0], "#ALL");
         schematron.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, this.secureProcessing);
+        if (this.accessExternalDtd != null) {
+            schematron.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, this.accessExternalDtd);
+        }
+        if (this.accessExternalSchema != null) {
+            schematron.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, this.accessExternalSchema);
+        }
 
         return new Schema(schematron);
+    }
+
+    public void setProperty (String name, Object value) throws SAXNotRecognizedException
+    {
+        if (name.equals(XMLConstants.ACCESS_EXTERNAL_DTD)) {
+            this.accessExternalDtd = value;
+        } else if (name.equals(XMLConstants.ACCESS_EXTERNAL_SCHEMA)) {
+            this.accessExternalSchema = value;
+        } else {
+            throw new SAXNotRecognizedException();
+        }
     }
 
     public void setFeature (String name, boolean value) throws SAXNotRecognizedException
