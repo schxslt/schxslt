@@ -102,26 +102,16 @@ public class Schematron
         }
     }
 
-    public DocumentBuilder getDocumentBuilder ()
-    {
-        if (this.builder == null) {
-            try {
-                this.builder = this.factory.newDocumentBuilder();
-            } catch (ParserConfigurationException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return this.builder;
-    }
-
     private Document loadDocument (final InputStream input)
     {
         try {
-            return this.builder.parse(input);
+            return this.factory.newDocumentBuilder().parse(input);
         } catch (SAXException e) {
             throw new RuntimeException("Unable to parse XML document");
         } catch (IOException e) {
             throw new RuntimeException("Unable to parse XML document");
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
         }
     }
 
