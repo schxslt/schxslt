@@ -35,6 +35,7 @@ import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -54,6 +55,7 @@ import javax.xml.transform.dom.DOMSource;
 public class Schematron
 {
     private Templates validator;
+    private DocumentBuilder builder;
 
     private String phase;
     private Source schema;
@@ -99,20 +101,30 @@ public class Schematron
         }
     }
 
-    private static Document loadDocument (final InputStream input)
+    public DocumentBuilder getDocumentBuilder ()
+    {
+        if (this.builder == null) {
+            try {
+                this.builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            } catch (ParserConfigurationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return this.builder;
+    }
+
+    private Document loadDocument (final InputStream input)
     {
         try {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(input);
+            return this.builder.parse(input);
         } catch (SAXException e) {
             throw new RuntimeException("Unable to parse XML document");
         } catch (IOException e) {
             throw new RuntimeException("Unable to parse XML document");
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Unable to parse XML document");
         }
     }
 
-    private static Document loadDocument (final File file)
+    private Document loadDocument (final File file)
     {
         try {
             return loadDocument(new FileInputStream(file));
