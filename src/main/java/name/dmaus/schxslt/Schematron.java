@@ -54,11 +54,11 @@ import javax.xml.transform.dom.DOMSource;
 public class Schematron
 {
     private Templates validator;
+    private final Compiler compiler = new Compiler();
 
     public Schematron (final Source source, final String phase)
     {
-        Compiler compiler = new Compiler();
-        this.validator = compiler.compile(source, phase);
+        this.validator = this.compiler.compile(source, phase);
     }
 
     public Schematron (final File schema, final String phase)
