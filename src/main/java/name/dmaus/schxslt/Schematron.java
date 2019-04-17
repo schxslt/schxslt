@@ -55,20 +55,25 @@ public class Schematron
 {
     private Templates validator;
 
-    public Schematron (final File schema, final String phase)
+    public Schematron (final Source source, final String phase)
     {
         Compiler compiler = new Compiler();
-        this.validator = compiler.compile(new DOMSource(this.loadDocument(schema)), phase);
+        this.validator = compiler.compile(source, phase);
+    }
+
+    public Schematron (final File schema, final String phase)
+    {
+        this(new DOMSource(loadDocument(schema)), phase);
     }
 
     public Result validate (final InputStream input)
     {
-        return validate(new DOMSource(this.loadDocument(input)));
+        return validate(new DOMSource(loadDocument(input)));
     }
 
     public Result validate (final File file)
     {
-        return validate(new DOMSource(this.loadDocument(file)));
+        return validate(new DOMSource(loadDocument(file)));
     }
 
     public Result validate (final Source source)
@@ -85,7 +90,7 @@ public class Schematron
         }
     }
 
-    private Document loadDocument (final InputStream input)
+    private static Document loadDocument (final InputStream input)
     {
         try {
             return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(input);
@@ -98,7 +103,7 @@ public class Schematron
         }
     }
 
-    private Document loadDocument (final File file)
+    private static Document loadDocument (final File file)
     {
         try {
             return loadDocument(new FileInputStream(file));
