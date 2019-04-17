@@ -61,6 +61,7 @@ public class Schematron
     private Source schema;
 
     private final Compiler compiler = new Compiler();
+    private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
     public Schematron (final Source schema, final String phase)
     {
@@ -105,7 +106,7 @@ public class Schematron
     {
         if (this.builder == null) {
             try {
-                this.builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                this.builder = this.factory.newDocumentBuilder();
             } catch (ParserConfigurationException e) {
                 throw new RuntimeException(e);
             }
