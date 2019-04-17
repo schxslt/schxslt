@@ -28,6 +28,9 @@ import org.w3c.dom.ls.LSResourceResolver;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+
+import javax.xml.XMLConstants;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerFactory;
@@ -36,6 +39,8 @@ import name.dmaus.schxslt.Schematron;
 
 public class SchemaFactory extends javax.xml.validation.SchemaFactory
 {
+    private boolean secureProcessing = false;
+
     private ErrorHandler errors;
     private LSResourceResolver resources;
 
@@ -76,6 +81,17 @@ public class SchemaFactory extends javax.xml.validation.SchemaFactory
         }
 
         Schematron schematron = new Schematron(schemas[0], "#ALL");
+        schematron.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, this.secureProcessing);
+
         return new Schema(schematron);
+    }
+
+    public void setFeature (String name, boolean value) throws SAXNotRecognizedException
+    {
+        if (name.equals(XMLConstants.FEATURE_SECURE_PROCESSING)) {
+            this.secureProcessing = value;
+        } else {
+            throw new SAXNotRecognizedException();
+        }
     }
 }
