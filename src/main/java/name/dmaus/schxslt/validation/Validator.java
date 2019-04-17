@@ -26,6 +26,7 @@ package name.dmaus.schxslt.validation;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import org.w3c.dom.ls.LSResourceResolver;
 
@@ -35,9 +36,9 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.Result;
 
 import name.dmaus.schxslt.Schematron;
+import name.dmaus.schxslt.Result;
 
 public class Validator extends javax.xml.validation.Validator
 {
@@ -58,7 +59,7 @@ public class Validator extends javax.xml.validation.Validator
 
     public void setErrorHandler (ErrorHandler errorHandler)
     {
-        this.errors = errors;
+        this.errors = errorHandler;
     }
 
     public LSResourceResolver getResourceResolver ()
@@ -74,17 +75,33 @@ public class Validator extends javax.xml.validation.Validator
     public void reset ()
     {}
 
-    public void validate (Source source, Result result) throws SAXException
+    public void validate (Source source, javax.xml.transform.Result result) throws SAXException
     {
-        if (!this.schematron.validate(source).isValid()) {
+        Result validity = this.schematron.validate(source);
+        if (!validity.isValid()) {
+            for (String message : validity.getValidationMessages()) {
+                try {
+                    this.signalError(message);
+                } catch (Throwable t) {
+                    throw new SAXException();
+                }
+            }
             throw new SAXException();
         }
+
         if (result != null) {
             try {
                 TransformerFactory.newInstance().newTransformer().transform(source, result);
             } catch (TransformerException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private void signalError (final String message) throws Throwable
+    {
+        if (this.errors != null) {
+            this.errors.error(new SAXParseException(message, null));
         }
     }
 }

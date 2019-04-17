@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
 import org.w3c.dom.Document;
 
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import javax.xml.validation.*;
 
@@ -103,5 +104,41 @@ public class ValidationTest
 
         Validator validator = schema.newValidator();
         validator.validate(new DOMSource(document));
+    }
+
+    @Test
+    public void validateWithErrorHandler () throws Exception
+    {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+
+        InputStream documentStream = getClass().getResourceAsStream("/simple-schema.sch");
+        Document document = docFactory.newDocumentBuilder().parse(documentStream);
+
+        ErrorHandler errors = new ErrorHandler();
+        Validator validator = simpleSchema.newValidator();
+        validator.setErrorHandler(errors);
+
+        try {
+            validator.validate(new DOMSource(document));
+        } catch (SAXException e) {
+        }
+        assertTrue(errors.wasCalled);
+    }
+
+    private class ErrorHandler implements org.xml.sax.ErrorHandler
+    {
+        private boolean wasCalled = false;
+
+        public void fatalError (SAXParseException e) throws SAXException
+        {}
+
+        public void error (SAXParseException e) throws SAXException
+        {
+            this.wasCalled = true;
+        }
+
+        public void warning (SAXParseException e) throws SAXException
+        {}
+
     }
 }
