@@ -49,6 +49,8 @@ import java.io.IOException;
 public class ValidationTest
 {
     private Schema simpleSchema;
+    private Source simpleSchemaSource;
+    private SchemaFactory schemaFactory;
 
     @BeforeClass
     public static void setup ()
@@ -60,9 +62,9 @@ public class ValidationTest
     @Before
     public void setupSimpleSchema () throws Exception
     {
-        SchemaFactory factory = SchemaFactory.newInstance("http://purl.oclc.org/dsdl/schematron");
-        Source source = new StreamSource(getClass().getResourceAsStream("/simple-schema.sch"));
-        simpleSchema = factory.newSchema(source);
+        schemaFactory = SchemaFactory.newInstance("http://purl.oclc.org/dsdl/schematron");
+        simpleSchemaSource = new StreamSource(getClass().getResourceAsStream("/simple-schema.sch"));
+        simpleSchema = schemaFactory.newSchema(simpleSchemaSource);
     }
 
     @Test(expected=UnsupportedOperationException.class)
@@ -85,6 +87,21 @@ public class ValidationTest
         Document document = docFactory.newDocumentBuilder().parse(documentStream);
 
         Validator validator = simpleSchema.newValidator();
+        validator.validate(new DOMSource(document));
+    }
+
+    @Test
+    public void validationWithPhase () throws Exception
+    {
+        schemaFactory.setProperty("phase", "default");
+        Schema schema = schemaFactory.newSchema(simpleSchemaSource);
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+
+        InputStream documentStream = getClass().getResourceAsStream("/simple-schema.sch");
+        Document document = docFactory.newDocumentBuilder().parse(documentStream);
+
+        Validator validator = schema.newValidator();
         validator.validate(new DOMSource(document));
     }
 }

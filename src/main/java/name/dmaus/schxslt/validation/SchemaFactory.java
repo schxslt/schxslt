@@ -43,6 +43,8 @@ public class SchemaFactory extends javax.xml.validation.SchemaFactory
     private Object accessExternalSchema = null;
     private Object accessExternalDtd = null;
 
+    private String phase = "#ALL";
+
     private ErrorHandler errors;
     private LSResourceResolver resources;
 
@@ -82,7 +84,8 @@ public class SchemaFactory extends javax.xml.validation.SchemaFactory
             throw new UnsupportedOperationException();
         }
 
-        Schematron schematron = new Schematron(schemas[0], "#ALL");
+        Schematron schematron = new Schematron(schemas[0], this.phase);
+
         schematron.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, this.secureProcessing);
         if (this.accessExternalDtd != null) {
             schematron.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, this.accessExternalDtd);
@@ -100,6 +103,8 @@ public class SchemaFactory extends javax.xml.validation.SchemaFactory
             this.accessExternalDtd = value;
         } else if (name.equals(XMLConstants.ACCESS_EXTERNAL_SCHEMA)) {
             this.accessExternalSchema = value;
+        } else if (name.equals("phase")) {
+            this.phase = (String)value;
         } else {
             throw new SAXNotRecognizedException();
         }
