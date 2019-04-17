@@ -54,16 +54,21 @@ import javax.xml.transform.dom.DOMSource;
 public class Schematron
 {
     private Templates validator;
+
+    private String phase;
+    private Source schema;
+
     private final Compiler compiler = new Compiler();
 
-    public Schematron (final Source source, final String phase)
+    public Schematron (final Source schema, final String phase)
     {
-        this.validator = this.compiler.compile(source, phase);
+        this.phase = phase;
+        this.schema = schema;
     }
 
     public Schematron (final File schema, final String phase)
     {
-        this(new DOMSource(loadDocument(schema)), phase);
+        this(new StreamSource(schema), phase);
     }
 
     public Result validate (final InputStream input)
@@ -78,6 +83,10 @@ public class Schematron
 
     public Result validate (final Source source)
     {
+        if (this.validator == null) {
+            this.validator = this.compiler.compile(this.schema, this.phase);
+        }
+
         DOMResult target = new DOMResult();
         try {
             this.validator.newTransformer().transform(source, target);
