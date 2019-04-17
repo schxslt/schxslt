@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -99,6 +100,15 @@ public class Schematron
 
         } catch (TransformerException e) {
             throw new RuntimeException("Unable to apply validation stylesheet");
+        }
+    }
+
+    public void setFeature (String name, boolean value) throws SAXNotRecognizedException
+    {
+        try {
+            this.factory.setFeature(name, value);
+        } catch (ParserConfigurationException e) {
+            throw new SAXNotRecognizedException("Feature '" + name + "' is not supported");
         }
     }
 
