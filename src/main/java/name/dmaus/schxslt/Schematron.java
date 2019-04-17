@@ -112,6 +112,11 @@ public class Schematron
         }
     }
 
+    public void setProperty (String name, Object value)
+    {
+        this.factory.setAttribute(name, value);
+    }
+
     private Document loadDocument (final InputStream input)
     {
         try {
