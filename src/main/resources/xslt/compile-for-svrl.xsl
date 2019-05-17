@@ -55,7 +55,7 @@
 
   <xsl:template name="schxslt-api:failed-assert">
     <xsl:param name="assert" as="element(sch:assert)" required="yes"/>
-    <svrl:failed-assert location="{{schxslt:location({($assert/@subject, $assert/../@subject, '.')[1]})}}">
+    <svrl:failed-assert location="{{schxslt-api:location({($assert/@subject, $assert/../@subject, '.')[1]})}}">
       <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id, $assert/@test)"/>
       <xsl:call-template name="schxslt:handle-detailed-report">
         <xsl:with-param name="schema" as="element(sch:schema)" tunnel="yes" select="$assert/../../.."/>
@@ -65,7 +65,7 @@
 
   <xsl:template name="schxslt-api:successful-report">
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
-    <svrl:successful-report location="{{schxslt:location({($report/@subject, $report/../@subject, '.')[1]})}}">
+    <svrl:successful-report location="{{schxslt-api:location({($report/@subject, $report/../@subject, '.')[1]})}}">
       <xsl:sequence select="($report/@role, $report/@flag, $report/@id, $report/@test)"/>
       <xsl:call-template name="schxslt:handle-detailed-report">
         <xsl:with-param name="schema" as="element(sch:schema)" tunnel="yes" select="$report/../../.."/>

@@ -1,6 +1,6 @@
 <xsl:transform version="2.0"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-               xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
+               xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
@@ -11,7 +11,7 @@
     <param name="node">Node</param>
     <return>Path to node</return>
   </doc>
-  <xsl:function name="schxslt:location" as="xs:string">
+  <xsl:function name="schxslt-api:location" as="xs:string">
     <xsl:param name="node" as="node()"/>
     <xsl:variable name="segments" as="xs:string*">
       <xsl:for-each select="($node/ancestor-or-self::node())">
