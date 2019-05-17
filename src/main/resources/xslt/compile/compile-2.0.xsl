@@ -97,7 +97,8 @@
       </template>
 
       <xsl:sequence select="$validation-stylesheet-body"/>
-      <xsl:sequence select="document('location.xsl')//xsl:function[@name = 'schxslt:location']"/>
+
+      <xsl:call-template name="schxslt:copy-location-function"/>
 
     </transform>
 
