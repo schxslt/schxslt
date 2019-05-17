@@ -63,7 +63,7 @@
   </xsl:template>
 
   <xsl:template name="schxslt:copy-location-function">
-    <xsl:sequence select="document('location.xsl')//xsl:function[schxslt:is-location-function(.)]"/>
+    <xsl:sequence select="(xsl:function, document('location.xsl')//xsl:function)[schxslt:is-location-function(.)][1]"/>
   </xsl:template>
 
 </xsl:transform>
