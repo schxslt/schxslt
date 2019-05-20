@@ -34,7 +34,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -54,25 +56,41 @@ import javax.xml.transform.dom.DOMSource;
 public class Schematron
 {
     private Templates validator;
+    private DocumentBuilder builder;
+
+    private String phase;
+    private Source schema;
+
+    private final Compiler compiler = new Compiler();
+    private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+    public Schematron (final Source schema, final String phase)
+    {
+        this.phase = phase;
+        this.schema = schema;
+    }
 
     public Schematron (final File schema, final String phase)
     {
-        Compiler compiler = new Compiler();
-        this.validator = compiler.compile(new DOMSource(this.loadDocument(schema)), phase);
+        this(new StreamSource(schema), phase);
     }
 
     public Result validate (final InputStream input)
     {
-        return validate(new DOMSource(this.loadDocument(input)));
+        return validate(new DOMSource(loadDocument(input)));
     }
 
     public Result validate (final File file)
     {
-        return validate(new DOMSource(this.loadDocument(file)));
+        return validate(new DOMSource(loadDocument(file)));
     }
 
-    public Result validate (final DOMSource source)
+    public Result validate (final Source source)
     {
+        if (this.validator == null) {
+            this.validator = this.compiler.compile(this.schema, this.phase);
+        }
+
         DOMResult target = new DOMResult();
         try {
             this.validator.newTransformer().transform(source, target);
@@ -85,16 +103,30 @@ public class Schematron
         }
     }
 
+    public void setFeature (String name, boolean value) throws SAXNotRecognizedException
+    {
+        try {
+            this.factory.setFeature(name, value);
+        } catch (ParserConfigurationException e) {
+            throw new SAXNotRecognizedException("Feature '" + name + "' is not supported");
+        }
+    }
+
+    public void setProperty (String name, Object value)
+    {
+        this.factory.setAttribute(name, value);
+    }
+
     private Document loadDocument (final InputStream input)
     {
         try {
-            return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(input);
+            return this.factory.newDocumentBuilder().parse(input);
         } catch (SAXException e) {
             throw new RuntimeException("Unable to parse XML document");
         } catch (IOException e) {
             throw new RuntimeException("Unable to parse XML document");
         } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Unable to parse XML document");
+            throw new RuntimeException(e);
         }
     }
 
