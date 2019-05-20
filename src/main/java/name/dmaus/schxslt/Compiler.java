@@ -41,13 +41,23 @@ import java.io.File;
 
 import org.w3c.dom.Document;
 
+import java.util.Map;
+
 public class Compiler
 {
     private final TransformerFactory factory = TransformerFactory.newInstance();
     private final URIResolver resolver = new Resolver();
 
+    private Map<String, Object> parameters = null;
+
     public Compiler ()
     {
+        this(null);
+    }
+
+    public Compiler (final Map<String, Object> parameters)
+    {
+        this.parameters = parameters;
         this.factory.setURIResolver(this.resolver);
     }
 
@@ -73,6 +83,12 @@ public class Compiler
 
             DOMSource srcCompile = new DOMSource(dstExpand.getNode());
             DOMResult dstCompile = new DOMResult();
+
+            if (parameters != null) {
+                for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+                    stepCompile.setParameter(entry.getKey(), entry.getValue());
+                }
+            }
 
             if (phase != null) {
                 stepCompile.setParameter("phase", phase);
