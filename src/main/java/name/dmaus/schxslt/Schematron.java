@@ -60,19 +60,20 @@ public class Schematron
 
     private String phase;
     private Source schema;
+    private Compiler compiler;
 
-    private final Compiler compiler = new Compiler();
     private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-    public Schematron (final Source schema, final String phase)
+    public Schematron (final Compiler compiler, final Source schema, final String phase)
     {
         this.phase = phase;
         this.schema = schema;
+        this.compiler = compiler;
     }
 
-    public Schematron (final File schema, final String phase)
+    public Schematron (final Compiler compiler, final File schema, final String phase)
     {
-        this(new StreamSource(schema), phase);
+        this(compiler, new StreamSource(schema), phase);
     }
 
     public Result validate (final InputStream input)

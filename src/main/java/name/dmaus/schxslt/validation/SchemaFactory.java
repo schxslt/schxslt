@@ -36,6 +36,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.TransformerFactory;
 
 import name.dmaus.schxslt.Schematron;
+import name.dmaus.schxslt.Compiler;
 
 public class SchemaFactory extends javax.xml.validation.SchemaFactory
 {
@@ -84,7 +85,8 @@ public class SchemaFactory extends javax.xml.validation.SchemaFactory
             throw new UnsupportedOperationException();
         }
 
-        Schematron schematron = new Schematron(schemas[0], this.phase);
+        Compiler compiler = new Compiler();
+        Schematron schematron = new Schematron(compiler, schemas[0], this.phase);
 
         schematron.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, this.secureProcessing);
         if (this.accessExternalDtd != null) {
