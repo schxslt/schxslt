@@ -48,6 +48,10 @@ public class Compiler
     private final TransformerFactory factory = TransformerFactory.newInstance();
     private final URIResolver resolver = new Resolver();
 
+    private final String includeStylesheetPath = "/xslt/include.xsl";
+    private final String expandStylesheetPath = "/xslt/expand.xsl";
+    private final String compileStylesheetPath = "/xslt/compile-for-svrl.xsl";
+
     private Map<String, Object> parameters = null;
 
     public Compiler ()
@@ -70,9 +74,9 @@ public class Compiler
     {
         try {
 
-            Transformer stepInclude = createSchematronTransformer("/xslt/include.xsl");
-            Transformer stepExpand = createSchematronTransformer("/xslt/expand.xsl");
-            Transformer stepCompile = createSchematronTransformer("/xslt/compile-for-svrl.xsl");
+            Transformer stepInclude = createSchematronTransformer(includeStylesheetPath);
+            Transformer stepExpand = createSchematronTransformer(expandStylesheetPath);
+            Transformer stepCompile = createSchematronTransformer(compileStylesheetPath);
 
             DOMResult dstInclude = new DOMResult();
             stepInclude.transform(schema, dstInclude);
