@@ -48,9 +48,9 @@ public class Compiler
     private final TransformerFactory factory = TransformerFactory.newInstance();
     private final URIResolver resolver = new Resolver();
 
-    private final String includeStylesheetPath = "/xslt/include.xsl";
-    private final String expandStylesheetPath = "/xslt/expand.xsl";
-    private final String compileStylesheetPath = "/xslt/compile-for-svrl.xsl";
+    private String includeStylesheetPath = "/xslt/include.xsl";
+    private String expandStylesheetPath = "/xslt/expand.xsl";
+    private String compileStylesheetPath = "/xslt/compile-for-svrl.xsl";
 
     private Map<String, Object> parameters = null;
 
@@ -104,6 +104,21 @@ public class Compiler
         }  catch (TransformerException e) {
             throw new RuntimeException("Unable to compile validation stylesheet");
         }
+    }
+
+    public void setIncludeStylesheetPath (final String includeStylesheetPath)
+    {
+        this.includeStylesheetPath = includeStylesheetPath;
+    }
+
+    public void setExpandStylesheetPath (final String expandStylesheetPath)
+    {
+        this.expandStylesheetPath = expandStylesheetPath;
+    }
+
+    public void setCompileStylesheetPath (final String compileStylesheetPath)
+    {
+        this.compileStylesheetPath = compileStylesheetPath;
     }
 
     private Transformer createSchematronTransformer (final String filename) throws TransformerException
