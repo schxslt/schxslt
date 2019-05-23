@@ -78,12 +78,8 @@
     <transform>
       <xsl:sequence select="$validation-stylesheet/@*"/>
       <xsl:sequence select="$validation-stylesheet/node()"/>
-      <xsl:call-template name="schxslt:copy-location-function"/>
+      <xsl:sequence select="(xsl:function, document('compile/api-2.0.xsl')//xsl:function)[schxslt:is-location-function(.)][1]"/>
     </transform>
-  </xsl:template>
-
-  <xsl:template name="schxslt:copy-location-function">
-    <xsl:sequence select="(xsl:function, document('compile/api-2.0.xsl')//xsl:function)[schxslt:is-location-function(.)][1]"/>
   </xsl:template>
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
