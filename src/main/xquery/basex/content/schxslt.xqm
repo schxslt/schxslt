@@ -20,10 +20,13 @@ declare namespace xsl = "http://www.w3.org/1999/XSL/Transform";
  :
  : @param  $document Document to be validated
  : @param  $schematron Schematron document
+ : @param  $phase Validation phase
  : @return Validation report
  :)
-declare function schxslt:validate ($document as node(), $schematron as node()) as document-node(element(svrl:schematron-output)) {
-  $document => xslt:transform(schxslt:compile($schematron))
+declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as document-node(element(svrl:schematron-output)) {
+  let $options := if ($phase) then map{"phase": $phase} else map{}
+  return
+    $document => xslt:transform(schxslt:compile($schematron), $options)
 };
 
 (:~
