@@ -40,6 +40,7 @@ public class Resolver implements URIResolver
     {
         URI baseUri;
         URI hrefUri;
+
         try {
 
             if (base == null || base.isEmpty()) {
@@ -48,7 +49,11 @@ public class Resolver implements URIResolver
                 baseUri = new URI(base.substring(1 + base.indexOf("!")));
             }
 
-            hrefUri = baseUri.resolve(href);
+            if (href.isEmpty()) {
+                hrefUri = baseUri;
+            } else {
+                hrefUri = baseUri.resolve(href);
+            }
 
             URL systemId = getClass().getResource(hrefUri.toString());
 
