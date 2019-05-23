@@ -111,7 +111,7 @@ public class Application
         System.out.format("[%s] %s%n", result.isValid() ? "valid" : "invalid", filename);
         if (verbose) {
             for (String message : result.getValidationMessages()) {
-                System.out.format("%s%n", message);
+                System.out.format("[%s] %s %s%n", result.isValid() ? "valid" : "invalid", filename, message);
             }
         }
     }
