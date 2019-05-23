@@ -25,6 +25,7 @@
 package name.dmaus.schxslt.cli;
 
 import name.dmaus.schxslt.Result;
+import name.dmaus.schxslt.Compiler;
 import name.dmaus.schxslt.Schematron;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class Application
         Configuration configuration = new Configuration();
         configuration.parse(args);
 
-        Schematron schematron = new Schematron(configuration.getSchematron(), configuration.getPhase());
+        Schematron schematron = new Schematron(new Compiler(), configuration.getSchematron(), configuration.getPhase());
         Application application = new Application(schematron);
 
         if (configuration.hasDocument()) {
