@@ -82,6 +82,10 @@
     </transform>
   </xsl:template>
 
+  <xsl:template name="schxslt:copy-location-function">
+    <xsl:sequence select="(xsl:function, document('compile/api-2.0.xsl')//xsl:function)[schxslt:is-location-function(.)][1]"/>
+  </xsl:template>
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Create detailed report about failed assert or successful report</p>
