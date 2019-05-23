@@ -74,11 +74,12 @@
   </xsl:template>
 
   <xsl:template name="schxslt-api:post-process-validation-stylesheet" as="element(xsl:transform)">
+    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="validation-stylesheet" as="element(xsl:transform)" required="yes"/>
     <transform>
       <xsl:sequence select="$validation-stylesheet/@*"/>
       <xsl:sequence select="$validation-stylesheet/node()"/>
-      <xsl:sequence select="(xsl:function, document('')//xsl:function)[schxslt:is-location-function(.)][1]"/>
+      <xsl:sequence select="($schema/sch:schema/xsl:function, document('')//xsl:function)[schxslt:is-location-function(.)][1]"/>
     </transform>
   </xsl:template>
 

@@ -105,6 +105,7 @@
     </xsl:variable>
 
     <xsl:call-template name="schxslt-api:post-process-validation-stylesheet">
+      <xsl:with-param name="schema" select="."/>
       <xsl:with-param name="validation-stylesheet" select="$validation-stylesheet"/>
     </xsl:call-template>
 
