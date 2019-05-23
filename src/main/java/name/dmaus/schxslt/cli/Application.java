@@ -41,7 +41,7 @@ public class Application
         configuration.parse(args);
 
         Schematron schematron = new Schematron(new Compiler(), configuration.getSchematron(), configuration.getPhase());
-        Application application = new Application(schematron);
+        Application application = new Application(schematron, configuration.beVerbose());
 
         if (configuration.hasDocument()) {
             application.execute(configuration.getDocument());
@@ -52,10 +52,17 @@ public class Application
         }
     }
 
+    private Boolean verbose;
     private Schematron schematron;
 
     public Application (Schematron schematron)
     {
+        this(schematron, false);
+    }
+
+    public Application (Schematron schematron, Boolean verbose)
+    {
+        this.verbose = verbose;
         this.schematron = schematron;
     }
 
@@ -102,5 +109,10 @@ public class Application
     private void printResult (final Result result, final String filename)
     {
         System.out.format("[%s] %s%n", result.isValid() ? "valid" : "invalid", filename);
+        if (verbose) {
+            for (String message : result.getValidationMessages()) {
+                System.out.format("%s%n", message);
+            }
+        }
     }
 }

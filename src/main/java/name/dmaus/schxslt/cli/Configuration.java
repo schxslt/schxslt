@@ -44,6 +44,7 @@ public class Configuration
         options.addOption("p", "phase", true, "Validation phase");
         options.addOption("d", "document", true, "Path to document");
         options.addOption("r", "repl", false, "Run as REPL");
+        options.addOption("v", "verbose", false, "Verbose output");
         options.addRequiredOption("s", "schematron", true, "Path to schema");
     }
 
@@ -92,6 +93,11 @@ public class Configuration
     public File getSchematron ()
     {
         return new File(arguments.getOptionValue("s"));
+    }
+
+    public Boolean beVerbose ()
+    {
+        return arguments.hasOption("v");
     }
 
 }
