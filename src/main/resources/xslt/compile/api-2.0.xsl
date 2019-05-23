@@ -79,7 +79,7 @@
     <param name="validation-stylesheet">Validation stylesheet</param>
   </doc>
   <xsl:template name="schxslt-api:post-process-validation-stylesheet" as="element(xsl:transform)">
-    <xsl:param name="validation-stylesheet" as="element(xsl:transform)"/>
+    <xsl:param name="validation-stylesheet" as="element(xsl:transform)" required="yes"/>
     <xsl:sequence select="$validation-stylesheet"/>
   </xsl:template>
 
