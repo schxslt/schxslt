@@ -78,7 +78,7 @@
     <transform>
       <xsl:sequence select="$validation-stylesheet/@*"/>
       <xsl:sequence select="$validation-stylesheet/node()"/>
-      <xsl:sequence select="(xsl:function, document('compile/api-2.0.xsl')//xsl:function)[schxslt:is-location-function(.)][1]"/>
+      <xsl:sequence select="(xsl:function, document('')//xsl:function)[schxslt:is-location-function(.)][1]"/>
     </transform>
   </xsl:template>
 
@@ -142,5 +142,36 @@
       </svrl:diagnostic-reference>
     </xsl:for-each>
   </xsl:template>
+
+  <xsl:function name="schxslt-api:location" as="xs:string">
+    <xsl:param name="node" as="node()"/>
+    <xsl:variable name="segments" as="xs:string*">
+      <xsl:for-each select="($node/ancestor-or-self::node())">
+        <xsl:variable name="position">
+          <xsl:number level="single"/>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test=". instance of element()">
+            <xsl:value-of select="concat(name(.), '[', $position, ']')"/>
+          </xsl:when>
+          <xsl:when test=". instance of attribute()">
+            <xsl:value-of select="concat('@', name(.))"/>
+          </xsl:when>
+          <xsl:when test=". instance of processing-instruction()">
+            <xsl:value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
+          </xsl:when>
+          <xsl:when test=". instance of comment()">
+            <xsl:value-of select="concat('comment()[', $position, ']')"/>
+          </xsl:when>
+          <xsl:when test=". instance of text()">
+            <xsl:value-of select="concat('text()[', $position, ']')"/>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <xsl:value-of select="concat('/', string-join($segments, '/'))"/>
+  </xsl:function>
 
 </xsl:transform>
