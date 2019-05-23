@@ -35,72 +35,78 @@
 
   <xsl:template match="sch:schema">
 
-    <transform version="{schxslt:xslt-version(.)}">
-      <xsl:for-each select="sch:ns">
-        <xsl:namespace name="{@prefix}" select="@uri"/>
-      </xsl:for-each>
-      <xsl:sequence select="@xml:base"/>
+    <xsl:variable name="validation-stylesheet" as="element(xsl:transform)">
 
-      <output indent="yes"/>
+      <transform version="{schxslt:xslt-version(.)}">
+        <xsl:for-each select="sch:ns">
+          <xsl:namespace name="{@prefix}" select="@uri"/>
+        </xsl:for-each>
+        <xsl:sequence select="@xml:base"/>
 
-      <xsl:sequence select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
+        <output indent="yes"/>
 
-      <!-- See https://github.com/dmj/schxslt/issues/25 -->
-      <xsl:variable name="global-bindings" as="element(sch:let)*" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
-      <xsl:if test="count($global-bindings) ne count(distinct-values($global-bindings/@name))">
-        <xsl:message terminate="yes">
-          Compilation aborted because of variable name conflicts:
-          <xsl:for-each-group select="$global-bindings" group-by="@name">
-            <xsl:value-of select="current-grouping-key()"/> (<xsl:value-of select="current-group()/../local-name()" separator=", "/>)
-          </xsl:for-each-group>
-        </xsl:message>
-      </xsl:if>
+        <xsl:sequence select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
+        <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
 
-      <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="bindings" select="$global-bindings"/>
-      </xsl:call-template>
-
-      <template match="/">
-        <xsl:sequence select="sch:phase[@id eq $effective-phase]/@xml:base"/>
+        <!-- See https://github.com/dmj/schxslt/issues/25 -->
+        <xsl:variable name="global-bindings" as="element(sch:let)*" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
+        <xsl:if test="count($global-bindings) ne count(distinct-values($global-bindings/@name))">
+          <xsl:message terminate="yes">
+            Compilation aborted because of variable name conflicts:
+            <xsl:for-each-group select="$global-bindings" group-by="@name">
+              <xsl:value-of select="current-grouping-key()"/> (<xsl:value-of select="current-group()/../local-name()" separator=", "/>)
+            </xsl:for-each-group>
+          </xsl:message>
+        </xsl:if>
 
         <xsl:call-template name="schxslt:let-variable">
-          <xsl:with-param name="bindings" select="sch:phase[@id eq $effective-phase]/sch:let"/>
+          <xsl:with-param name="bindings" select="$global-bindings"/>
         </xsl:call-template>
 
-        <variable name="report" as="element(schxslt:report)">
-          <schxslt:report>
-            <xsl:for-each select="$validation-stylesheet-body/@name">
-              <call-template name="{.}"/>
-            </xsl:for-each>
-          </schxslt:report>
-        </variable>
+        <template match="/">
+          <xsl:sequence select="sch:phase[@id eq $effective-phase]/@xml:base"/>
 
-        <!-- Unwrap the intermediary report -->
-        <variable name="schxslt:report" as="element()*">
-          <for-each select="$report/schxslt:pattern">
-            <sequence select="*"/>
-            <sequence select="$report/schxslt:rule[@pattern = current()/@id]/*"/>
-          </for-each>
-        </variable>
+          <xsl:call-template name="schxslt:let-variable">
+            <xsl:with-param name="bindings" select="sch:phase[@id eq $effective-phase]/sch:let"/>
+          </xsl:call-template>
 
-        <xsl:call-template name="schxslt-api:report">
-          <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
-          <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
-        </xsl:call-template>
+          <variable name="report" as="element(schxslt:report)">
+            <schxslt:report>
+              <xsl:for-each select="$validation-stylesheet-body/@name">
+                <call-template name="{.}"/>
+              </xsl:for-each>
+            </schxslt:report>
+          </variable>
 
-      </template>
+          <!-- Unwrap the intermediary report -->
+          <variable name="schxslt:report" as="element()*">
+            <for-each select="$report/schxslt:pattern">
+              <sequence select="*"/>
+              <sequence select="$report/schxslt:rule[@pattern = current()/@id]/*"/>
+            </for-each>
+          </variable>
 
-      <template match="text() | @*" mode="#all" priority="-10"/>
-      <template match="*" mode="#all" priority="-10">
-        <apply-templates mode="#current" select="@* | node()"/>
-      </template>
+          <xsl:call-template name="schxslt-api:report">
+            <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+            <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
+          </xsl:call-template>
 
-      <xsl:sequence select="$validation-stylesheet-body"/>
+        </template>
 
-      <xsl:call-template name="schxslt:copy-location-function"/>
+        <template match="text() | @*" mode="#all" priority="-10"/>
+        <template match="*" mode="#all" priority="-10">
+          <apply-templates mode="#current" select="@* | node()"/>
+        </template>
 
-    </transform>
+        <xsl:sequence select="$validation-stylesheet-body"/>
+
+        <xsl:call-template name="schxslt:copy-location-function"/>
+
+      </transform>
+
+    </xsl:variable>
+
+    <xsl:sequence select="schxslt-api:post-process-validation-stylesheet($validation-stylesheet)"/>
 
   </xsl:template>
 

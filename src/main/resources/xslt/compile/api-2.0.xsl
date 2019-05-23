@@ -72,6 +72,17 @@
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Post process the validation stylesheet</p>
+    </desc>
+    <param name="validation-stylesheet">Validation stylesheet</param>
+  </doc>
+  <xsl:function name="schxslt-api:post-process-validation-stylesheet" as="element(xsl:transform)">
+    <xsl:param name="validation-stylesheet" as="element(xsl:transform)"/>
+    <xsl:sequence select="$validation-stylesheet"/>
+  </xsl:function>
+
   <xsl:function name="schxslt-api:location" as="xs:string">
     <xsl:param name="node" as="node()"/>
     <xsl:variable name="segments" as="xs:string*">
