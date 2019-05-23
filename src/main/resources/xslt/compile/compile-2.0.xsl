@@ -100,8 +100,6 @@
 
         <xsl:sequence select="$validation-stylesheet-body"/>
 
-        <xsl:call-template name="schxslt:copy-location-function"/>
-
       </transform>
 
     </xsl:variable>

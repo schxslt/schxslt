@@ -73,6 +73,15 @@
     </svrl:successful-report>
   </xsl:template>
 
+  <xsl:template name="schxslt-api:post-process-validation-stylesheet" as="element(xsl:transform)">
+    <xsl:param name="validation-stylesheet" as="element(xsl:transform)" required="yes"/>
+    <transform>
+      <xsl:sequence select="$validation-stylesheet/@*"/>
+      <xsl:sequence select="$validation-stylesheet/node()"/>
+      <xsl:call-template name="schxslt:copy-location-function"/>
+    </transform>
+  </xsl:template>
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Create detailed report about failed assert or successful report</p>
