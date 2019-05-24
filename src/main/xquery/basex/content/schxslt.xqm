@@ -59,5 +59,5 @@ declare %private function schxslt:include ($schematron as node()) as document-no
  : @return Schematron document w/ instantiated abstract patterns and rules
  :)
 declare %private function schxslt:expand ($schematron as node()) as document-node(element(sch:schema)) {
-  $schematron => xslt:transform(file:base-dir() || "xslt/include.xsl")
+  $schematron => xslt:transform(file:base-dir() || "xslt/expand.xsl")
 };
