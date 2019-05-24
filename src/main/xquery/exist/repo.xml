@@ -1,0 +1,10 @@
+<meta xmlns="http://exist-db.org/xquery/repo">
+  <description></description>
+  <author>David Maus</author>
+  <website>https://doi.org/10.5281/zenodo.1495494</website>
+  <status>stable</status>
+  <license>The MIT License</license>
+  <copyright>true</copyright>
+  <type>library</type>
+  <target>schxslt</target>
+</meta>
