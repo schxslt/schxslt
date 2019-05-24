@@ -1,8 +1,4 @@
-<xsl:transform version="2.0"
-  xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-  xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:transform xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0">
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
@@ -56,8 +52,7 @@
         <xsl:sequence select="$schema/sch:pattern"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:sequence
-          select="$schema/sch:pattern[@id = $schema/sch:phase[@id eq $phase]/sch:active/@pattern]"/>
+        <xsl:sequence select="$schema/sch:pattern[@id = $schema/sch:phase[@id eq $phase]/sch:active/@pattern]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
@@ -76,7 +71,7 @@
   </xsl:function>
 
   <xsl:function name="schxslt:version" as="xs:string">
-    <xsl:text>1.2-SNAPSHOT</xsl:text>
+    <xsl:text>1.2-rc1</xsl:text>
   </xsl:function>
 
 </xsl:transform>
