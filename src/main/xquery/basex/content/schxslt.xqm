@@ -24,9 +24,12 @@ declare namespace xsl = "http://www.w3.org/1999/XSL/Transform";
  : @return Validation report
  :)
 declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as document-node(element(svrl:schematron-output)) {
-  let $options := if ($phase) then map{"phase": $phase} else map{}
-  return
-    $document => xslt:transform(schxslt:compile($schematron), $options)
+  if (xslt:version() ne '3.0')
+    then error(QName('https://doi.org/10.5281/zenodo.1495494', 'E0001'), "Processor does not support the required XSLT version")
+    else
+      let $options := if ($phase) then map{"phase": $phase} else map{}
+      return
+        $document => xslt:transform(schxslt:compile($schematron), $options)
 };
 
 (:~
