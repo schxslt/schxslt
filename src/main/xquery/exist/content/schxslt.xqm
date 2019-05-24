@@ -15,6 +15,8 @@ declare namespace svrl = "http://purl.oclc.org/dsdl/svrl";
 declare namespace sch = "http://purl.oclc.org/dsdl/schematron";
 declare namespace xsl = "http://www.w3.org/1999/XSL/Transform";
 
+declare %private variable $schxslt:base-dir := "xmldb:/db/apps/schxslt/content/";
+
 (:~
  : Validate document against Schematron and return the validation report.
  :
@@ -23,10 +25,10 @@ declare namespace xsl = "http://www.w3.org/1999/XSL/Transform";
  : @param  $phase Validation phase
  : @return Validation report
  :)
-declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as document-node(element(svrl:schematron-output)) {
+declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as element(svrl:schematron-output) {
   let $options := if ($phase) then <parameters><param name="phase" value="{$phase}"/></parameters> else ()
   return
-    $document => transform:transform(schxslt:compile($schematron, $options))
+    $document => transform:transform(schxslt:compile($schematron, $options), ())
 };
 
 (:~
@@ -35,8 +37,8 @@ declare function schxslt:validate ($document as node(), $schematron as node(), $
  : @param  $schematron Schematron document
  : @return Validation stylesheet
  :)
-declare %private function schxslt:compile ($schematron as node(), $options as element(parameters)?) as document-node(element(xsl:transform)) {
-  $schematron => schxslt:include() => schxslt:expand() => transform:transform("xslt/compile-for-svrl.xsl", $options)
+declare %private function schxslt:compile ($schematron as node(), $options as element(parameters)?) as element(xsl:transform) {
+  $schematron => schxslt:include() => schxslt:expand() => transform:transform(doc($schxslt:base-dir || "xslt/compile-for-svrl.xsl"), $options)
 };
 
 (:~
@@ -45,8 +47,8 @@ declare %private function schxslt:compile ($schematron as node(), $options as el
  : @param  $schematron Schematron document
  : @return Schematron document w/ processed inclusions
  :)
-declare %private function schxslt:include ($schematron as node()) as document-node(element(sch:schema)) {
-  $schematron => transform:transform("xslt/include.xsl")
+declare %private function schxslt:include ($schematron as node()) as element(sch:schema) {
+  $schematron => transform:transform(doc($schxslt:base-dir || "xslt/include.xsl"), ())
 };
 
 (:~
@@ -55,6 +57,6 @@ declare %private function schxslt:include ($schematron as node()) as document-no
  : @param  $schematron Schematron document
  : @return Schematron document w/ instantiated abstract patterns and rules
  :)
-declare %private function schxslt:expand ($schematron as node()) as document-node(element(sch:schema)) {
-  $schematron => transform:transform("xslt/expand.xsl")
+declare %private function schxslt:expand ($schematron as node()) as element(sch:schema) {
+  $schematron => transform:transform(doc($schxslt:base-dir || "xslt/expand.xsl"), ())
 };
