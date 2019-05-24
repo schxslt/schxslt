@@ -29,17 +29,18 @@ declare function schxslt:validate ($document as node(), $schematron as node(), $
     else
       let $options := if ($phase) then map{"phase": $phase} else map{}
       return
-        $document => xslt:transform(schxslt:compile($schematron), $options)
+        $document => xslt:transform(schxslt:compile($schematron, $options))
 };
 
 (:~
  : Compile Schematron to validation stylesheet.
  :
  : @param  $schematron Schematron document
+ : @param  $options Schematron compiler parameters
  : @return Validation stylesheet
  :)
-declare %private function schxslt:compile ($schematron as node()) as document-node(element(xsl:transform)) {
-  $schematron => schxslt:include() => schxslt:expand() => xslt:transform(file:base-dir() || "xslt/compile-for-svrl.xsl")
+declare %private function schxslt:compile ($schematron as node(), $options as map(*)) as document-node(element(xsl:transform)) {
+  $schematron => schxslt:include() => schxslt:expand() => xslt:transform(file:base-dir() || "xslt/compile-for-svrl.xsl", $options)
 };
 
 (:~
