@@ -1,15 +1,18 @@
-ifeq ($(OS),Windows_NT)
-	XSPEC=xspec.cmd
-	CALABASH=calabash.cmd
-else
-	XSPEC=xspec
-	CALABASH=calabash
-endif
+VERSION := $(file < VERSION)
 
 .PHONY: test
-test:
-	${CALABASH} src/test/resources/runner.xpl
+test: clean
+	calabash src/test/resources/runner.xpl
+	mvn test
 
 .PHONY: clean
 clean:
-	rm -vf src/test/resources/spec/*/*.sch.xsl
+	rm -f src/test/resources/spec/*/*.sch.xsl
+	mvn clean
+
+.PHONY: update-version
+update-version:
+	calabash lib/update-version.xpl
+
+basex-module:
+	cd src/main/xquery/basex; zip -r ../../../../target/xquery-basex-${VERSION}.xar content expath-pkg.xml
