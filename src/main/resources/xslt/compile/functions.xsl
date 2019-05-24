@@ -75,4 +75,8 @@
 
   </xsl:function>
 
+  <xsl:function name="schxslt:version" as="xs:string">
+    <xsl:text>1.2-SNAPSHOT</xsl:text>
+  </xsl:function>
+
 </xsl:transform>
