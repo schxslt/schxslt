@@ -16,3 +16,7 @@ update-version:
 
 basex-module:
 	cd src/main/xquery/basex; zip -r ../../../../target/xquery-basex-${VERSION}.xar content expath-pkg.xml
+
+exist-docker:
+	docker pull existdb/existdb:release
+	docker run -dit -p 8080:8080 -p 8443:8443 --name exist existdb/existdb:release
