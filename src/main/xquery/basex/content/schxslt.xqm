@@ -33,6 +33,17 @@ declare function schxslt:validate ($document as node(), $schematron as node(), $
 };
 
 (:~
+ : Validate document against Schematron and return the validation report.
+ :
+ : @param  $document Document to be validated
+ : @param  $schematron Schematron document
+ : @return Validation report
+ :)
+declare function schxslt:validate ($document as node(), $schematron as node()) as document-node(element(svrl:schematron-output)) {
+  schxslt:validate($document, $schematron, ())
+};
+
+(:~
  : Compile Schematron to validation stylesheet.
  :
  : @param  $schematron Schematron document
