@@ -77,7 +77,7 @@
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="validation-stylesheet" as="element(xsl:transform)" required="yes"/>
 
-    <xsl:variable name="location-function" select="($schema/sch:schema/xsl:function, document('')//xsl:function)[schxslt:is-location-function(.)][1]"/>
+    <xsl:variable name="location-function" select="($schema/sch:schema/xsl:function, document('compile-for-svrl.xsl')//xsl:function)[schxslt:is-location-function(.)][1]"/>
     <xsl:if test="empty($location-function)">
       <xsl:message terminate="yes">
         Can't find required function Q{https://doi.org/10.5281/zenodo.1495494}location.
