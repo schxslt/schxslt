@@ -11,11 +11,13 @@ xquery version "3.1";
 
 module namespace schxslt = "https://doi.org/10.5281/zenodo.1495494";
 
+declare namespace expath = "http://expath.org/ns/pkg";
 declare namespace svrl = "http://purl.oclc.org/dsdl/svrl";
 declare namespace sch = "http://purl.oclc.org/dsdl/schematron";
 declare namespace xsl = "http://www.w3.org/1999/XSL/Transform";
 
-declare %private variable $schxslt:base-dir := "xmldb:/db/apps/schxslt/content/";
+declare %private variable $schxslt:base-dir :=
+  util:collection-name(collection(repo:get-root())//expath:package[@name = "https://doi.org/10.5281/zenodo.1495494"]);
 
 (:~
  : Validate document against Schematron and return the validation report.
@@ -49,7 +51,7 @@ declare function schxslt:validate ($document as node(), $schematron as node()) a
  : @return Validation stylesheet
  :)
 declare %private function schxslt:compile ($schematron as node(), $options as element(parameters)?) as element(xsl:transform) {
-  $schematron => schxslt:include() => schxslt:expand() => transform:transform(doc($schxslt:base-dir || "xslt/compile-for-svrl.xsl"), $options)
+  $schematron => schxslt:include() => schxslt:expand() => transform:transform(doc($schxslt:base-dir || "/content/xslt/compile-for-svrl.xsl"), $options)
 };
 
 (:~
@@ -59,7 +61,7 @@ declare %private function schxslt:compile ($schematron as node(), $options as el
  : @return Schematron document w/ processed inclusions
  :)
 declare %private function schxslt:include ($schematron as node()) as element(sch:schema) {
-  $schematron => transform:transform(doc($schxslt:base-dir || "xslt/include.xsl"), ())
+  $schematron => transform:transform(doc($schxslt:base-dir || "/content/xslt/include.xsl"), ())
 };
 
 (:~
@@ -69,5 +71,5 @@ declare %private function schxslt:include ($schematron as node()) as element(sch
  : @return Schematron document w/ instantiated abstract patterns and rules
  :)
 declare %private function schxslt:expand ($schematron as node()) as element(sch:schema) {
-  $schematron => transform:transform(doc($schxslt:base-dir || "xslt/expand.xsl"), ())
+  $schematron => transform:transform(doc($schxslt:base-dir || "/content/xslt/expand.xsl"), ())
 };
