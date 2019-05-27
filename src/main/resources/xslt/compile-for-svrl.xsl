@@ -76,10 +76,17 @@
   <xsl:template name="schxslt-api:post-process-validation-stylesheet" as="element(xsl:transform)">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="validation-stylesheet" as="element(xsl:transform)" required="yes"/>
+
+    <xsl:variable name="location-function" select="($schema/sch:schema/xsl:function, document('')//xsl:function)[schxslt:is-location-function(.)][1]"/>
+    <xsl:if test="empty($location-function)">
+      <xsl:message terminate="yes">
+        Can't find required function Q{https://doi.org/10.5281/zenodo.1495494}location.
+      </xsl:message>
+    </xsl:if>
     <transform>
       <xsl:sequence select="$validation-stylesheet/@*"/>
       <xsl:sequence select="$validation-stylesheet/node()"/>
-      <xsl:sequence select="($schema/sch:schema/xsl:function, document('')//xsl:function)[schxslt:is-location-function(.)][1]"/>
+      <xsl:sequence select="$location-function"/>
     </transform>
   </xsl:template>
 
