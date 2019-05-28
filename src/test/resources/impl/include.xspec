@@ -1,7 +1,7 @@
 <description xmlns="http://www.jenitennison.com/xslt/xspec"
              xmlns:sch="http://purl.oclc.org/dsdl/schematron"
              xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
-             stylesheet="../../../main/resources/xslt/include.xsl">
+             stylesheet="../../../main/resources/xslt/2.0/include.xsl">
   <scenario label="When a Schematron contains a sch:include">
     <context>
       <sch:schema queryBinding="xslt2">

@@ -51,7 +51,7 @@ declare function schxslt:validate ($document as node(), $schematron as node()) a
  : @return Validation stylesheet
  :)
 declare %private function schxslt:compile ($schematron as node(), $options as map(*)) as document-node(element(xsl:transform)) {
-  $schematron => schxslt:include() => schxslt:expand() => xslt:transform(file:base-dir() || "xslt/compile-for-svrl.xsl", $options)
+  $schematron => schxslt:include() => schxslt:expand() => xslt:transform(file:base-dir() || "xslt/2.0/compile-for-svrl.xsl", $options)
 };
 
 (:~
@@ -61,7 +61,7 @@ declare %private function schxslt:compile ($schematron as node(), $options as ma
  : @return Schematron document w/ processed inclusions
  :)
 declare %private function schxslt:include ($schematron as node()) as document-node(element(sch:schema)) {
-  $schematron => xslt:transform(file:base-dir() || "xslt/include.xsl")
+  $schematron => xslt:transform(file:base-dir() || "xslt/2.0/include.xsl")
 };
 
 (:~
@@ -71,5 +71,5 @@ declare %private function schxslt:include ($schematron as node()) as document-no
  : @return Schematron document w/ instantiated abstract patterns and rules
  :)
 declare %private function schxslt:expand ($schematron as node()) as document-node(element(sch:schema)) {
-  $schematron => xslt:transform(file:base-dir() || "xslt/expand.xsl")
+  $schematron => xslt:transform(file:base-dir() || "xslt/2.0/expand.xsl")
 };

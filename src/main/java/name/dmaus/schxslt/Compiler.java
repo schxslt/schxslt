@@ -48,9 +48,9 @@ public class Compiler
     private final TransformerFactory factory = TransformerFactory.newInstance();
     private final URIResolver resolver = new Resolver();
 
-    private String includeStylesheetPath = "/xslt/include.xsl";
-    private String expandStylesheetPath = "/xslt/expand.xsl";
-    private String compileStylesheetPath = "/xslt/compile-for-svrl.xsl";
+    private String includeStylesheetPath = "/xslt/2.0/include.xsl";
+    private String expandStylesheetPath = "/xslt/2.0/expand.xsl";
+    private String compileStylesheetPath = "/xslt/2.0/compile-for-svrl.xsl";
 
     private Map<String, Object> parameters = null;
 

@@ -29,10 +29,10 @@ to the right documents.
 This step can be skipped if the Schematron does not reference external 
 definitions.
 
-The responsible stylesheet is [include.xsl](src/main/resources/xslt/include.xsl).
+The responsible stylesheet is [include.xsl](src/main/resources/xslt/2.0/include.xsl).
 
 ```
-saxon -xsl:src/main/resources/xslt/include.xsl -o:stage-1.sch </path/to/schematron>
+saxon -xsl:src/main/resources/xslt/2.0/include.xsl -o:stage-1.sch </path/to/schematron>
 ```
 
 ### Step 2: Expand abstract patterns and rules
@@ -42,10 +42,10 @@ Abstract patterns and rules are instantiated.
 This step can be skipped if the Schematron does not define abstract 
 patterns or rules.
 
-The responsible stylesheet is [expand.xsl](src/main/resources/xslt/expand.xsl).
+The responsible stylesheet is [expand.xsl](src/main/resources/xslt/2.0/expand.xsl).
 
 ```
-saxon -xsl:src/main/resources/xslt/expand.xsl -o:stage-2.sch stage-1.sch
+saxon -xsl:src/main/resources/xslt/2.0/expand.xsl -o:stage-2.sch stage-1.sch
 ```
 
 ### Step 3: Compile validation stylesheet
@@ -53,7 +53,7 @@ saxon -xsl:src/main/resources/xslt/expand.xsl -o:stage-2.sch stage-1.sch
 Compiles an XSLT 2.0 validation stylesheet that creates an SVRL report 
 document.
 
-The responsible stylesheet is [compile-for-svrl.xsl](src/main/resources/xslt/compile-for-svrl.xsl).
+The responsible stylesheet is [compile-for-svrl.xsl](src/main/resources/xslt/2.0/compile-for-svrl.xsl).
 
 This stylesheet takes an optional argument 'phase' to validate in the selected 
 phase. If no phase is requested the value of the @defaultPhase attribute is 
@@ -61,7 +61,7 @@ used if present. Otherwise, it defaults to phase '#ALL' and validates
 all patterns.
 
 ```
-saxon -xsl:src/main/resources/xslt/compile-for-svrl.xsl -o:stage-3.xsl stage-2.sch [phase=myphase]
+saxon -xsl:src/main/resources/xslt/2.0/compile-for-svrl.xsl -o:stage-3.xsl stage-2.sch [phase=myphase]
 ```
 
 ## Using XProc

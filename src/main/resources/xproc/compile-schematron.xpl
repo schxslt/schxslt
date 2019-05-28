@@ -25,7 +25,7 @@
 
   <p:xslt>
     <p:input port="stylesheet">
-      <p:document href="../xslt/include.xsl"/>
+      <p:document href="../xslt/2.0/include.xsl"/>
     </p:input>
     <p:input port="parameters">
       <p:empty/>
@@ -34,7 +34,7 @@
 
   <p:xslt>
     <p:input port="stylesheet">
-      <p:document href="../xslt/expand.xsl"/>
+      <p:document href="../xslt/2.0/expand.xsl"/>
     </p:input>
     <p:input port="parameters">
       <p:empty/>
@@ -44,7 +44,7 @@
   <p:xslt name="compile">
     <p:with-param name="phase" select="$phase"/>
     <p:input port="stylesheet">
-      <p:document href="../xslt/compile-for-svrl.xsl"/>
+      <p:document href="../xslt/2.0/compile-for-svrl.xsl"/>
     </p:input>
   </p:xslt>
 
