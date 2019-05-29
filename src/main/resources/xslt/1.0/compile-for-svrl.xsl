@@ -1,0 +1,230 @@
+<xsl:transform version="1.0"
+               xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+               xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
+               xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
+               xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+               xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:import href="compile/compile-1.0.xsl"/>
+
+  <xsl:template name="schxslt-api:report">
+    <xsl:param name="schema"/>
+    <xsl:param name="phase"/>
+
+    <svrl:schematron-output>
+      <xsl:copy-of select="$schema/@schemaVersion"/>
+      <xsl:if test="$effective-phase != '#ALL'">
+        <xsl:attribute name="phase"><xsl:value-of select="$effective-phase"/></xsl:attribute>
+      </xsl:if>
+      <xsl:if test="$schema/sch:title">
+        <xsl:attribute name="title" select="$schema/sch:title"/>
+      </xsl:if>
+      <xsl:for-each select="$schema/sch:p">
+        <svrl:text>
+          <xsl:copy-of select="@id | @class | @icon"/>
+          <xsl:apply-templates select="node()"/>
+        </svrl:text>
+      </xsl:for-each>
+
+      <xsl:for-each select="$schema/sch:ns">
+        <svrl:ns-prefix-in-attribute-values>
+          <xsl:copy-of select="@prefix | @uri"/>
+        </svrl:ns-prefix-in-attribute-values>
+      </xsl:for-each>
+
+      <copy-of select="$schxslt:report"/>
+
+    </svrl:schematron-output>
+
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:active-pattern">
+    <xsl:param name="pattern"/>
+
+    <svrl:active-pattern>
+      <xsl:copy-of select="$pattern/@id | $pattern/@role"/>
+      <xsl:if test="$pattern/@documents">
+        <attribute name="documents"><value-of select="normalize-space()"/></attribute>
+      </xsl:if>
+    </svrl:active-pattern>
+
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:fired-rule">
+    <xsl:param name="rule"/>
+
+    <svrl:fired-rule>
+      <xsl:copy-of select="$rule/@id | $rule/@context | $rule/@role | $rule/@flag"/>
+    </svrl:fired-rule>
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:failed-assert">
+    <xsl:param name="assert"/>
+
+    <variable name="location">
+      <call-template name="schxslt-xslt1:location">
+        <xsl:choose>
+          <xsl:when test="$assert/@subject">
+            <with-param name="node" select="{$assert/@subject}"/>
+          </xsl:when>
+          <xsl:when test="$assert/../@subject">
+            <with-param name="node" select="{$assert/../@subject}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <with-param name="node" select="."/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </call-template>
+    </variable>
+    <svrl:failed-assert location="{{normalize-space($location)}}">
+      <xsl:copy-of select="$assert/@role | $assert/@flag | $assert/@id | $assert/@test"/>
+      <xsl:call-template name="schxslt-xslt1:detailed-report"/>
+    </svrl:failed-assert>
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:successful-report">
+    <xsl:param name="report"/>
+
+    <variable name="location">
+      <call-template name="schxslt-xslt1:location">
+        <xsl:choose>
+          <xsl:when test="$report/@subject">
+            <with-param name="node" select="{$report/@subject}"/>
+          </xsl:when>
+          <xsl:when test="$report/../@subject">
+            <with-param name="node" select="{$report/../@subject}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <with-param name="node" select="."/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </call-template>
+    </variable>
+    <svrl:successful-report location="{{normalize-space($location)}}">
+      <xsl:copy-of select="$report/@role | $report/@flag | $report/@id | $report/@test"/>
+      <xsl:call-template name="schxslt-xslt1:detailed-report"/>
+    </svrl:successful-report>
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:post-process-validation-stylesheet">
+    <xsl:param name="schema"/>
+    <xsl:param name="validation-stylesheet"/>
+
+    <transform>
+      <xsl:copy-of select="$validation-stylesheet/*/@*"/>
+      <xsl:copy-of select="$validation-stylesheet/*/node()"/>
+      <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt-xslt1:location']"/>
+    </transform>
+
+  </xsl:template>
+
+  <xsl:template name="schxslt-xslt1:detailed-report">
+    <xsl:if test="@diagnostics">
+      <xsl:call-template name="schxslt-xslt1:copy-diagnostics"/>
+    </xsl:if>
+    <xsl:if test="@properties">
+      <xsl:call-template name="schxslt-xslt1:copy-properties"/>
+    </xsl:if>
+    <xsl:if test="text() | *">
+      <svrl:text>
+        <xsl:apply-templates select="node()"/>
+      </svrl:text>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="schxslt-xslt1:copy-diagnostics">
+    <xsl:param name="sequence" select="normalize-space(@diagnostics)"/>
+
+    <xsl:variable name="head">
+      <xsl:choose>
+        <xsl:when test="contains($sequence, ' ')">
+          <xsl:value-of select="substring-before($sequence, ' ')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$sequence"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <svrl:diagnostic-reference diagnostic="{$head}">
+      <svrl:text>
+        <xsl:copy-of select="key('schxslt-xslt1:diagnostics', $head)/@*"/>
+        <xsl:apply-templates select="key('schxslt-xslt1:diagnostics', $head)/node()"/>
+      </svrl:text>
+    </svrl:diagnostic-reference>
+
+    <xsl:choose>
+      <xsl:when test="contains($sequence, ' ')">
+        <xsl:call-template name="schxslt-xslt1:copy-diagnostics">
+          <xsl:with-param name="diagnostics" select="substring-after($sequence, ' ')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+
+  </xsl:template>
+
+  <xsl:template name="schxslt-xslt1:copy-properties">
+    <xsl:param name="sequence" select="normalize-space(@properties)"/>
+
+    <xsl:variable name="head">
+      <xsl:choose>
+        <xsl:when test="contains($sequence, ' ')">
+          <xsl:value-of select="substring-before($sequence, ' ')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$sequence"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <svrl:diagnostic-reference diagnostic="{$head}">
+      <svrl:text>
+        <xsl:copy-of select="key('schxslt-xslt1:properties', $head)/@*"/>
+        <xsl:apply-templates select="key('schxslt-xslt1:properties', $head)/node()"/>
+      </svrl:text>
+    </svrl:diagnostic-reference>
+
+    <xsl:choose>
+      <xsl:when test="contains($sequence, ' ')">
+        <xsl:call-template name="schxslt-xslt1:copy-properties">
+          <xsl:with-param name="properties" select="substring-after($sequence, ' ')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise/>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="schxslt-xslt1:location">
+    <xsl:param name="node"/>
+
+    <xsl:variable name="path">
+      <xsl:for-each select="$node/ancestor::*">
+        <xsl:text>/</xsl:text>
+        <xsl:value-of select="concat(name(), '[', 1 + count(preceding-sibling::*[name() = name(current())]), ']')"/>
+      </xsl:for-each>
+      <xsl:text>/</xsl:text>
+      <xsl:choose>
+        <xsl:when test="$node/self::*">
+          <xsl:value-of select="concat(name(), '[', 1 + count(preceding-sibling::*[name() = name(current())]), ']')"/>
+        </xsl:when>
+        <xsl:when test="count($node/../@*) = count($node|$node/../@*)">
+          <xsl:value-of select="concat('@', name($node))"/>
+        </xsl:when>
+        <xsl:when test="$node/self::processing-instruction()">
+          <xsl:value-of select="concat('processing-instruction()', '[', 1 + count(preceding-sibling::processing-instruction()), ']')"/>
+        </xsl:when>
+        <xsl:when test="$node/self::comment()">
+          <xsl:value-of select="concat('comment()', '[', 1 + count(preceding-sibling::comment()), ']')"/>
+        </xsl:when>
+        <xsl:when test="$node/self::text()">
+          <xsl:value-of select="concat('text()', '[', 1 + count(preceding-sibling::text()), ']')"/>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:value-of select="$path"/>
+  </xsl:template>
+
+</xsl:transform>
