@@ -94,7 +94,7 @@ public class ValidationTest
     @Test
     public void validationWithPhase () throws Exception
     {
-        schemaFactory.setProperty("phase", "default");
+        schemaFactory.setProperty("https://doi.org/10.5281/zenodo.1495494#phase", "default");
         Schema schema = schemaFactory.newSchema(simpleSchemaSource);
 
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();

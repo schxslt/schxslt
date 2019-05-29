@@ -105,7 +105,7 @@ public class SchemaFactory extends javax.xml.validation.SchemaFactory
             this.accessExternalDtd = value;
         } else if (name.equals(XMLConstants.ACCESS_EXTERNAL_SCHEMA)) {
             this.accessExternalSchema = value;
-        } else if (name.equals("phase")) {
+        } else if (name.equals("https://doi.org/10.5281/zenodo.1495494#phase")) {
             this.phase = (String)value;
         } else {
             throw new SAXNotRecognizedException();
