@@ -63,7 +63,7 @@
     <xsl:param name="assert"/>
 
     <variable name="location">
-      <call-template name="schxslt-xslt1:location">
+      <call-template name="schxslt:location">
         <xsl:choose>
           <xsl:when test="$assert/@subject">
             <with-param name="node" select="{$assert/@subject}"/>
@@ -79,7 +79,7 @@
     </variable>
     <svrl:failed-assert location="{{normalize-space($location)}}">
       <xsl:copy-of select="$assert/@role | $assert/@flag | $assert/@id | $assert/@test"/>
-      <xsl:call-template name="schxslt-xslt1:detailed-report"/>
+      <xsl:call-template name="schxslt:detailed-report"/>
     </svrl:failed-assert>
   </xsl:template>
 
@@ -87,7 +87,7 @@
     <xsl:param name="report"/>
 
     <variable name="location">
-      <call-template name="schxslt-xslt1:location">
+      <call-template name="schxslt:location">
         <xsl:choose>
           <xsl:when test="$report/@subject">
             <with-param name="node" select="{$report/@subject}"/>
@@ -103,7 +103,7 @@
     </variable>
     <svrl:successful-report location="{{normalize-space($location)}}">
       <xsl:copy-of select="$report/@role | $report/@flag | $report/@id | $report/@test"/>
-      <xsl:call-template name="schxslt-xslt1:detailed-report"/>
+      <xsl:call-template name="schxslt:detailed-report"/>
     </svrl:successful-report>
   </xsl:template>
 
@@ -114,17 +114,17 @@
     <transform>
       <xsl:copy-of select="$validation-stylesheet/*/@*"/>
       <xsl:copy-of select="$validation-stylesheet/*/node()"/>
-      <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt-xslt1:location']"/>
+      <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
     </transform>
 
   </xsl:template>
 
-  <xsl:template name="schxslt-xslt1:detailed-report">
+  <xsl:template name="schxslt:detailed-report">
     <xsl:if test="@diagnostics">
-      <xsl:call-template name="schxslt-xslt1:copy-diagnostics"/>
+      <xsl:call-template name="schxslt:copy-diagnostics"/>
     </xsl:if>
     <xsl:if test="@properties">
-      <xsl:call-template name="schxslt-xslt1:copy-properties"/>
+      <xsl:call-template name="schxslt:copy-properties"/>
     </xsl:if>
     <xsl:if test="text() | *">
       <svrl:text>
@@ -133,7 +133,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="schxslt-xslt1:copy-diagnostics">
+  <xsl:template name="schxslt:copy-diagnostics">
     <xsl:param name="sequence" select="normalize-space(@diagnostics)"/>
 
     <xsl:variable name="head">
@@ -149,14 +149,14 @@
 
     <svrl:diagnostic-reference diagnostic="{$head}">
       <svrl:text>
-        <xsl:copy-of select="key('schxslt-xslt1:diagnostics', $head)/@*"/>
-        <xsl:apply-templates select="key('schxslt-xslt1:diagnostics', $head)/node()"/>
+        <xsl:copy-of select="key('schxslt:diagnostics', $head)/@*"/>
+        <xsl:apply-templates select="key('schxslt:diagnostics', $head)/node()"/>
       </svrl:text>
     </svrl:diagnostic-reference>
 
     <xsl:choose>
       <xsl:when test="contains($sequence, ' ')">
-        <xsl:call-template name="schxslt-xslt1:copy-diagnostics">
+        <xsl:call-template name="schxslt:copy-diagnostics">
           <xsl:with-param name="diagnostics" select="substring-after($sequence, ' ')"/>
         </xsl:call-template>
       </xsl:when>
@@ -165,7 +165,7 @@
 
   </xsl:template>
 
-  <xsl:template name="schxslt-xslt1:copy-properties">
+  <xsl:template name="schxslt:copy-properties">
     <xsl:param name="sequence" select="normalize-space(@properties)"/>
 
     <xsl:variable name="head">
@@ -181,14 +181,14 @@
 
     <svrl:diagnostic-reference diagnostic="{$head}">
       <svrl:text>
-        <xsl:copy-of select="key('schxslt-xslt1:properties', $head)/@*"/>
-        <xsl:apply-templates select="key('schxslt-xslt1:properties', $head)/node()"/>
+        <xsl:copy-of select="key('schxslt:properties', $head)/@*"/>
+        <xsl:apply-templates select="key('schxslt:properties', $head)/node()"/>
       </svrl:text>
     </svrl:diagnostic-reference>
 
     <xsl:choose>
       <xsl:when test="contains($sequence, ' ')">
-        <xsl:call-template name="schxslt-xslt1:copy-properties">
+        <xsl:call-template name="schxslt:copy-properties">
           <xsl:with-param name="properties" select="substring-after($sequence, ' ')"/>
         </xsl:call-template>
       </xsl:when>
@@ -196,7 +196,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="schxslt-xslt1:location">
+  <xsl:template name="schxslt:location">
     <xsl:param name="node"/>
 
     <xsl:variable name="path">
