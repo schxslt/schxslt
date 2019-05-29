@@ -22,15 +22,17 @@ declare %private variable $schxslt:base-dir :=
 (:~
  : Validate document against Schematron and return the validation report.
  :
- : @param  $document Document to be validated
- : @param  $schematron Schematron document
- : @param  $phase Validation phase
+ : @param  $document   Document to be validated
+ : @param  $schematron Schematron schema
+ : @param  $phase      Validation phase
  : @return Validation report
  :)
 declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as element(svrl:schematron-output) {
   let $options := if ($phase) then <parameters><param name="phase" value="{$phase}"/></parameters> else ()
+  let $schematron := if ($schematron instance of document-node()) then $schematron/sch:schema else $schematron
+  let $xsltver := schxslt:processor-path(lower-case($schematron/@queryBinding))
   return
-    $document => transform:transform(schxslt:compile($schematron, $options), ())
+    $document => transform:transform(schxslt:compile($schematron, $options, $xsltver), ())
 };
 
 (:~
@@ -45,31 +47,37 @@ declare function schxslt:validate ($document as node(), $schematron as node()) a
 };
 
 (:~
+ : Return path segment to processor for requested query language.
+ :
+ : @error  Query language not supported
+ :
+ : @param  $queryBinding Query language token
+ : @return Path segment to processor
+ :)
+declare %private function schxslt:processor-path ($queryBinding as xs:string) as xs:string {
+  switch ($queryBinding)
+    case ""
+      return "1.0"
+    case "xslt"
+      return "1.0"
+    case "xslt2"
+      return "2.0"
+    default
+      return error(xs:QName("schxslt:UnsupportedQueryBinding"))
+};
+
+(:~
  : Compile Schematron to validation stylesheet.
  :
  : @param  $schematron Schematron document
+ : @param  $options Schematron compiler parameters
  : @return Validation stylesheet
  :)
-declare %private function schxslt:compile ($schematron as node(), $options as element(parameters)?) as element(xsl:transform) {
-  $schematron => schxslt:include() => schxslt:expand() => transform:transform(doc($schxslt:base-dir || "/content/xslt/2.0/compile-for-svrl.xsl"), $options)
-};
-
-(:~
- : Process inclusions.
- :
- : @param  $schematron Schematron document
- : @return Schematron document w/ processed inclusions
- :)
-declare %private function schxslt:include ($schematron as node()) as element(sch:schema) {
-  $schematron => transform:transform(doc($schxslt:base-dir || "/content/xslt/2.0/include.xsl"), ())
-};
-
-(:~
- : Expand abstract patterns and rules.
- :
- : @param  $schematron Schematron document
- : @return Schematron document w/ instantiated abstract patterns and rules
- :)
-declare %private function schxslt:expand ($schematron as node()) as element(sch:schema) {
-  $schematron => transform:transform(doc($schxslt:base-dir || "/content/xslt/2.0/expand.xsl"), ())
+declare %private function schxslt:compile ($schematron as node(), $options as element(parameters)?, $xsltver as xs:string) as element(xsl:transform) {
+  let $basedir := "xmldb:exist://" || $schxslt:base-dir || "/content/xslt/" || $xsltver || "/"
+  let $include := $basedir || "include.xsl"
+  let $expand  := $basedir || "expand.xsl"
+  let $compile := $basedir || "compile-for-svrl.xsl"
+  return
+    $schematron => transform:transform($include, ()) => transform:transform($expand, ()) => transform:transform($compile, $options)
 };
