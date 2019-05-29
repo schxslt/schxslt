@@ -33,6 +33,26 @@ declare function schxslt:validate ($document as node(), $schematron as node(), $
 };
 
 (:~
+ : Return path segment to processor for requested query language.
+ :
+ : @error  Query language not supported
+ :
+ : @param  $queryBinding Query language token
+ : @return Path segment to processor
+ :)
+declare %private function schxslt:processor-path ($queryBinding as xs:string) as xs:string {
+  switch ($queryBinding)
+    case ""
+      return "1.0"
+    case "xslt"
+      return "1.0"
+    case "xslt2"
+      return "2.0"
+    default
+      error(xs:QName("schxslt:UnsupportedQueryBinding"))
+};
+
+(:~
  : Validate document against Schematron and return the validation report.
  :
  : @param  $document Document to be validated
