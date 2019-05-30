@@ -13,9 +13,7 @@ Report Language (SVRL) when applied to an instance document.
 
 With this respect it operates much like the
 ["skeleton" implementation](https://github.com/schematron/schematron)
-by Rick Jelliffe and others. It differes from the "skeleton" in that
-it only supports XSLT 2 aus query language binding and requires an
-XSLT processor supporting XSLT 2.0 or higher.
+by Rick Jelliffe and others.
 
 ## Compiling Schematron to validation stylesheet
 
