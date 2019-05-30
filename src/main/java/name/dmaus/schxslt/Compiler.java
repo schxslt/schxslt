@@ -43,7 +43,7 @@ import org.w3c.dom.Document;
 
 import java.util.Map;
 
-public class Compiler
+class Compiler
 {
     private final TransformerFactory factory = TransformerFactory.newInstance();
     private final URIResolver resolver = new Resolver();
