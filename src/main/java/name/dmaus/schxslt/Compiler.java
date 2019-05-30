@@ -54,15 +54,9 @@ public class Compiler
 
     private Map<String, Object> parameters = null;
 
-    public Compiler ()
-    {
-        this(null);
-    }
-
-    public Compiler (final Map<String, Object> parameters)
+    public void setParameters (final Map<String, Object> parameters)
     {
         this.parameters = parameters;
-        this.factory.setURIResolver(this.resolver);
     }
 
     public Templates compile (final Source schema)
