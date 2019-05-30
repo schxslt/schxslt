@@ -72,12 +72,12 @@ public class Schematron
 
     public Result validate (final InputStream input)
     {
-        return validate(new DOMSource(loadDocument(input)));
+        return validate(loadDocument(input));
     }
 
     public Result validate (final File file)
     {
-        return validate(new DOMSource(loadDocument(file)));
+        return validate(loadDocument(file));
     }
 
     public Result validate (final Source source)
@@ -112,10 +112,10 @@ public class Schematron
         this.factory.setAttribute(name, value);
     }
 
-    private Document loadDocument (final InputStream input)
+    private DOMSource loadDocument (final InputStream input)
     {
         try {
-            return this.factory.newDocumentBuilder().parse(input);
+            return new DOMSource(this.factory.newDocumentBuilder().parse(input));
         } catch (SAXException e) {
             throw new RuntimeException("Unable to parse XML document");
         } catch (IOException e) {
@@ -125,7 +125,7 @@ public class Schematron
         }
     }
 
-    private Document loadDocument (final File file)
+    private DOMSource loadDocument (final File file)
     {
         try {
             return loadDocument(new FileInputStream(file));
