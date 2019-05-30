@@ -65,6 +65,11 @@ public class Schematron
     private final CompilerFactory compilers = new CompilerFactory();
     private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
+    public Schematron (final File schema)
+    {
+        this(schema, null);
+    }
+
     public Schematron (final File schema, final String phase)
     {
         this.phase = phase;
