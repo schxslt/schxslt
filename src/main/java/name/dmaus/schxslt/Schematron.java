@@ -59,7 +59,7 @@ public class Schematron
     private DocumentBuilder builder;
 
     private String phase;
-    private Source schema;
+    private DOMSource schema;
 
     private final Compiler compiler = new Compiler();
     private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -67,7 +67,7 @@ public class Schematron
     public Schematron (final File schema, final String phase)
     {
         this.phase = phase;
-        this.schema = new StreamSource(schema);
+        this.schema = loadDocument(schema);
     }
 
     public Result validate (final InputStream input)
