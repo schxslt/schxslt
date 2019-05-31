@@ -70,8 +70,4 @@
 
   </xsl:function>
 
-  <xsl:function name="schxslt:version" as="xs:string">
-    <xsl:text>1.2-rc2</xsl:text>
-  </xsl:function>
-
 </xsl:transform>
