@@ -84,12 +84,6 @@
     <xsl:sequence select="$location-function"/>
   </xsl:template>
 
-  <xsl:template name="schxslt-api:post-process-validation-stylesheet" as="element(xsl:transform)">
-    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <xsl:param name="validation-stylesheet" as="element(xsl:transform)" required="yes"/>
-    <xsl:sequence select="$validation-stylesheet"/>
-  </xsl:template>
-
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Create detailed report about failed assert or successful report</p>

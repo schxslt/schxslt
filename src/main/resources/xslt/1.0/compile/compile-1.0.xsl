@@ -47,83 +47,74 @@
       </xsl:message>
     </xsl:if>
 
-    <xsl:variable name="validation-stylesheet">
+    <transform version="1.0">
+      <xsl:for-each select="sch:ns">
+        <xsl:attribute name="{@prefix}:dummy" namespace="{@uri}"/>
+      </xsl:for-each>
 
-      <transform version="1.0">
-        <xsl:for-each select="sch:ns">
-          <xsl:attribute name="{@prefix}:dummy" namespace="{@uri}"/>
-        </xsl:for-each>
+      <xsl:call-template name="schxslt:version"/>
 
-        <xsl:call-template name="schxslt:version"/>
+      <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
+        <xsl:with-param name="schema" select="."/>
+      </xsl:call-template>
 
-        <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
-          <xsl:with-param name="schema" select="."/>
-        </xsl:call-template>
-
-        <!-- Schema, phase and pattern variables are global -->
-        <xsl:call-template name="schxslt:let-variable">
-          <xsl:with-param name="bindings" select="sch:let | sch:phase[@id = $effective-phase]/sch:let"/>
-        </xsl:call-template>
-        <xsl:choose>
-          <xsl:when test="$effective-phase = '#ALL'">
-            <xsl:call-template name="schxslt:let-variable">
-              <xsl:with-param name="bindings" select="sch:pattern/sch:let"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="schxslt:let-variable">
-              <xsl:with-param name="bindings" select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]/sch:let"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-
-        <output indent="yes"/>
-
-        <template match="/">
-
-          <variable name="schxslt:report">
-            <xsl:choose>
-              <xsl:when test="$effective-phase = '#ALL'">
-                <xsl:for-each select="sch:pattern">
-                  <call-template name="{generate-id()}"/>
-                </xsl:for-each>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:for-each select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]">
-                  <call-template name="{generate-id()}"/>
-                </xsl:for-each>
-              </xsl:otherwise>
-            </xsl:choose>
-          </variable>
-
-          <xsl:call-template name="schxslt-api:report">
-            <xsl:with-param name="schema" select="."/>
-            <xsl:with-param name="phase" select="$effective-phase"/>
+      <!-- Schema, phase and pattern variables are global -->
+      <xsl:call-template name="schxslt:let-variable">
+        <xsl:with-param name="bindings" select="sch:let | sch:phase[@id = $effective-phase]/sch:let"/>
+      </xsl:call-template>
+      <xsl:choose>
+        <xsl:when test="$effective-phase = '#ALL'">
+          <xsl:call-template name="schxslt:let-variable">
+            <xsl:with-param name="bindings" select="sch:pattern/sch:let"/>
           </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="schxslt:let-variable">
+            <xsl:with-param name="bindings" select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]/sch:let"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
 
-        </template>
+      <output indent="yes"/>
 
-        <xsl:choose>
-          <xsl:when test="$effective-phase = '#ALL'">
-            <xsl:apply-templates select="sch:pattern"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]"/>
-          </xsl:otherwise>
-        </xsl:choose>
+      <template match="/">
 
-        <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
+        <variable name="schxslt:report">
+          <xsl:choose>
+            <xsl:when test="$effective-phase = '#ALL'">
+              <xsl:for-each select="sch:pattern">
+                <call-template name="{generate-id()}"/>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:for-each select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]">
+                <call-template name="{generate-id()}"/>
+              </xsl:for-each>
+            </xsl:otherwise>
+          </xsl:choose>
+        </variable>
+
+        <xsl:call-template name="schxslt-api:report">
           <xsl:with-param name="schema" select="."/>
+          <xsl:with-param name="phase" select="$effective-phase"/>
         </xsl:call-template>
 
-      </transform>
+      </template>
 
-    </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="$effective-phase = '#ALL'">
+          <xsl:apply-templates select="sch:pattern"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]"/>
+        </xsl:otherwise>
+      </xsl:choose>
 
-    <xsl:call-template name="schxslt-api:post-process-validation-stylesheet">
-      <xsl:with-param name="schema" select="."/>
-      <xsl:with-param name="validation-stylesheet" select="$validation-stylesheet"/>
-    </xsl:call-template>
+      <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
+        <xsl:with-param name="schema" select="."/>
+      </xsl:call-template>
+
+    </transform>
 
   </xsl:template>
 

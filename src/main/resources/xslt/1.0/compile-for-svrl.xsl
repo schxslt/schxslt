@@ -112,12 +112,6 @@
     <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
   </xsl:template>
 
-  <xsl:template name="schxslt-api:post-process-validation-stylesheet">
-    <xsl:param name="schema"/>
-    <xsl:param name="validation-stylesheet"/>
-    <xsl:copy-of select="$validation-stylesheet"/>
-  </xsl:template>
-
   <xsl:template name="schxslt:detailed-report">
     <xsl:if test="@diagnostics">
       <xsl:call-template name="schxslt:copy-diagnostics"/>
