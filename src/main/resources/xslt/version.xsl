@@ -1,6 +1,4 @@
-<xsl:transform version="1.0"
-               xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
-               xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:transform xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
   <xsl:template name="schxslt:version">
     <xsl:variable name="product" select="normalize-space(concat(system-property('xsl:product-name'), ' ', system-property('xsl:product-version')))"/>
