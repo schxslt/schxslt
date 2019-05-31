@@ -80,17 +80,4 @@
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
   </xsl:template>
 
-  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
-    <desc>
-      <p>Post process the validation stylesheet</p>
-    </desc>
-    <param name="schema">Schematron schema</param>
-    <param name="validation-stylesheet">Validation stylesheet</param>
-  </doc>
-  <xsl:template name="schxslt-api:post-process-validation-stylesheet" as="element(xsl:transform)">
-    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <xsl:param name="validation-stylesheet" as="element(xsl:transform)" required="yes"/>
-    <xsl:sequence select="$validation-stylesheet"/>
-  </xsl:template>
-
 </xsl:transform>
