@@ -4,7 +4,7 @@
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-  
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl" scope="stylesheet">
     <desc>
       <p>SchXslt Callback API Specification</p>
@@ -15,7 +15,7 @@
       </p>
     </desc>
   </doc>
-  
+
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
       <p>Create part of the validation stylesheet that creates the report</p>
@@ -47,7 +47,7 @@
       <p>Create part of the validation stylesheet that reports a fired rule</p>
     </desc>
     <param name="rule">Schematron element of the fired rule</param>
-  </doc> 
+  </doc>
   <xsl:template name="schxslt-api:fired-rule">
     <xsl:param name="rule"/>
   </xsl:template>
@@ -70,6 +70,14 @@
   </doc>
   <xsl:template name="schxslt-api:successful-report">
     <xsl:param name="report"/>
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:validation-stylesheet-body-top-hook">
+    <xsl:param name="schema"/>
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
+    <xsl:param name="schema"/>
   </xsl:template>
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
