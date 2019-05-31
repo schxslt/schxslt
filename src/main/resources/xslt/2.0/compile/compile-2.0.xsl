@@ -21,6 +21,7 @@
 
   <xsl:include href="functions.xsl"/>
   <xsl:include href="templates.xsl"/>
+  <xsl:include href="../../version.xsl"/>
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
@@ -42,6 +43,8 @@
           <xsl:namespace name="{@prefix}" select="@uri"/>
         </xsl:for-each>
         <xsl:sequence select="@xml:base"/>
+
+        <xsl:call-template name="schxslt:version"/>
 
         <output indent="yes"/>
 

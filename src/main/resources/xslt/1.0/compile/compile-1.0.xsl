@@ -7,6 +7,8 @@
 
   <xsl:import href="api-1.0.xsl"/>
 
+  <xsl:include href="../../version.xsl"/>
+
   <xsl:output indent="yes"/>
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
 
@@ -51,6 +53,8 @@
         <xsl:for-each select="sch:ns">
           <xsl:attribute name="{@prefix}:dummy" namespace="{@uri}"/>
         </xsl:for-each>
+
+        <xsl:call-template name="schxslt:version"/>
 
         <!-- Schema, phase and pattern variables are global -->
         <xsl:call-template name="schxslt:let-variable">
