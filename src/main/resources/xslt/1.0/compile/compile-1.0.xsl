@@ -56,6 +56,10 @@
 
         <xsl:call-template name="schxslt:version"/>
 
+        <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
+          <xsl:with-param name="schema" select="."/>
+        </xsl:call-template>
+
         <!-- Schema, phase and pattern variables are global -->
         <xsl:call-template name="schxslt:let-variable">
           <xsl:with-param name="bindings" select="sch:let | sch:phase[@id = $effective-phase]/sch:let"/>
@@ -107,6 +111,10 @@
             <xsl:apply-templates select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]"/>
           </xsl:otherwise>
         </xsl:choose>
+
+        <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
+          <xsl:with-param name="schema" select="."/>
+        </xsl:call-template>
 
       </transform>
 

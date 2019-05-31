@@ -46,6 +46,10 @@
 
         <xsl:call-template name="schxslt:version"/>
 
+        <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
+          <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+        </xsl:call-template>
+
         <output indent="yes"/>
 
         <xsl:sequence select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
@@ -102,6 +106,10 @@
         </template>
 
         <xsl:sequence select="$validation-stylesheet-body"/>
+
+        <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
+          <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+        </xsl:call-template>
 
       </transform>
 

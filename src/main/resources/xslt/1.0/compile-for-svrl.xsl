@@ -107,16 +107,15 @@
     </svrl:successful-report>
   </xsl:template>
 
+  <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
+    <xsl:param name="schema"/>
+    <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
+  </xsl:template>
+
   <xsl:template name="schxslt-api:post-process-validation-stylesheet">
     <xsl:param name="schema"/>
     <xsl:param name="validation-stylesheet"/>
-
-    <transform>
-      <xsl:copy-of select="$validation-stylesheet/*/@*"/>
-      <xsl:copy-of select="$validation-stylesheet/*/node()"/>
-      <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
-    </transform>
-
+    <xsl:copy-of select="$validation-stylesheet"/>
   </xsl:template>
 
   <xsl:template name="schxslt:detailed-report">
