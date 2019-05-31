@@ -5,10 +5,9 @@
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:output indent="yes"/>
-
   <xsl:import href="api-1.0.xsl"/>
 
+  <xsl:output indent="yes"/>
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
 
   <xsl:key name="schxslt:diagnostics" match="sch:diagnostic" use="@id"/>
