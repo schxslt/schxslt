@@ -72,10 +72,22 @@
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Create top part of the validation stylesheet</p>
+    </desc>
+    <param name="schema">Schematron schema</param>
+  </doc>
   <xsl:template name="schxslt-api:validation-stylesheet-body-top-hook">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Create bottom part of the validation stylesheet</p>
+    </desc>
+    <param name="schema">Schematron schema</param>
+  </doc>
   <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
   </xsl:template>
