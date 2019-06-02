@@ -54,6 +54,11 @@ class Compiler
 
     private Map<String, Object> parameters = null;
 
+    public Compiler ()
+    {
+        factory.setURIResolver(resolver);
+    }
+
     public void setParameters (final Map<String, Object> parameters)
     {
         this.parameters = parameters;
