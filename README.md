@@ -13,9 +13,6 @@ Download or compile the .jar file and define a new task using ```name.dmaus.schx
 class name. The .jar contains the Java classes of a Schematron validation task as well as the
 SchXslt transformation stylesheets.
 
-The task relies on a XSLT 2.0 processor to be registered as transformer factory implementation and
-uses [Saxon](https://saxonica.com) if no other transformer is registered.
-
 It supports the following options:
 
 <table>

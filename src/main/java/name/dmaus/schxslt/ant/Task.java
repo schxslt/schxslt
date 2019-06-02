@@ -40,8 +40,6 @@ public class Task extends org.apache.tools.ant.Task
 
     private String phase = "#ALL";
 
-    private final String transformerFactoryImpl = "net.sf.saxon.TransformerFactoryImpl";
-
     private Schematron validator;
 
     public void setPhase (String phase)
@@ -77,9 +75,6 @@ public class Task extends org.apache.tools.ant.Task
         }
         if (!this.schema.exists() || !this.schema.canRead()) {
             throw new BuildException("Unable to read " + this.schema);
-        }
-        if (System.getProperty("javax.xml.transform.TransformerFactory") == null) {
-            System.setProperty("javax.xml.transform.TransformerFactory", this.transformerFactoryImpl);
         }
 
         this.log("Generating validation stylesheet for Schematron '" + this.schema + "'");
