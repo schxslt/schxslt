@@ -18,7 +18,7 @@
         <xsl:attribute name="phase"><xsl:value-of select="$effective-phase"/></xsl:attribute>
       </xsl:if>
       <xsl:if test="$schema/sch:title">
-        <xsl:attribute name="title" select="$schema/sch:title"/>
+        <xsl:attribute name="title"><xsl:value-of select="$schema/sch:title"/></xsl:attribute>
       </xsl:if>
       <xsl:for-each select="$schema/sch:p">
         <svrl:text>
