@@ -76,7 +76,7 @@
     </xsl:variable>
     <xsl:variable name="replacement" select="key('schxslt:params', $instanceId)[@name = substring($param, 2)]/@value"/>
 
-    <xsl:variable name="source">
+    <xsl:variable name="source-replaced">
       <xsl:call-template name="schxslt:replace-single-param">
         <xsl:with-param name="source" select="$source"/>
         <xsl:with-param name="param" select="$param"/>
@@ -88,7 +88,7 @@
       <xsl:when test="contains($params, ' ')">
         <xsl:call-template name="schxslt:replace-params">
           <xsl:with-param name="instanceId" select="$instanceId"/>
-          <xsl:with-param name="source" select="$source"/>
+          <xsl:with-param name="source" select="$source-replaced"/>
           <xsl:with-param name="params" select="substring-after($params, ' ')"/>
         </xsl:call-template>
       </xsl:when>
