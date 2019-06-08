@@ -93,7 +93,7 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="$source"/>
+        <xsl:value-of select="$source-replaced"/>
       </xsl:otherwise>
     </xsl:choose>
 
