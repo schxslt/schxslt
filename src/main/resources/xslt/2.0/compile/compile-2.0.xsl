@@ -132,16 +132,15 @@
         <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
       </xsl:call-template>
 
-      <if test="empty($schxslt:rules[@pattern = '{generate-id(..)}'])">
-        <if test="empty($schxslt:rules[@pattern = '{generate-id(..)}'][@context = generate-id(current())])">
-          <schxslt:rule pattern="{generate-id(..)}@{{base-uri(.)}}">
-            <xsl:call-template name="schxslt-api:fired-rule">
-              <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
-            </xsl:call-template>
-            <xsl:apply-templates select="sch:assert | sch:report"/>
-          </schxslt:rule>
-        </if>
+      <if test="empty($schxslt:rules[@pattern = '{generate-id(..)}'][@context = generate-id(current())])">
+        <schxslt:rule pattern="{generate-id(..)}@{{base-uri(.)}}">
+          <xsl:call-template name="schxslt-api:fired-rule">
+            <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
+          </xsl:call-template>
+          <xsl:apply-templates select="sch:assert | sch:report"/>
+        </schxslt:rule>
       </if>
+
       <next-match>
         <with-param name="schxslt:rules" as="element(schxslt:rule)*">
           <sequence select="$schxslt:rules"/>
