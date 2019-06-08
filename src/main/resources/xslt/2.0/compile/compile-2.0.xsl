@@ -84,7 +84,7 @@
         </variable>
 
         <!-- Unwrap the intermediary report -->
-        <variable name="schxslt:report" as="element()*">
+        <variable name="schxslt:report" as="node()*">
           <for-each select="$report/schxslt:pattern">
             <sequence select="*"/>
             <sequence select="$report/schxslt:rule[@pattern = current()/@id]/*"/>
