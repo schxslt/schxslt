@@ -84,10 +84,10 @@
         </variable>
 
         <!-- Unwrap the intermediary report -->
-        <variable name="schxslt:report" as="element()*">
+        <variable name="schxslt:report" as="node()*">
           <for-each select="$report/schxslt:pattern">
-            <sequence select="*"/>
-            <sequence select="$report/schxslt:rule[@pattern = current()/@id]/*"/>
+            <sequence select="node()"/>
+            <sequence select="$report/schxslt:rule[@pattern = current()/@id]/node()"/>
           </for-each>
         </variable>
 
@@ -132,16 +132,26 @@
         <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
       </xsl:call-template>
 
-      <if test="empty($schxslt:rules[@pattern = '{generate-id(..)}'])">
-        <if test="empty($schxslt:rules[@pattern = '{generate-id(..)}'][@context = generate-id(current())])">
+      <choose>
+        <when test="empty($schxslt:rules[@pattern = '{generate-id(..)}'][@context = generate-id(current())])">
           <schxslt:rule pattern="{generate-id(..)}@{{base-uri(.)}}">
             <xsl:call-template name="schxslt-api:fired-rule">
               <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
             </xsl:call-template>
             <xsl:apply-templates select="sch:assert | sch:report"/>
           </schxslt:rule>
-        </if>
-      </if>
+        </when>
+        <otherwise>
+          <schxslt:rule pattern="{generate-id(..)}@{{base-uri(.)}}">
+            <xsl:variable name="message">
+              WARNING: Rule <xsl:value-of select="normalize-space(@id)"/> for context "<xsl:value-of select="@context"/>" shadowed by preceeding rule
+            </xsl:variable>
+            <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
+            <message> <xsl:sequence select="normalize-space($message)"/> </message>
+          </schxslt:rule>
+        </otherwise>
+      </choose>
+
       <next-match>
         <with-param name="schxslt:rules" as="element(schxslt:rule)*">
           <sequence select="$schxslt:rules"/>
