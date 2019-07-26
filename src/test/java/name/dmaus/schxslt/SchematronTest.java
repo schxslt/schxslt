@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package name.dmaus.schxslt.validation.test;
+package name.dmaus.schxslt;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
