@@ -40,7 +40,7 @@ public class Application
         Configuration configuration = new Configuration();
         configuration.parse(args);
 
-        Schematron schematron = new Schematron(new Compiler(), configuration.getSchematron(), configuration.getPhase());
+        Schematron schematron = new Schematron(configuration.getSchematron(), configuration.getPhase());
         Application application = new Application(schematron, configuration.beVerbose());
 
         if (configuration.hasDocument()) {
