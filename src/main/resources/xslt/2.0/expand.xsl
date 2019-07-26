@@ -10,7 +10,9 @@
   <!-- Copy the outermost element and preserve it's base URI -->
   <xsl:template match="sch:schema">
     <xsl:copy>
-      <xsl:attribute name="xml:base" select="base-uri()"/>
+      <xsl:if test="exists(base-uri())">
+        <xsl:attribute name="xml:base" select="base-uri()"/>
+      </xsl:if>
       <xsl:sequence select="@* except @xml:base"/>
       <xsl:apply-templates/>
     </xsl:copy>

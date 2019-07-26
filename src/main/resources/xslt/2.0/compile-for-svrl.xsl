@@ -41,7 +41,10 @@
 
   <xsl:template name="schxslt-api:active-pattern">
     <xsl:param name="pattern" as="element(sch:pattern)" required="yes"/>
-    <svrl:active-pattern documents="{{base-uri(.)}}">
+    <svrl:active-pattern>
+      <xsl:if test="exists(base-uri(.))">
+        <xsl:attribute name="documents" select="base-uri(.)"/>
+      </xsl:if>
       <xsl:sequence select="($pattern/@id, $pattern/@role)"/>
     </svrl:active-pattern>
   </xsl:template>
