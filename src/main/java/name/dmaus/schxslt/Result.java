@@ -74,7 +74,7 @@ public class Result
     {
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            DOMSource source = new DOMSource(this.report);
+            DOMSource source = new DOMSource(this.report, this.report.getDocumentURI());
             StreamResult result = new StreamResult(file);
 
             transformer.transform(source, result);

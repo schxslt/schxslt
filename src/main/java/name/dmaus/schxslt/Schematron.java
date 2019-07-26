@@ -135,7 +135,9 @@ public class Schematron
     private DOMSource loadDocument (final File file)
     {
         try {
-            return loadDocument(new FileInputStream(file));
+            DOMSource source = loadDocument(new FileInputStream(file));
+            source.setSystemId(file.toURI().toString());
+            return source;
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Unable to open file '" + file.getAbsolutePath() + "'");
         }

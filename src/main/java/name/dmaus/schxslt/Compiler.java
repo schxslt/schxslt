@@ -80,11 +80,11 @@ class Compiler
             DOMResult dstInclude = new DOMResult();
             stepInclude.transform(schema, dstInclude);
 
-            DOMSource srcExpand = new DOMSource(dstInclude.getNode());
+            DOMSource srcExpand = new DOMSource(dstInclude.getNode(), dstInclude.getSystemId());
             DOMResult dstExpand = new DOMResult();
             stepExpand.transform(srcExpand, dstExpand);
 
-            DOMSource srcCompile = new DOMSource(dstExpand.getNode());
+            DOMSource srcCompile = new DOMSource(dstExpand.getNode(), dstExpand.getSystemId());
             DOMResult dstCompile = new DOMResult();
 
             if (parameters != null) {
@@ -98,7 +98,7 @@ class Compiler
             }
 
             stepCompile.transform(srcCompile, dstCompile);
-            return factory.newTemplates(new DOMSource(dstCompile.getNode()));
+            return factory.newTemplates(new DOMSource(dstCompile.getNode(), dstCompile.getSystemId()));
 
         }  catch (TransformerException e) {
             throw new RuntimeException("Unable to compile validation stylesheet");
