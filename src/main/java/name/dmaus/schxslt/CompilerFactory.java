@@ -27,13 +27,15 @@ package name.dmaus.schxslt;
 import javax.xml.transform.dom.DOMSource;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class CompilerFactory
 {
     public Compiler newInstance (final DOMSource schema)
     {
-        Element outermost = (Element)schema.getNode().getFirstChild();
+        Document document = (Document)schema.getNode();
+        Element outermost = document.getDocumentElement();
         if (outermost == null) {
             throw new RuntimeException("Invalid Schematron document");
         }

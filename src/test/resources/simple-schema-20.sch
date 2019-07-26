@@ -1,3 +1,4 @@
+<!-- Simple XSLT 2.0 Schematron -->
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
   <phase id="default">
     <active pattern="p-02"/>
