@@ -13,13 +13,13 @@
       <xsl:when test="contains(@href, '#')">
         <xsl:if test="local-name(..) = local-name(document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')])">
           <xsl:if test="namespace-uri(document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]) = 'http://purl.oclc.org/dsdl/schematron'">
-            <xsl:copy-of select="document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]/*"/>
+            <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]/*"/>
           </xsl:if>
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="local-name(..) = local-name(document(@href)/*) and namespace-uri(document(@href)/*) = 'http://purl.oclc.org/dsdl/schematron'">
-          <xsl:copy-of select="document(@href)/*/*"/>
+          <xsl:apply-templates select="document(@href)/*/*"/>
         </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
@@ -28,10 +28,10 @@
   <xsl:template match="sch:include">
     <xsl:choose>
       <xsl:when test="contains(@href, '#')">
-        <xsl:copy-of select="document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]"/>
+        <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:copy-of select="document(@href)"/>
+        <xsl:apply-templates select="document(@href)"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
