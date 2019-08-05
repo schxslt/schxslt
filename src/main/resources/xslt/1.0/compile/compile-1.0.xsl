@@ -187,7 +187,7 @@
   </xsl:template>
 
   <xsl:template match="sch:name[@path]">
-    <value-of select="name(@path)"/>
+    <value-of select="@path"/>
   </xsl:template>
 
   <xsl:template match="sch:name[not(@path)]">
