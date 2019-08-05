@@ -172,12 +172,12 @@
       </xsl:choose>
     </xsl:variable>
 
-    <svrl:diagnostic-reference diagnostic="{$head}">
+    <svrl:property-reference property="{$head}">
       <svrl:text>
         <xsl:copy-of select="key('schxslt:properties', $head)/@*"/>
         <xsl:apply-templates select="key('schxslt:properties', $head)/node()"/>
       </svrl:text>
-    </svrl:diagnostic-reference>
+    </svrl:property-reference>
 
     <xsl:choose>
       <xsl:when test="contains($sequence, ' ')">
