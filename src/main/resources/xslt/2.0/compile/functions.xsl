@@ -1,4 +1,4 @@
-<xsl:transform xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0">
+<xsl:transform xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0" xmlns:error="https://doi.org/10.5281/zenodo.1495494#error">
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
@@ -27,8 +27,10 @@
     </xsl:variable>
 
     <xsl:if test="$phase ne '#ALL' and not($schema/sch:phase[@id = $phase])">
-      <xsl:message terminate="yes"> The phase '<xsl:value-of select="$phase"/>' is not defined.
-      </xsl:message>
+      <xsl:variable name="message">
+        The phase '<xsl:value-of select="$phase"/>' is not defined.
+      </xsl:variable>
+      <xsl:message terminate="yes" select="error(xs:QName('error:E0001'), normalize-space($message))"/>
     </xsl:if>
 
     <xsl:value-of select="$phase"/>
@@ -61,9 +63,10 @@
     <xsl:param name="schema" as="element(sch:schema)"/>
 
     <xsl:if test="not(lower-case($schema/@queryBinding) = ('xslt2', 'xslt3'))">
-      <xsl:message terminate="yes">
+      <xsl:variable name="message">
         The query language '<xsl:value-of select="($schema/@queryBinding, 'xslt')[1]"/>' is not supported.
-      </xsl:message>
+      </xsl:variable>
+      <xsl:message terminate="yes" select="error(xs:QName('error:E0002'), normalize-space($message))"/>
     </xsl:if>
 
     <xsl:value-of select="if (lower-case($schema/@queryBinding) eq 'xslt2') then '2.0' else '3.0'"/>

@@ -2,6 +2,7 @@
 <xsl:transform version="2.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+               xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -56,12 +57,13 @@
       <!-- See https://github.com/dmj/schxslt/issues/25 -->
       <xsl:variable name="global-bindings" as="element(sch:let)*" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       <xsl:if test="count($global-bindings) ne count(distinct-values($global-bindings/@name))">
-        <xsl:message terminate="yes">
+        <xsl:variable name="message">
           Compilation aborted because of variable name conflicts:
           <xsl:for-each-group select="$global-bindings" group-by="@name">
             <xsl:value-of select="current-grouping-key()"/> (<xsl:value-of select="current-group()/../local-name()" separator=", "/>)
           </xsl:for-each-group>
-        </xsl:message>
+        </xsl:variable>
+        <xsl:message terminate="yes" select="error(xs:QName('error:E0003'), normalize-space($message))"/>
       </xsl:if>
 
       <xsl:call-template name="schxslt:let-variable">
