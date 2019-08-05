@@ -150,7 +150,7 @@
     <xsl:choose>
       <xsl:when test="contains($sequence, ' ')">
         <xsl:call-template name="schxslt:copy-diagnostics">
-          <xsl:with-param name="diagnostics" select="substring-after($sequence, ' ')"/>
+          <xsl:with-param name="sequence" select="substring-after($sequence, ' ')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise/>
@@ -182,7 +182,7 @@
     <xsl:choose>
       <xsl:when test="contains($sequence, ' ')">
         <xsl:call-template name="schxslt:copy-properties">
-          <xsl:with-param name="properties" select="substring-after($sequence, ' ')"/>
+          <xsl:with-param name="sequence" select="substring-after($sequence, ' ')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise/>
