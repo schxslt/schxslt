@@ -1,9 +1,0 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="diagnostic-01.sch"
-             xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
-  <scenario label="Diagnostic references are copied to SVRL output">
-    <context>
-      <document xmlns=""/>
-    </context>
-    <expect label="are copied to SVRL output" test="count(/svrl:schematron-output/svrl:failed-assert/svrl:diagnostic-reference[@diagnostic = ('d1', 'd2')]) eq 2"/>
-  </scenario>
-</description>

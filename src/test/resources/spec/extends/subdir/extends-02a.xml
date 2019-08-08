@@ -1,4 +1,0 @@
-<rule context="/" xmlns="http://purl.oclc.org/dsdl/schematron">
-  <extends href="extends-02b.xml"/>
-</rule>
-

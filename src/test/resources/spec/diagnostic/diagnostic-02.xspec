@@ -1,9 +1,0 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="diagnostic-02.sch"
-             xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
-  <scenario label="Language tag of diagnostic">
-    <context>
-      <document xmlns=""/>
-    </context>
-    <expect label="is preserved in SVRL output" test="exists(/svrl:schematron-output/svrl:failed-assert/svrl:diagnostic-reference/svrl:text/@xml:lang)"/>
-  </scenario>
-</description>

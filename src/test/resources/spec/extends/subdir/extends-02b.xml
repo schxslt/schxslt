@@ -1,3 +1,0 @@
-<rule context="/" xmlns="http://purl.oclc.org/dsdl/schematron">
-  <report test="doc-available('extends-02b.xml')" id="R1"/>
-</rule>

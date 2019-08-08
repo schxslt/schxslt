@@ -1,8 +1,0 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="expand-abstract-04.sch">
-  <scenario label="Replace parameters in an abstract pattern's @documents attribute">
-    <context>
-      <document xmlns=""/>
-    </context>
-    <expect-report id="R1"/>
-  </scenario>
-</description>

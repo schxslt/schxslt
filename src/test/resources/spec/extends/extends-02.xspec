@@ -1,8 +1,0 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="extends-02.sch">
-  <scenario label="Extends is recursive">
-    <context>
-      <document xmlns=""/>
-    </context>
-    <expect-report id="R1"/>
-  </scenario>
-</description>

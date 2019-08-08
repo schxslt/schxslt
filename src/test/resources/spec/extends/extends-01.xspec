@@ -1,8 +1,0 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="extends-01.sch">
-  <scenario label="Extends performs base URI fixup on included definitions">
-    <context>
-      <document xmlns=""/>
-    </context>
-    <expect-report id="R1"/>
-  </scenario>
-</description>
