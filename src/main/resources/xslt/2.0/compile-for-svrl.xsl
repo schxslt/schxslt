@@ -159,10 +159,10 @@
         </xsl:variable>
         <xsl:choose>
           <xsl:when test=". instance of element()">
-            <xsl:value-of select="concat(name(.), '[', $position, ']')"/>
+            <xsl:value-of select="concat('Q{', namespace-uri(.), '}', local-name(.), '[', $position, ']')"/>
           </xsl:when>
           <xsl:when test=". instance of attribute()">
-            <xsl:value-of select="concat('@', name(.))"/>
+            <xsl:value-of select="concat('@Q{', namespace-uri(.), '}', local-name(.))"/>
           </xsl:when>
           <xsl:when test=". instance of processing-instruction()">
             <xsl:value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>

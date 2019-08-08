@@ -194,25 +194,31 @@
 
     <xsl:variable name="path">
       <xsl:for-each select="$node/ancestor::*">
+        <xsl:variable name="position">
+          <xsl:number level="single"/>
+        </xsl:variable>
         <xsl:text>/</xsl:text>
-        <xsl:value-of select="concat(name(), '[', 1 + count(preceding-sibling::*[name() = name(current())]), ']')"/>
+        <xsl:value-of select="concat('Q{', namespace-uri(.), '}', local-name(.), '[', $position, ']')"/>
       </xsl:for-each>
       <xsl:text>/</xsl:text>
+      <xsl:variable name="position">
+        <xsl:number level="single"/>
+      </xsl:variable>
       <xsl:choose>
         <xsl:when test="$node/self::*">
-          <xsl:value-of select="concat(name(), '[', 1 + count(preceding-sibling::*[name() = name(current())]), ']')"/>
+          <xsl:value-of select="concat('Q{', namespace-uri($node), '}', local-name($node), '[', $position, ']')"/>
         </xsl:when>
         <xsl:when test="count($node/../@*) = count($node|$node/../@*)">
-          <xsl:value-of select="concat('@', name($node))"/>
+          <xsl:value-of select="concat('@Q{', namespace-uri($node), '}', local-name($node))"/>
         </xsl:when>
         <xsl:when test="$node/self::processing-instruction()">
-          <xsl:value-of select="concat('processing-instruction()', '[', 1 + count(preceding-sibling::processing-instruction()), ']')"/>
+          <xsl:value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)', '[', $position, ']')"/>
         </xsl:when>
         <xsl:when test="$node/self::comment()">
-          <xsl:value-of select="concat('comment()', '[', 1 + count(preceding-sibling::comment()), ']')"/>
+          <xsl:value-of select="concat('comment()', '[', $position, ']')"/>
         </xsl:when>
         <xsl:when test="$node/self::text()">
-          <xsl:value-of select="concat('text()', '[', 1 + count(preceding-sibling::text()), ']')"/>
+          <xsl:value-of select="concat('text()', '[', $position, ']')"/>
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
