@@ -25,7 +25,6 @@
 package name.dmaus.schxslt.cli;
 
 import name.dmaus.schxslt.Result;
-import name.dmaus.schxslt.Compiler;
 import name.dmaus.schxslt.Schematron;
 
 import java.io.File;
