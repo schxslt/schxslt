@@ -10,7 +10,7 @@
           <html:p/>
         </param>
       </call>
-      <expect label="reports element and position" select="'/html:p[2]'"/>
+      <expect label="reports element and position" select="'/Q{http://www.w3.org/1999/xhtml}p[2]'"/>
     </scenario>
     <scenario label="when called with an attribute as location node">
       <call function="schxslt:location">
@@ -18,7 +18,7 @@
           <html:p attr="value"/>
         </param>
       </call>
-      <expect label="reports attribute name" select="'/html:p[1]/@attr'"/>
+      <expect label="reports attribute name" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/@Q{}attr'"/>
     </scenario>
     <scenario label="when called with a processing instruction as node">
       <call function="schxslt:location">
@@ -26,7 +26,7 @@
           <html:p><?pi ?></html:p>
         </param>
       </call>
-      <expect label="reports pi and position" select="'/html:p[1]/processing-instruction(&quot;pi&quot;)[1]'"/>
+      <expect label="reports pi and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/processing-instruction(&quot;pi&quot;)[1]'"/>
     </scenario>
     <scenario label="when called with a comment as node">
       <call function="schxslt:location">
@@ -34,7 +34,7 @@
           <html:p><!-- I am here! --></html:p>
         </param>
       </call>
-      <expect label="reports comment and position" select="'/html:p[1]/comment()[1]'"/>
+      <expect label="reports comment and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/comment()[1]'"/>
     </scenario>
     <scenario label="when called with a text node">
       <call function="schxslt:location">
@@ -46,7 +46,7 @@
           </html:p>
         </param>
       </call>
-      <expect label="reports text node and position" select="'/html:p[1]/text()[1]'"/>
+      <expect label="reports text node and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/text()[1]'"/>
     </scenario>
   </scenario>
 </description>
