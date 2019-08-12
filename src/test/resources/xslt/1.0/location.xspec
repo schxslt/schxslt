@@ -1,6 +1,6 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../main/resources/xslt/2.0/compile-for-svrl.xsl"
+<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../../main/resources/xslt/1.0/compile-for-svrl.xsl"
              xmlns:html="http://www.w3.org/1999/xhtml"
-             xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
+             xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xslt-version="1.0">
   <scenario label="Testing the schxslt:location function">
     <scenario label="when called with an element as location node">
       <call function="schxslt:location">

@@ -1,0 +1,52 @@
+<description xmlns="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../../main/resources/xslt/2.0/compile-for-svrl.xsl"
+             xmlns:html="http://www.w3.org/1999/xhtml"
+             xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
+  <scenario label="Testing the schxslt:location function">
+    <scenario label="when called with an element as location node">
+      <call function="schxslt:location">
+        <param name="node" as="node()" select="html:p[2]">
+          <html:p/>
+          <html:p/>
+          <html:p/>
+        </param>
+      </call>
+      <expect label="reports element and position" select="'/Q{http://www.w3.org/1999/xhtml}p[2]'"/>
+    </scenario>
+    <scenario label="when called with an attribute as location node">
+      <call function="schxslt:location">
+        <param name="node" as="node()" select="html:p/@attr">
+          <html:p attr="value"/>
+        </param>
+      </call>
+      <expect label="reports attribute name" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/@Q{}attr'"/>
+    </scenario>
+    <scenario label="when called with a processing instruction as node">
+      <call function="schxslt:location">
+        <param name="node" as="node()" select="html:p/processing-instruction('pi')">
+          <html:p><?pi ?></html:p>
+        </param>
+      </call>
+      <expect label="reports pi and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/processing-instruction(&quot;pi&quot;)[1]'"/>
+    </scenario>
+    <scenario label="when called with a comment as node">
+      <call function="schxslt:location">
+        <param name="node" as="node()" select="html:p/comment()">
+          <html:p><!-- I am here! --></html:p>
+        </param>
+      </call>
+      <expect label="reports comment and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/comment()[1]'"/>
+    </scenario>
+    <scenario label="when called with a text node">
+      <call function="schxslt:location">
+        <param name="node" as="node()" select="html:p/text()[contains(., 'foobar')]">
+          <html:p>
+            <html:br/>
+            foobar
+            <html:br/>
+          </html:p>
+        </param>
+      </call>
+      <expect label="reports text node and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/text()[1]'"/>
+    </scenario>
+  </scenario>
+</description>

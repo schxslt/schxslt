@@ -64,6 +64,32 @@
   </dependencies>
 
   <build>
+    <plugins>
+      <plugin>
+        <groupId>io.xspec.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <version>1.5.1</version>        
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.8.0-15</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <testDir>src/test/resources/xslt</testDir>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>run-xspec</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
     <testOutputDirectory>${project.basedir}/target/test-classes/resources</testOutputDirectory>
     <testResources>
       <testResource>
