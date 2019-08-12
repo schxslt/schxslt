@@ -45,6 +45,7 @@ public class Configuration
         options.addOption("d", "document", true, "Path to document");
         options.addOption("r", "repl", false, "Run as REPL");
         options.addOption("v", "verbose", false, "Verbose output");
+        options.addOption("o", "output", true, "Output file (SVRL report)");
         options.addRequiredOption("s", "schematron", true, "Path to schema");
     }
 
@@ -79,6 +80,14 @@ public class Configuration
     public File getDocument ()
     {
         return new File(arguments.getOptionValue("d"));
+    }
+
+    public File getOutputFile ()
+    {
+        if (arguments.hasOption("o")) {
+            return new File(arguments.getOptionValue("o"));
+        }
+        return null;
     }
 
     public String getPhase ()

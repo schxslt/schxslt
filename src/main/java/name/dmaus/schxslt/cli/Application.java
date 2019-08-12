@@ -40,7 +40,7 @@ public class Application
         configuration.parse(args);
 
         Schematron schematron = new Schematron(configuration.getSchematron(), configuration.getPhase());
-        Application application = new Application(schematron, configuration.beVerbose());
+        Application application = new Application(schematron, configuration.beVerbose(), configuration.getOutputFile());
 
         if (configuration.hasDocument()) {
             application.execute(configuration.getDocument());
@@ -51,6 +51,7 @@ public class Application
         }
     }
 
+    private File output;
     private Boolean verbose;
     private Schematron schematron;
 
@@ -65,16 +66,29 @@ public class Application
         this.schematron = schematron;
     }
 
+    public Application (Schematron schematron, Boolean verbose, File output)
+    {
+        this.output = output;
+        this.verbose = verbose;
+        this.schematron = schematron;
+    }
+
     public void execute (final File input)
     {
         Result result = schematron.validate(input);
         printResult(result, input.getAbsolutePath());
+        if (output != null) {
+            result.saveAs(output);
+        }
     }
 
     public void execute (final InputStream input)
     {
         Result result = schematron.validate(input);
         printResult(result, "<stdin>");
+        if (output != null) {
+            result.saveAs(output);
+        }
     }
 
     public void execute (final Console console)
