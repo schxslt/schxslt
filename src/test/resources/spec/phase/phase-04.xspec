@@ -1,9 +1,0 @@
-<description xmlns="http://www.jenitennison.com/xslt/xspec" schematron="phase-04.sch">
-  <scenario label="No phase and no @defaultPhase fires all patterns">
-    <context>
-      <document/>
-    </context>
-    <expect-assert id="A01"/>
-    <expect-assert id="A02"/>
-  </scenario>
-</description>
