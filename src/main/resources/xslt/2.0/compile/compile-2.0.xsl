@@ -66,8 +66,12 @@
         <xsl:message terminate="yes" select="error(xs:QName('error:E0003'), normalize-space($message))"/>
       </xsl:if>
 
+      <xsl:call-template name="schxslt:let-param">
+        <xsl:with-param name="bindings" select="sch:let"/>
+      </xsl:call-template>
+
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="bindings" select="$global-bindings"/>
+        <xsl:with-param name="bindings" select="(sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       </xsl:call-template>
 
       <template match="/">

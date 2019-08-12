@@ -59,8 +59,11 @@
       </xsl:call-template>
 
       <!-- Schema, phase and pattern variables are global -->
+      <xsl:call-template name="schxslt:let-param">
+        <xsl:with-param name="bindings" select="sch:let"/>
+      </xsl:call-template>
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="bindings" select="sch:let | sch:phase[@id = $effective-phase]/sch:let"/>
+        <xsl:with-param name="bindings" select="sch:phase[@id = $effective-phase]/sch:let"/>
       </xsl:call-template>
       <xsl:choose>
         <xsl:when test="$effective-phase = '#ALL'">
@@ -210,6 +213,15 @@
     <xsl:if test="$bindings">
       <xsl:for-each select="$bindings">
         <variable name="{@name}" select="{@value}"/>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="schxslt:let-param">
+    <xsl:param name="bindings"/>
+    <xsl:if test="$bindings">
+      <xsl:for-each select="$bindings">
+        <param name="{@name}" select="{@value}"/>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
