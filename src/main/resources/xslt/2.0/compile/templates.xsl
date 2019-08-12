@@ -55,11 +55,4 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:template name="schxslt:let-with-param">
-    <xsl:param name="bindings" as="element(sch:let)*"/>
-    <xsl:for-each select="distinct-values($bindings/@name)">
-      <with-param name="{.}" select="${.}" tunnel="yes"/>
-    </xsl:for-each>
-  </xsl:template>
-
 </xsl:transform>
