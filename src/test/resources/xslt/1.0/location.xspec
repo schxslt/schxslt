@@ -3,7 +3,7 @@
              xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xslt-version="1.0">
   <scenario label="Testing the schxslt:location function">
     <scenario label="when called with an element as location node">
-      <call function="schxslt:location">
+      <call template="schxslt:location">
         <param name="node" as="node()" select="html:p[2]">
           <html:p/>
           <html:p/>
@@ -13,7 +13,7 @@
       <expect label="reports element and position" select="'/Q{http://www.w3.org/1999/xhtml}p[2]'"/>
     </scenario>
     <scenario label="when called with an attribute as location node">
-      <call function="schxslt:location">
+      <call template="schxslt:location">
         <param name="node" as="node()" select="html:p/@attr">
           <html:p attr="value"/>
         </param>
@@ -21,7 +21,7 @@
       <expect label="reports attribute name" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/@Q{}attr'"/>
     </scenario>
     <scenario label="when called with a processing instruction as node">
-      <call function="schxslt:location">
+      <call template="schxslt:location">
         <param name="node" as="node()" select="html:p/processing-instruction('pi')">
           <html:p><?pi ?></html:p>
         </param>
@@ -29,7 +29,7 @@
       <expect label="reports pi and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/processing-instruction(&quot;pi&quot;)[1]'"/>
     </scenario>
     <scenario label="when called with a comment as node">
-      <call function="schxslt:location">
+      <call template="schxslt:location">
         <param name="node" as="node()" select="html:p/comment()">
           <html:p><!-- I am here! --></html:p>
         </param>
@@ -37,7 +37,7 @@
       <expect label="reports comment and position" select="'/Q{http://www.w3.org/1999/xhtml}p[1]/comment()[1]'"/>
     </scenario>
     <scenario label="when called with a text node">
-      <call function="schxslt:location">
+      <call template="schxslt:location">
         <param name="node" as="node()" select="html:p/text()[contains(., 'foobar')]">
           <html:p>
             <html:br/>
