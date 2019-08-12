@@ -51,7 +51,9 @@
   <xsl:template name="schxslt:let-param">
     <xsl:param name="bindings" as="element(sch:let)*"/>
     <xsl:for-each select="$bindings">
-      <param name="{@name}" select="{@value}"/>
+      <param name="{@name}" select="{@value}">
+        <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
+      </param>
     </xsl:for-each>
   </xsl:template>
 
