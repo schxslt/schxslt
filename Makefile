@@ -2,7 +2,6 @@ VERSION := $(file < VERSION)
 
 .PHONY: test
 test: clean
-	calabash src/test/resources/runner.xpl
 	mvn test
 	basex -c "TEST src/test/xquery/basex/"
 
