@@ -38,7 +38,7 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
-          <finalName>cli-schxslt-${project.version}</finalName>
+          <finalName>schxslt-cli</finalName>
           <appendAssemblyId>false</appendAssemblyId>
           <archive>
             <manifest>
