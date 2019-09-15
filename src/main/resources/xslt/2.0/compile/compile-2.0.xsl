@@ -1,8 +1,10 @@
 <!-- Compile preprocessed Schematron to validation stylesheet -->
 <xsl:transform version="2.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
+               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -43,7 +45,22 @@
       </xsl:for-each>
       <xsl:sequence select="@xml:base"/>
 
-      <xsl:call-template name="schxslt:version"/>
+      <rdf:Description>
+        <xsl:if test="sch:title">
+          <dc:title>
+            <xsl:sequence select="@xml:lang"/>
+            <xsl:value-of select="sch:title"/>
+          </dc:title>
+        </xsl:if>
+        <xsl:for-each select="sch:p">
+          <dc:description>
+            <xsl:sequence select="@xml:lang"/>
+            <xsl:value-of select="."/>
+          </dc:description>
+        </xsl:for-each>
+        <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
+        <dc:date><xsl:value-of select="current-dateTime()"/></dc:date>
+      </rdf:Description>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="."/>

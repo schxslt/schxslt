@@ -1,5 +1,7 @@
 <xsl:transform version="1.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
@@ -52,7 +54,21 @@
         <xsl:attribute name="{@prefix}:dummy" namespace="{@uri}"/>
       </xsl:for-each>
 
-      <xsl:call-template name="schxslt:version"/>
+      <rdf:Description>
+        <xsl:if test="sch:title">
+          <dc:title>
+            <xsl:copy-of select="@xml:lang"/>
+            <xsl:value-of select="sch:title"/>
+          </dc:title>
+        </xsl:if>
+        <xsl:for-each select="sch:p">
+          <dc:description>
+            <xsl:copy-of select="@xml:lang"/>
+            <xsl:value-of select="."/>
+          </dc:description>
+        </xsl:for-each>
+        <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
+      </rdf:Description>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" select="."/>
