@@ -54,6 +54,16 @@
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
     <desc>
+      <p>Create part of the validation stylesheet that reports a suppressed rule</p>
+    </desc>
+    <param name="rule">Schematron element of the suppressed rule</param>
+  </doc>
+  <xsl:template name="schxslt-api:suppressed-rule">
+    <xsl:param name="rule" as="element(sch:rule)" required="yes"/>
+  </xsl:template>
+
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
       <p>Create part of the validation stylesheet that reports a failed assert</p>
     </desc>
     <param name="assert">Schematron element of the failed assert</param>

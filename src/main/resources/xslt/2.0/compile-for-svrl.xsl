@@ -57,6 +57,18 @@
     </svrl:fired-rule>
   </xsl:template>
 
+  <xsl:template name="schxslt-api:suppressed-rule">
+    <xsl:param name="rule" as="element(sch:rule)" required="yes"/>
+    <xsl:variable name="message">
+      WARNING: Rule <xsl:value-of select="normalize-space(@id)"/> for context "<xsl:value-of select="@context"/>" shadowed by preceeding rule
+    </xsl:variable>
+    <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
+    <message> <xsl:sequence select="normalize-space($message)"/> </message>
+    <svrl:suppressed-rule>
+      <xsl:sequence select="($rule/@id, $rule/@context, $rule/@role, $rule/@flag)"/>
+    </svrl:suppressed-rule>
+  </xsl:template>
+
   <xsl:template name="schxslt-api:failed-assert">
     <xsl:param name="assert" as="element(sch:assert)" required="yes"/>
     <svrl:failed-assert location="{{schxslt:location({($assert/@subject, $assert/../@subject, '.')[1]})}}">

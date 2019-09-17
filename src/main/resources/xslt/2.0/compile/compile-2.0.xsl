@@ -149,11 +149,9 @@
         </when>
         <otherwise>
           <schxslt:rule pattern="{generate-id(..)}@{{base-uri(.)}}">
-            <xsl:variable name="message">
-              WARNING: Rule <xsl:value-of select="normalize-space(@id)"/> for context "<xsl:value-of select="@context"/>" shadowed by preceeding rule
-            </xsl:variable>
-            <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
-            <message> <xsl:sequence select="normalize-space($message)"/> </message>
+            <xsl:call-template name="schxslt-api:suppressed-rule">
+              <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
+            </xsl:call-template>
           </schxslt:rule>
         </otherwise>
       </choose>
