@@ -64,6 +64,9 @@
     </xsl:variable>
     <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
     <message> <xsl:sequence select="normalize-space($message)"/> </message>
+    <svrl:suppressed-rule>
+      <xsl:sequence select="($rule/@id, $rule/@context, $rule/@role, $rule/@flag)"/>
+    </svrl:suppressed-rule>
   </xsl:template>
 
   <xsl:template name="schxslt-api:failed-assert">
