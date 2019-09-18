@@ -31,6 +31,25 @@
   <xsl:variable name="effective-phase" select="schxslt:effective-phase(sch:schema, $phase)" as="xs:string"/>
   <xsl:variable name="active-patterns" select="schxslt:active-patterns(sch:schema, $effective-phase)" as="element(sch:pattern)+"/>
 
+  <xsl:variable name="metadata" as="element(rdf:Description)">
+    <rdf:Description>
+      <xsl:if test="sch:schema/sch:title">
+        <dc:title>
+          <xsl:sequence select="sch:schema/sch:title/@xml:lang"/>
+          <xsl:value-of select="sch:schema/sch:title"/>
+        </dc:title>
+      </xsl:if>
+      <xsl:for-each select="sch:schema/sch:p">
+        <dc:description>
+          <xsl:sequence select="@xml:lang"/>
+          <xsl:value-of select="."/>
+        </dc:description>
+      </xsl:for-each>
+      <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
+      <dc:date><xsl:value-of select="current-dateTime()"/></dc:date>
+    </rdf:Description>
+  </xsl:variable>
+
   <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
     <xsl:call-template name="schxslt:validation-stylesheet-body">
       <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
@@ -45,22 +64,7 @@
       </xsl:for-each>
       <xsl:sequence select="@xml:base"/>
 
-      <rdf:Description>
-        <xsl:if test="sch:title">
-          <dc:title>
-            <xsl:sequence select="@xml:lang"/>
-            <xsl:value-of select="sch:title"/>
-          </dc:title>
-        </xsl:if>
-        <xsl:for-each select="sch:p">
-          <dc:description>
-            <xsl:sequence select="@xml:lang"/>
-            <xsl:value-of select="."/>
-          </dc:description>
-        </xsl:for-each>
-        <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
-        <dc:date><xsl:value-of select="current-dateTime()"/></dc:date>
-      </rdf:Description>
+      <xsl:sequence select="$metadata"/>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="."/>

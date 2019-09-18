@@ -35,6 +35,24 @@
     </xsl:choose>
   </xsl:variable>
 
+  <xsl:variable name="metadata">
+    <rdf:Description>
+      <xsl:if test="sch:schema/sch:title">
+        <dc:title>
+          <xsl:copy-of select="sch:schema/sch:title/@xml:lang"/>
+          <xsl:value-of select="sch:schema/sch:title"/>
+        </dc:title>
+      </xsl:if>
+      <xsl:for-each select="sch:schema/sch:p">
+        <dc:description>
+          <xsl:copy-of select="@xml:lang"/>
+          <xsl:value-of select="."/>
+        </dc:description>
+      </xsl:for-each>
+      <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
+    </rdf:Description>
+  </xsl:variable>
+
   <xsl:template match="/sch:schema">
 
     <xsl:if test="@queryBinding and translate(@queryBinding, 'XSLT', 'xslt') != 'xslt'">
@@ -54,21 +72,7 @@
         <xsl:attribute name="{@prefix}:dummy" namespace="{@uri}"/>
       </xsl:for-each>
 
-      <rdf:Description>
-        <xsl:if test="sch:title">
-          <dc:title>
-            <xsl:copy-of select="@xml:lang"/>
-            <xsl:value-of select="sch:title"/>
-          </dc:title>
-        </xsl:if>
-        <xsl:for-each select="sch:p">
-          <dc:description>
-            <xsl:copy-of select="@xml:lang"/>
-            <xsl:value-of select="."/>
-          </dc:description>
-        </xsl:for-each>
-        <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
-      </rdf:Description>
+      <xsl:copy-of select="$metadata"/>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" select="."/>
