@@ -8,6 +8,8 @@
       <xsl:text> / </xsl:text>
       <xsl:value-of select="$product"/>
     </xsl:if>
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="concat('(', system-property('xsl:vendor'), ')')"/>
   </xsl:template>
 
 </xsl:transform>
