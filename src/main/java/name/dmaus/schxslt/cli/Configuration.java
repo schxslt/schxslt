@@ -30,6 +30,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.File;
 
 public class Configuration
@@ -110,8 +113,18 @@ public class Configuration
 
     private void printHelp ()
     {
+        System.out.println("SchXslt CLI v" + getVersion());
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("name.dmaus.schxslt.cli.Main", options, true);
+    }
+
+    private String getVersion ()
+    {
+        BufferedReader r = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/VERSION")));
+        try {
+            return r.readLine();
+        } catch (IOException e) { };
+        return "";
     }
 
 }
