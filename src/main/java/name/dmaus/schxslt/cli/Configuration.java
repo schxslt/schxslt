@@ -61,8 +61,7 @@ public class Configuration
             }
         } catch (ParseException e) {
             System.err.println(e.getMessage());
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("name.dmaus.schxslt.cli.Main", options, true);
+            printHelp();
             System.exit(1);
         }
     }
@@ -107,6 +106,12 @@ public class Configuration
     public Boolean beVerbose ()
     {
         return arguments.hasOption("v");
+    }
+
+    private void printHelp ()
+    {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("name.dmaus.schxslt.cli.Main", options, true);
     }
 
 }
