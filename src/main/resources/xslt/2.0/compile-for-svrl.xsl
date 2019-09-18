@@ -1,5 +1,7 @@
 <xsl:transform version="2.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
@@ -28,6 +30,14 @@
           <xsl:apply-templates select="node()"/>
         </svrl:text>
       </xsl:for-each>
+
+      <svrl:metadata>
+        <dc:creator><value-of select="normalize-space(concat(system-property('xsl:product-name'), ' ', system-property('xsl:product-version')))"/></dc:creator>
+        <dc:date><xsl:value-of select="current-dateTime()"/></dc:date>
+        <dc:source>
+          <xsl:sequence select="$metadata"/>
+        </dc:source>
+      </svrl:metadata>
 
       <xsl:for-each select="$schema/sch:ns">
         <svrl:ns-prefix-in-attribute-values>

@@ -1,5 +1,6 @@
 <xsl:transform version="1.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
@@ -26,6 +27,12 @@
           <xsl:apply-templates select="node()"/>
         </svrl:text>
       </xsl:for-each>
+
+      <svrl:metadata>
+        <dc:source>
+          <xsl:copy-of select="$metadata"/>
+        </dc:source>
+      </svrl:metadata>
 
       <xsl:for-each select="$schema/sch:ns">
         <svrl:ns-prefix-in-attribute-values>
