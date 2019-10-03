@@ -4,8 +4,8 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
-  <!-- Entry for recursive inclusion -->
-  <xsl:template match="sch:schema">
+  <!-- Entry point for recursive inclusion -->
+  <xsl:template match="sch:schema" mode="#default schxslt:start-include">
     <xsl:call-template name="schxslt:include">
       <xsl:with-param name="schematron" select="."/>
     </xsl:call-template>
@@ -29,7 +29,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <!-- Copy outermost element and keep it's base URI -->
+  <!-- Copy outermost element and keep its base URI -->
   <xsl:template match="sch:schema" mode="schxslt:include">
     <xsl:copy>
       <xsl:if test="exists(base-uri())">

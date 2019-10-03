@@ -28,8 +28,20 @@
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
-  <xsl:variable name="effective-phase" select="schxslt:effective-phase(sch:schema, $phase)" as="xs:string"/>
-  <xsl:variable name="active-patterns" select="schxslt:active-patterns(sch:schema, $effective-phase)" as="element(sch:pattern)+"/>
+  <!-- There are cases where a Schematron file includes an XSLT library, and the output schxslt is intended to be incorporated into that library as a low-level imported stylesheet. In such cases, the following parameter should be false, otherwise true. -->
+  <xsl:param name="schxslt-is-master-of-included-xslt" as="xs:boolean" select="true()"/>
+  
+  <!-- To avoid a validation error in thes stylesheet from oXygen, be sure that the including ../compile-for-svrl.xsl is registered as a master file -->
+  <xsl:variable name="effective-phase" select="schxslt:effective-phase($input-expanded/sch:schema, $phase)" as="xs:string"/>
+  <xsl:variable name="active-patterns" select="schxslt:active-patterns($input-expanded/sch:schema, $effective-phase)" as="element(sch:pattern)+"/>
+
+  <xsl:variable name="xslt-includes" select="sch:schema/xsl:include"/>
+  
+  <!-- The following regex is a simplification of rules at https://www.w3.org/TR/REC-xml/#CharClasses -->
+  <xsl:variable name="ncname-regex" as="xs:string">[\p{Ll}\p{Lu}\p{Lo}\p{Lt}\p{Nl}_:][\p{L}\p{M}\p{Nl}\p{Nd}_:\.-]*</xsl:variable>
+  <xsl:variable name="main-template-mode-name" as="xs:string"
+    select="if (exists(base-uri(/))) then replace(base-uri(/), concat('.+?(', $ncname-regex, ')$'), '$1') else 'default'"
+  />
 
   <xsl:variable name="metadata" as="element(rdf:Description)">
     <rdf:Description>
@@ -55,8 +67,10 @@
       <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
     </xsl:call-template>
   </xsl:variable>
+  <xsl:variable name="target-schxslt-template-modes" as="xs:string+"
+    select="('#default', $validation-stylesheet-body/@name)"/>
 
-  <xsl:template match="sch:schema">
+  <xsl:template match="sch:schema" mode="#default compile-sch-xslt">
 
     <transform version="{schxslt:xslt-version(.)}">
       <xsl:for-each select="sch:ns">
@@ -64,8 +78,14 @@
       </xsl:for-each>
       <xsl:sequence select="@xml:base"/>
 
+      <xsl:if test="exists($xslt-includes)">
+        <param name="schxslt-is-master" as="xs:boolean" select="{$schxslt-is-master-of-included-xslt}()" static="yes"/>
+      </xsl:if>
+      <xsl:apply-templates select="$xslt-includes" mode="include-xslt"/>
+
       <xsl:sequence select="$metadata"/>
 
+      
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
       </xsl:call-template>
@@ -95,7 +115,7 @@
         <xsl:with-param name="bindings" select="(sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       </xsl:call-template>
 
-      <template match="/">
+      <template match="/" mode="#default schxslt:{$main-template-mode-name}">
         <xsl:sequence select="sch:phase[@id eq $effective-phase]/@xml:base"/>
 
         <xsl:call-template name="schxslt:let-variable">
@@ -125,9 +145,14 @@
 
       </template>
 
-      <template match="text() | @*" mode="#all" priority="-10"/>
-      <template match="*" mode="#all" priority="-10">
+      <xsl:comment>By default, the modes employed in this schxslt file are shallow skips...</xsl:comment>
+      <template match="text() | @*" mode="{string-join($target-schxslt-template-modes, ' ')}"/>
+      <template match="*" mode="{string-join($target-schxslt-template-modes, ' ')}">
         <apply-templates mode="#current" select="@* | node()"/>
+      </template>
+      <xsl:comment>...but all other template modes should defer to rules specified by any imported stylesheets.</xsl:comment>
+      <template match="document-node() | node() | @*" mode="#all" priority="-1">
+        <apply-imports/>
       </template>
 
       <xsl:sequence select="$validation-stylesheet-body"/>
@@ -135,7 +160,7 @@
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
       </xsl:call-template>
-
+      
     </transform>
 
   </xsl:template>
@@ -146,7 +171,7 @@
     </desc>
     <param name="mode">Template mode</param>
   </doc>
-  <xsl:template match="sch:rule">
+  <xsl:template match="sch:rule" mode="#default compile-sch-xslt">
     <xsl:param name="mode" as="xs:string" required="yes"/>
 
     <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
@@ -165,7 +190,7 @@
             <xsl:call-template name="schxslt-api:fired-rule">
               <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
             </xsl:call-template>
-            <xsl:apply-templates select="sch:assert | sch:report"/>
+            <xsl:apply-templates select="sch:assert | sch:report" mode="#current"/>
           </schxslt:rule>
         </when>
         <otherwise>
@@ -240,6 +265,21 @@
 
     </xsl:for-each-group>
 
+  </xsl:template>
+  
+  <!-- An <xsl:include> that was in the original schematron file should be downgraded in 
+    the output XSLT file to an <xsl:import> so that its content does not accidentally override 
+    the new controlling SCHXSLT file.
+  -->
+  <xsl:template match="xsl:include" mode="include-xslt">
+    <!--<xsl:if test="$output-xsl-is-slave-of-included-xslt = false()">
+        <import>
+          <xsl:copy-of select="@*"/>
+        </import>
+    </xsl:if>-->
+    <import use-when="$schxslt-is-master">
+      <xsl:copy-of select="@*"/>
+    </import>
   </xsl:template>
 
 </xsl:transform>

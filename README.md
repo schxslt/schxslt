@@ -15,6 +15,8 @@ With this respect it operates much like the
 ["skeleton" implementation](https://github.com/schematron/schematron)
 by Rick Jelliffe and others.
 
+*The description that follows comes from the original repository. Please read it in tandem with the [comments on this revised version](README-REV.md).*
+
 ## Compiling Schematron to validation stylesheet
 
 ### Step 1: Incorporate external definitions
