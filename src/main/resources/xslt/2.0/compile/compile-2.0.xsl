@@ -68,7 +68,7 @@
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="target-schxslt-template-modes" as="xs:string+"
-    select="('#default', $validation-stylesheet-body/@name)"/>
+    select="('#default', concat('schxslt:', $main-template-mode-name), $validation-stylesheet-body/@name)"/>
 
   <xsl:template match="sch:schema" mode="#default compile-sch-xslt">
 
@@ -125,7 +125,9 @@
         <variable name="report" as="element(schxslt:report)">
           <schxslt:report>
             <xsl:for-each select="$validation-stylesheet-body/@name">
-              <call-template name="{.}"/>
+              <call-template name="{.}">
+                <with-param name="default-document" as="document-node()" select="."/>
+              </call-template>
             </xsl:for-each>
           </schxslt:report>
         </variable>
@@ -147,7 +149,7 @@
 
       <xsl:comment>By default, the modes employed in this schxslt file are shallow skips...</xsl:comment>
       <template match="text() | @*" mode="{string-join($target-schxslt-template-modes, ' ')}"/>
-      <template match="*" mode="{string-join($target-schxslt-template-modes, ' ')}">
+      <template match="* | processing-instruction() | comment()" mode="{string-join($target-schxslt-template-modes, ' ')}">
         <apply-templates mode="#current" select="@* | node()"/>
       </template>
       <xsl:comment>...but all other template modes should defer to rules specified by any imported stylesheets.</xsl:comment>
@@ -228,6 +230,7 @@
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
 
+        <param name="default-document" as="document-node()"/>
         <xsl:call-template name="schxslt:let-variable">
           <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
         </xsl:call-template>
@@ -240,7 +243,7 @@
               </for-each>
             </xsl:when>
             <xsl:otherwise>
-              <sequence select="/"/>
+              <sequence select="$default-document"/>
             </xsl:otherwise>
           </xsl:choose>
         </variable>
