@@ -1,4 +1,4 @@
-# Revisions to [SchXslt Readme File](README-REV.md)
+# Revisions to [SchXslt](README-REV.md)
 
 This version of [SchXslt](https://github.com/schxslt/schxslt) has several enhancements in mind:
 

@@ -71,7 +71,7 @@
     select="('#default', concat('schxslt:', $main-template-mode-name), $validation-stylesheet-body/@name)"/>
 
   <xsl:template match="sch:schema" mode="#default compile-sch-xslt">
-
+    <!-- This is the main/initial template for any input Schematron file. -->
     <transform version="{schxslt:xslt-version(.)}">
       <xsl:for-each select="sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
@@ -176,7 +176,7 @@
   <xsl:template match="sch:rule" mode="#default compile-sch-xslt">
     <xsl:param name="mode" as="xs:string" required="yes"/>
 
-    <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
+    <template match="{@context}" priority="{count(following::sch:rule) + 1}" mode="{$mode}">
       <xsl:sequence select="(@xml:base, ../@xml:base)"/>
 
       <!-- Check if a context node was already matched by a rule of the current pattern. -->
