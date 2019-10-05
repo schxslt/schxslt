@@ -13,11 +13,13 @@ To support these enhancements, the following changes were made (only to the bran
 - compile-for-svrl.xsl was changed:
   - Added parameters to allow skipping include and expand processes, if already done.
   - Bound the optimal form of the input to global variable $input-expanded.
+  - base-uri(.) changed to $this-base-uri (see below)
 - compile/compile-2.0.xsl was changed: 
    - Converted each `<xsl:include href="myxsltlibrary.xsl"/>` to `<xsl:import href="myxsltlibrary.xsl"/>`. This step is required because unexpected template rules in any included XSLT could wreak havoc with the SchXslt's processes.
    - Supplied **static** parameter $schxslt-is-master to true(). See below.
    - Changed default template patterns so that the stylesheet's own are defined as shallow skips, but all other template modes are allowed to be determined by the imported XSLT stylesheets.
-   - Provided the default template mode name an alias, so that any stylesheets that include the schxslt file can invoke its particular process. This is needed because the XSLT library might have imported numerous schxslt files that need to be differentiated. 
+   - Changed $documents base-uri(.) to a variable, $this-base-uri, calculated to allow an @xml:base in a root element to override the detected base-uri(.). This step is important because an input document that has been manipulated earlier loses its original base uri, and has attached instead the static-base-uri of the stylesheet that generated the document.
+   - Provided the output default template mode name an alias, so that any stylesheets that include the schxslt file can invoke its particular process. This is needed because the XSLT library might have imported numerous schxslt files that need to be differentiated. 
 
 The resultant output SchXslt files will still work as before, when treated as master XSLT files. But they can also now be a component of a larger library.
 

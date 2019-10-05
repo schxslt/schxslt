@@ -249,8 +249,9 @@
         </variable>
 
         <for-each select="$documents">
+          <variable name="this-base-uri" select="(*/@xml:base, base-uri(.))[1]"/>
           <xsl:for-each select="current-group()">
-            <schxslt:pattern id="{generate-id()}@{{base-uri(.)}}">
+            <schxslt:pattern id="{generate-id()}@{{$this-base-uri}}">
               <xsl:call-template name="schxslt-api:active-pattern">
                 <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
               </xsl:call-template>

@@ -103,7 +103,7 @@
     <svrl:active-pattern>
       <xsl:sequence select="($pattern/@id, $pattern/@role)"/>
       <xsl:if test="exists(base-uri(.))">
-        <attribute name="documents" select="base-uri(.)"/>
+        <attribute name="documents" select="$this-base-uri"/>
       </xsl:if>
     </svrl:active-pattern>
   </xsl:template>
