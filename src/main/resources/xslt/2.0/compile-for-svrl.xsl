@@ -27,7 +27,7 @@
       <xsl:for-each select="$schema/sch:p">
         <svrl:text>
           <xsl:sequence select="(@id, @class, @icon)"/>
-          <xsl:apply-templates select="node()"/>
+          <xsl:apply-templates select="node()" mode="#current"/>
         </svrl:text>
       </xsl:for-each>
 
@@ -121,7 +121,7 @@
     <xsl:call-template name="schxslt:copy-properties"/>
     <xsl:if test="text() | *">
       <svrl:text>
-        <xsl:apply-templates select="node()"/>
+        <xsl:apply-templates select="node()" mode="#current"/>
       </svrl:text>
     </xsl:if>
   </xsl:template>
@@ -131,7 +131,7 @@
     <svrl:property-reference property="{.}">
       <xsl:sequence select="($property/@role, $property/@scheme)"/>
       <svrl:text>
-        <xsl:apply-templates select="$property/node()"/>
+        <xsl:apply-templates select="$property/node()" mode="#current"/>
       </svrl:text>
     </svrl:property-reference>
   </xsl:template>
@@ -166,7 +166,7 @@
       <svrl:diagnostic-reference diagnostic="{.}">
         <svrl:text>
           <xsl:sequence select="$diagnostic/@*"/>
-          <xsl:apply-templates select="$diagnostic/node()"/>
+          <xsl:apply-templates select="$diagnostic/node()" mode="#current"/>
         </svrl:text>
       </svrl:diagnostic-reference>
     </xsl:for-each>
