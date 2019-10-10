@@ -7,20 +7,24 @@
   <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
   <xsl:key name="schxslt:params"            match="sch:pattern/sch:param"           use="generate-id(..)"/>
 
-  <xsl:template match="node() | @*">
+  <xsl:template match="sch:schema">
+    <xsl:apply-templates select="." mode="schxslt:expand"/>
+  </xsl:template>
+
+  <xsl:template match="node() | @*" mode="schxslt:expand">
     <xsl:copy>
-      <xsl:apply-templates select="node() | @*"/>
+      <xsl:apply-templates select="node() | @*" mode="schxslt:expand"/>
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="sch:pattern[@abstract = 'true']"/>
-  <xsl:template match="sch:rule[@abstract = 'true']"/>
+  <xsl:template match="sch:pattern[@abstract = 'true']" mode="schxslt:expand"/>
+  <xsl:template match="sch:rule[@abstract = 'true']"    mode="schxslt:expand"/>
 
-  <xsl:template match="sch:extends[@rule]">
+  <xsl:template match="sch:extends[@rule]" mode="schxslt:expand">
     <xsl:copy-of select="key('schxslt:abstract-rules', @rule)/node()"/>
   </xsl:template>
 
-  <xsl:template match="sch:pattern[@is-a]">
+  <xsl:template match="sch:pattern[@is-a]" mode="schxslt:expand">
     <xsl:copy>
       <xsl:apply-templates select="@*" mode="schxslt:pattern-instance">
         <xsl:with-param name="instanceId" select="generate-id()"/>
