@@ -4,9 +4,6 @@
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:key name="schxslt:abstract-patterns" match="sch:pattern[@abstract = 'true']" use="@id"/>
-  <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
-
   <xsl:template match="sch:schema">
     <xsl:apply-templates select="." mode="schxslt:expand"/>
   </xsl:template>
@@ -18,7 +15,10 @@
         <xsl:attribute name="xml:base" select="base-uri()"/>
       </xsl:if>
       <xsl:sequence select="@* except @xml:base"/>
-      <xsl:apply-templates mode="#current"/>
+      <xsl:apply-templates mode="#current">
+        <xsl:with-param name="abstract-rules"    select="sch:pattern/sch:rule[@abstract = 'true']" as="element(sch:rule)*" tunnel="yes"/>
+        <xsl:with-param name="abstract-patterns" select="sch:pattern[@abstract = 'true']" as="element(sch:pattern)*" tunnel="yes"/>
+      </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
 
@@ -37,24 +37,26 @@
 
   <!-- Instantiate an abstract rule -->
   <xsl:template match="sch:extends[@rule]" mode="schxslt:expand">
-    <xsl:sequence select="key('schxslt:abstract-rules', @rule)/node()"/>
+    <xsl:param name="abstract-rules" as="element(sch:rule)*" tunnel="yes"/>
+    <xsl:sequence select="$abstract-rules[@id = current()/@rule]/node()"/>
   </xsl:template>
 
   <!-- Instantiate an abstract pattern -->
   <xsl:template match="sch:pattern[@is-a]" mode="schxslt:expand">
-    <xsl:variable name="is-a" select="key('schxslt:abstract-patterns', @is-a)"/>
+    <xsl:param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes"/>
+    <xsl:variable name="is-a" as="element(sch:pattern)" select="$abstract-patterns[@id = current()/@is-a]"/>
     <xsl:copy>
       <xsl:sequence select="@* except @is-a"/>
       <xsl:apply-templates select="(if (not(@documents)) then $is-a/@documents else (), $is-a/node())" mode="#current">
-        <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
+        <xsl:with-param name="params" select="sch:param" tunnel="yes"/>
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
 
   <!-- Replace placeholders in abstract pattern instance -->
   <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents | sch:name/@path | sch:let/@value" mode="schxslt:expand">
-    <xsl:param name="schxslt:params" as="element(sch:param)*" tunnel="yes"/>
-    <xsl:attribute name="{name()}" select="schxslt:replace-params(., $schxslt:params)"/>
+    <xsl:param name="params" as="element(sch:param)*" tunnel="yes"/>
+    <xsl:attribute name="{name()}" select="schxslt:replace-params(., $params)"/>
   </xsl:template>
 
   <!-- Replace placeholders in property value -->
