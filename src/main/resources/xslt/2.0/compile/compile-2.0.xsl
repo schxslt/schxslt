@@ -28,40 +28,40 @@
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
-  <xsl:variable name="effective-phase" select="schxslt:effective-phase(sch:schema, $phase)" as="xs:string"/>
-  <xsl:variable name="active-patterns" select="schxslt:active-patterns(sch:schema, $effective-phase)" as="element(sch:pattern)+"/>
-
-  <xsl:variable name="metadata" as="element(rdf:Description)">
-    <rdf:Description>
-      <xsl:if test="sch:schema/sch:title">
-        <dc:title>
-          <xsl:sequence select="sch:schema/sch:title/@xml:lang"/>
-          <xsl:value-of select="sch:schema/sch:title"/>
-        </dc:title>
-      </xsl:if>
-      <xsl:for-each select="sch:schema/sch:p">
-        <dc:description>
-          <xsl:sequence select="@xml:lang"/>
-          <xsl:value-of select="."/>
-        </dc:description>
-      </xsl:for-each>
-      <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
-      <dc:date><xsl:value-of select="current-dateTime()"/></dc:date>
-    </rdf:Description>
-  </xsl:variable>
-
-  <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
-    <xsl:call-template name="schxslt:validation-stylesheet-body">
-      <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
-    </xsl:call-template>
-  </xsl:variable>
-
   <xsl:template match="sch:schema">
     <xsl:apply-templates select="." mode="schxslt:compile"/>
   </xsl:template>
 
   <xsl:template match="sch:schema" mode="schxslt:compile">
 
+    <xsl:variable name="effective-phase" select="schxslt:effective-phase(., $phase)" as="xs:string"/>
+    <xsl:variable name="active-patterns" select="schxslt:active-patterns(., $effective-phase)" as="element(sch:pattern)+"/>
+
+    <xsl:variable name="metadata" as="element(rdf:Description)">
+      <rdf:Description>
+        <xsl:if test="sch:title">
+          <dc:title>
+            <xsl:sequence select="sch:title/@xml:lang"/>
+            <xsl:value-of select="sch:title"/>
+          </dc:title>
+        </xsl:if>
+        <xsl:for-each select="sch:p">
+          <dc:description>
+            <xsl:sequence select="@xml:lang"/>
+            <xsl:value-of select="."/>
+          </dc:description>
+        </xsl:for-each>
+        <dc:creator><xsl:call-template name="schxslt:user-agent"/></dc:creator>
+        <dc:date><xsl:value-of select="current-dateTime()"/></dc:date>
+      </rdf:Description>
+    </xsl:variable>
+
+    <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
+      <xsl:call-template name="schxslt:validation-stylesheet-body">
+        <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
+      </xsl:call-template>
+    </xsl:variable>
+    
     <transform version="{schxslt:xslt-version(.)}">
       <xsl:for-each select="sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
