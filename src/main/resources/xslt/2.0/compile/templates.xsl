@@ -42,18 +42,38 @@
   <xsl:template name="schxslt:let-variable">
     <xsl:param name="bindings" as="element(sch:let)*"/>
     <xsl:for-each select="$bindings">
-      <variable name="{@name}" select="{@value}">
-        <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
-      </variable>
+      <xsl:choose>
+        <xsl:when test="@value">
+          <variable name="{@name}" select="{@value}">
+            <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
+          </variable>
+        </xsl:when>
+        <xsl:otherwise>
+          <variable name="{@name}">
+            <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
+            <xsl:sequence select="node()"/>
+          </variable>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="schxslt:let-param">
     <xsl:param name="bindings" as="element(sch:let)*"/>
     <xsl:for-each select="$bindings">
-      <param name="{@name}" select="{@value}">
-        <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
-      </param>
+      <xsl:choose>
+        <xsl:when test="@value">
+          <param name="{@name}" select="{@value}">
+            <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
+          </param>
+        </xsl:when>
+        <xsl:otherwise>
+          <param name="{@name}">
+            <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
+            <xsl:sequence select="node()"/>
+          </param>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:for-each>
   </xsl:template>
 

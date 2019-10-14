@@ -236,7 +236,16 @@
     <xsl:param name="bindings"/>
     <xsl:if test="$bindings">
       <xsl:for-each select="$bindings">
-        <variable name="{@name}" select="{@value}"/>
+        <xsl:choose>
+          <xsl:when test="@value">
+            <variable name="{@name}" select="{@value}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <variable name="{@name}">
+              <xsl:copy-of select="node()"/>
+            </variable>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
@@ -245,7 +254,16 @@
     <xsl:param name="bindings"/>
     <xsl:if test="$bindings">
       <xsl:for-each select="$bindings">
-        <param name="{@name}" select="{@value}"/>
+        <xsl:choose>
+          <xsl:when test="@value">
+            <param name="{@name}" select="{@value}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <param name="{@name}">
+              <xsl:copy-of select="node()"/>
+            </param>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
