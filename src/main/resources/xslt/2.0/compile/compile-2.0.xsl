@@ -35,8 +35,6 @@
   <xsl:variable name="effective-phase" select="schxslt:effective-phase($input-expanded/sch:schema, $phase)" as="xs:string"/>
   <xsl:variable name="active-patterns" select="schxslt:active-patterns($input-expanded/sch:schema, $effective-phase)" as="element(sch:pattern)+"/>
 
-  <xsl:variable name="xslt-includes" select="sch:schema/xsl:include"/>
-  
   <!-- The following regex is a simplification of rules at https://www.w3.org/TR/REC-xml/#CharClasses -->
   <xsl:variable name="ncname-regex" as="xs:string">[\p{Ll}\p{Lu}\p{Lo}\p{Lt}\p{Nl}_:][\p{L}\p{M}\p{Nl}\p{Nd}_:\.-]*</xsl:variable>
   <xsl:variable name="main-template-mode-name" as="xs:string"
@@ -78,12 +76,12 @@
       </xsl:for-each>
       <xsl:sequence select="@xml:base"/>
 
-      <xsl:sequence select="xsl:param[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:if test="exists($xslt-includes)">
+      <xsl:sequence select="xsl:param"/>
+      <xsl:if test="exists(xsl:include)">
         <param name="schxslt-is-master" as="xs:boolean" select="{$schxslt-is-master-of-included-xslt}()" static="yes"/>
       </xsl:if>
-      <xsl:sequence select="xsl:import[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:apply-templates select="$xslt-includes" mode="include-xslt"/>
+      <xsl:sequence select="xsl:import"/>
+      <xsl:apply-templates select="xsl:include" mode="include-xslt"/>
 
       <xsl:sequence select="$metadata"/>
 
@@ -93,10 +91,10 @@
 
       <output indent="yes"/>
 
-      <xsl:sequence select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="xsl:variable[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="xsl:template[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="xsl:key"/>
+      <xsl:sequence select="xsl:variable"/>
+      <xsl:sequence select="xsl:function"/>
+      <xsl:sequence select="xsl:template"/>
 
       <!-- See https://github.com/dmj/schxslt/issues/25 -->
       <xsl:variable name="global-bindings" as="element(sch:let)*" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
