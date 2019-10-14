@@ -81,11 +81,11 @@
       <xsl:if test="exists($xslt-includes)">
         <param name="schxslt-is-master" as="xs:boolean" select="{$schxslt-is-master-of-included-xslt}()" static="yes"/>
       </xsl:if>
+      <xsl:sequence select="xsl:import[not(preceding-sibling::sch:pattern)]"/>
       <xsl:apply-templates select="$xslt-includes" mode="include-xslt"/>
 
       <xsl:sequence select="$metadata"/>
 
-      
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
       </xsl:call-template>
@@ -93,7 +93,9 @@
       <output indent="yes"/>
 
       <xsl:sequence select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="xsl:variable[not(preceding-sibling::sch:pattern)]"/>
       <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="xsl:template[not(preceding-sibling::sch:pattern)]"/>
 
       <!-- See https://github.com/dmj/schxslt/issues/25 -->
       <xsl:variable name="global-bindings" as="element(sch:let)*" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
