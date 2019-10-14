@@ -78,6 +78,7 @@
       </xsl:for-each>
       <xsl:sequence select="@xml:base"/>
 
+      <xsl:sequence select="xsl:param[not(preceding-sibling::sch:pattern)]"/>
       <xsl:if test="exists($xslt-includes)">
         <param name="schxslt-is-master" as="xs:boolean" select="{$schxslt-is-master-of-included-xslt}()" static="yes"/>
       </xsl:if>
