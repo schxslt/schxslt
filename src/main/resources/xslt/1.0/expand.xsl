@@ -3,12 +3,21 @@
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:param name="schxslt.expand.perform-expand">true</xsl:param>
+
   <xsl:key name="schxslt:abstract-patterns" match="sch:pattern[@abstract = 'true']" use="@id"/>
   <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
   <xsl:key name="schxslt:params"            match="sch:pattern/sch:param"           use="generate-id(..)"/>
 
   <xsl:template match="sch:schema">
-    <xsl:apply-templates select="." mode="schxslt:expand"/>
+    <xsl:choose>
+      <xsl:when test="translate($schxslt.expand.perform-expand, 'TRUE', 'true') = 'true' or $schxslt.expand.perform-expand = '1'">
+        <xsl:apply-templates select="." mode="schxslt:expand"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="node() | @*" mode="schxslt:expand">

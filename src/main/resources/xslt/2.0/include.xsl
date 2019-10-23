@@ -4,6 +4,8 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
+  <xsl:param name="schxslt.include.perform-include" as="xs:boolean" select="true()"/>
+
   <!-- Entry for recursive inclusion -->
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:include">
@@ -14,17 +16,24 @@
   <!-- Recursive inclusion -->
   <xsl:template name="schxslt:include">
     <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
-    <xsl:variable name="result" as="element(sch:schema)">
-      <xsl:apply-templates select="$schematron" mode="schxslt:include"/>
-    </xsl:variable>
     <xsl:choose>
-      <xsl:when test="$result//sch:include or $result//sch:extends[@href]">
-        <xsl:call-template name="schxslt:include">
-          <xsl:with-param name="schematron" select="$result" as="element(sch:schema)"/>
-        </xsl:call-template>
+      <xsl:when test="$schxslt.include.perform-include">
+        <xsl:variable name="result" as="element(sch:schema)">
+          <xsl:apply-templates select="$schematron" mode="schxslt:include"/>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$result//sch:include or $result//sch:extends[@href]">
+            <xsl:call-template name="schxslt:include">
+              <xsl:with-param name="schematron" select="$result" as="element(sch:schema)"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="$result"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:sequence select="$result"/>
+        <xsl:sequence select="$schematron"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
