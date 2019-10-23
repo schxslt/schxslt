@@ -5,7 +5,14 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="sch:schema">
-    <xsl:apply-templates select="." mode="schxslt:expand"/>
+    <xsl:call-template name="schxslt:expand">
+      <xsl:with-param as="element(sch:schema)" name="schematron" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="schxslt:expand">
+    <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
+    <xsl:apply-templates select="$schematron" mode="schxslt:expand"/>
   </xsl:template>
 
   <!-- Copy the outermost element and preserve it's base URI -->
