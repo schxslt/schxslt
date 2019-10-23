@@ -29,7 +29,14 @@
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
   <xsl:template match="sch:schema">
-    <xsl:apply-templates select="." mode="schxslt:compile"/>
+    <xsl:call-template name="schxslt:compile">
+      <xsl:with-param name="schematron" as="element(sch:schema)" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="schxslt:compile">
+    <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
+    <xsl:apply-templates select="$schematron" mode="schxslt:compile"/>
   </xsl:template>
 
   <xsl:template match="sch:schema" mode="schxslt:compile">

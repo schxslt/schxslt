@@ -28,7 +28,7 @@
     <xsl:choose>
       <xsl:when test="$schxslt.pipeline.perform-expand">
         <xsl:call-template name="schxslt:expand">
-          <xsl:with-param name="schematron" select="$input-include"/>
+          <xsl:with-param name="schematron" as="element(sch:schema)" select="$input-include"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
@@ -38,7 +38,9 @@
   </xsl:variable>
 
   <xsl:template match="/">
-    <xsl:apply-templates select="$input-expand" mode="schxslt:compile"/>
+    <xsl:call-template name="schxslt:compile">
+      <xsl:with-param name="schematron" select="$input-expand" as="element(sch:schema)"/>
+    </xsl:call-template>
   </xsl:template>
 
 </xsl:transform>
