@@ -63,13 +63,13 @@
       </rdf:Description>
     </xsl:variable>
 
-    <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
+    <xsl:variable name="validation-stylesheet-body" as="element()+">
       <xsl:call-template name="schxslt:validation-stylesheet-body">
         <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
       </xsl:call-template>
     </xsl:variable>
-    
-    <transform version="{schxslt:xslt-version(.)}">
+
+    <package version="{schxslt:xslt-version(.)}" default-mode="schxslt:validate">
       <xsl:for-each select="sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
@@ -106,7 +106,9 @@
         <xsl:with-param name="bindings" select="(sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       </xsl:call-template>
 
-      <template match="/">
+      <mode name="schxslt:validate" on-no-match="shallow-skip" visibility="private"/>
+
+      <template match="/" mode="schxslt:validate">
         <xsl:sequence select="sch:phase[@id eq $effective-phase]/@xml:base"/>
 
         <xsl:call-template name="schxslt:let-variable">
@@ -147,7 +149,7 @@
         <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
       </xsl:call-template>
 
-    </transform>
+    </package>
 
   </xsl:template>
 
@@ -210,6 +212,8 @@
     <xsl:for-each-group select="$patterns" group-by="string-join((generate-id(sch:let), base-uri(.), @documents), '&lt;')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
       <xsl:variable name="baseUri" as="xs:anyURI" select="base-uri(.)"/>
+
+      <mode name="{$mode}" on-no-match="shallow-skip" visibility="private"/>
 
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
