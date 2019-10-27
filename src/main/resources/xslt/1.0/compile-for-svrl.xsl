@@ -116,7 +116,7 @@
 
   <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
     <xsl:param name="schema"/>
-    <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
+    <xsl:copy-of select="document('compile-for-svrl.xsl')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
   </xsl:template>
 
   <xsl:template name="schxslt:detailed-report">
