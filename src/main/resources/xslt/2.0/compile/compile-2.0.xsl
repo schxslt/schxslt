@@ -209,7 +209,7 @@
 
     <xsl:for-each-group select="$patterns" group-by="string-join((generate-id(sch:let), base-uri(.), @documents), '&lt;')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
-      <xsl:variable name="baseUri" as="xs:anyURI" select="base-uri(.)"/>
+      <xsl:variable name="baseUri" as="xs:anyURI?" select="base-uri(.)"/>
 
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
@@ -222,7 +222,14 @@
           <xsl:choose>
             <xsl:when test="@documents">
               <for-each select="{@documents}">
-                <sequence select="document(resolve-uri(., '{$baseUri}'))"/>
+                <xsl:choose>
+                  <xsl:when test="normalize-space($baseUri)">
+                    <sequence select="document(resolve-uri(., '{$baseUri}'))"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <sequence select="document(resolve-uri(.))"/>
+                  </xsl:otherwise>
+                </xsl:choose>
               </for-each>
             </xsl:when>
             <xsl:otherwise>
