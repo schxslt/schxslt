@@ -31,6 +31,19 @@ import java.io.File;
 import java.io.Console;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.xml.transform.dom.DOMSource;
+
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+
+import org.w3c.dom.Document;
 
 public class Application
 {
@@ -39,7 +52,9 @@ public class Application
         Configuration configuration = new Configuration();
         configuration.parse(args);
 
-        Schematron schematron = new Schematron(configuration.getSchematron(), configuration.getPhase());
+        StreamSource schema = new StreamSource(configuration.getSchematron());
+
+        Schematron schematron = new Schematron(schema, configuration.getPhase());
         Application application = new Application(schematron, configuration.beVerbose(), configuration.getOutputFile());
 
         if (configuration.hasDocument()) {
@@ -75,19 +90,22 @@ public class Application
 
     public void execute (final File input)
     {
-        Result result = schematron.validate(input);
+        StreamSource in = new StreamSource(input);
+        in.setSystemId(input);
+
+        Result result = schematron.validate(in);
         printResult(result, input.getAbsolutePath());
         if (output != null) {
-            result.saveAs(output);
+            save(result.getValidationReport());
         }
     }
 
     public void execute (final InputStream input)
     {
-        Result result = schematron.validate(input);
+        Result result = schematron.validate(new StreamSource(input));
         printResult(result, "<stdin>");
         if (output != null) {
-            result.saveAs(output);
+            save(result.getValidationReport());
         }
     }
 
@@ -99,8 +117,18 @@ public class Application
 
         while (true) {
             InputStream input = readConsole(console);
-            Result result = schematron.validate(input);
+            Result result = schematron.validate(new StreamSource(input));
             printResult(result, "<stdin>");
+        }
+    }
+
+    private void save (Document document)
+    {
+        try {
+            Transformer serializer = TransformerFactory.newInstance().newTransformer();
+            serializer.transform(new DOMSource(document), new StreamResult(output));
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
         }
     }
 
