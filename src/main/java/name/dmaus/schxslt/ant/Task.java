@@ -26,11 +26,23 @@ package name.dmaus.schxslt.ant;
 
 import name.dmaus.schxslt.Result;
 import name.dmaus.schxslt.Schematron;
+import name.dmaus.schxslt.SchematronException;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
+
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+
+import javax.xml.transform.dom.DOMSource;
+
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
 
 public class Task extends org.apache.tools.ant.Task
 {
@@ -78,7 +90,7 @@ public class Task extends org.apache.tools.ant.Task
         }
 
         this.log("Generating validation stylesheet for Schematron '" + this.schema + "'");
-        this.validator = new Schematron(this.schema, this.phase);
+        this.validator = new Schematron(new StreamSource(this.schema), this.phase);
 
         this.log("Validating '" + this.file + "'");
         this.validate(this.file);
@@ -88,19 +100,37 @@ public class Task extends org.apache.tools.ant.Task
 
     private void validate (final File file)
     {
-        Result report = this.validator.validate(file);
-        for (String message: report.getValidationMessages()) {
-            log(message, Project.MSG_WARN);
+        try {
+            StreamSource source = new StreamSource(file);
+            source.setSystemId(file);
+
+            Result report = this.validator.validate(source);
+            for (String message: report.getValidationMessages()) {
+                log(message, Project.MSG_WARN);
+            }
+
+            if (this.report != null) {
+                save(this.report, report.getValidationReport());
+            }
+
+            if (report.isValid() == false) {
+                String message = "The file '" + this.file + "' is invalid";
+                log(message, Project.MSG_ERR);
+                throw new BuildException(message);
+            }
+        } catch (SchematronException e) {
+            throw new RuntimeException(e);
         }
 
-        if (this.report != null) {
-            report.saveAs(this.report);
-        }
+    }
 
-        if (report.isValid() == false) {
-            String message = "The file '" + this.file + "' is invalid";
-            log(message, Project.MSG_ERR);
-            throw new BuildException(message);
+    private void save (final File file, final Document document)
+    {
+        try {
+            Transformer serializer = TransformerFactory.newInstance().newTransformer();
+            serializer.transform(new DOMSource(document), new StreamResult(file));
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
         }
     }
 
