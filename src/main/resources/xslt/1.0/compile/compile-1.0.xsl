@@ -37,12 +37,12 @@
 
   <xsl:variable name="metadata">
     <rdf:Description>
-      <xsl:if test="sch:schema/sch:title">
+      <xsl:for-each select="sch:schema/sch:title">
         <dc:title>
-          <xsl:copy-of select="sch:schema/sch:title/@xml:lang"/>
-          <xsl:value-of select="sch:schema/sch:title"/>
+          <xsl:copy-of select="@xml:lang"/>
+          <xsl:value-of select="."/>
         </dc:title>
-      </xsl:if>
+      </xsl:for-each>
       <xsl:for-each select="sch:schema/sch:p">
         <dc:description>
           <xsl:copy-of select="@xml:lang"/>

@@ -46,12 +46,12 @@
 
     <xsl:variable name="metadata" as="element(rdf:Description)">
       <rdf:Description>
-        <xsl:if test="sch:title">
+        <xsl:for-each select="sch:title">
           <dc:title>
-            <xsl:sequence select="sch:title/@xml:lang"/>
-            <xsl:value-of select="sch:title"/>
+            <xsl:sequence select="@xml:lang"/>
+            <xsl:value-of select="."/>
           </dc:title>
-        </xsl:if>
+        </xsl:for-each>
         <xsl:for-each select="sch:p">
           <dc:description>
             <xsl:sequence select="@xml:lang"/>
@@ -68,7 +68,7 @@
         <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
       </xsl:call-template>
     </xsl:variable>
-    
+
     <transform version="{schxslt:xslt-version(.)}">
       <xsl:for-each select="sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
