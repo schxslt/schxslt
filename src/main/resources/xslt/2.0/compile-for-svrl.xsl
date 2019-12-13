@@ -33,7 +33,7 @@
 
       <svrl:metadata>
         <dc:creator><value-of select="normalize-space(concat(system-property('xsl:product-name'), ' ', system-property('xsl:product-version')))"/></dc:creator>
-        <dc:date><xsl:value-of select="current-dateTime()"/></dc:date>
+        <dc:date><value-of select="current-dateTime()"/></dc:date>
       </svrl:metadata>
 
       <xsl:for-each select="$schema/sch:ns">

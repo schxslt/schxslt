@@ -29,8 +29,11 @@
       </xsl:for-each>
 
       <svrl:metadata>
+        <dc:creator>
+          <value-of select="normalize-space(concat(system-property('xsl:product-name'), ' ', system-property('xsl:product-version')))"/>
+        </dc:creator>
         <dc:source>
-          <xsl:copy-of select="$metadata"/>
+          <xsl:call-template name="schxslt:user-agent"/>
         </dc:source>
       </svrl:metadata>
 
