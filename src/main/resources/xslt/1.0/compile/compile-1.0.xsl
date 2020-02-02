@@ -17,27 +17,27 @@
 
   <xsl:param name="phase">#DEFAULT</xsl:param>
 
-  <xsl:variable name="effective-phase">
-    <xsl:choose>
-      <xsl:when test="$phase = '#DEFAULT' or $phase = ''">
-        <xsl:choose>
-          <xsl:when test="/sch:schema/@defaultPhase">
-            <xsl:value-of select="/sch:schema/@defaultPhase"/>
-          </xsl:when>
-          <xsl:otherwise>#ALL</xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$phase"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
   <xsl:template match="/sch:schema">
     <xsl:apply-templates select="." mode="schxslt:compile"/>
   </xsl:template>
 
   <xsl:template match="/sch:schema" mode="schxslt:compile">
+
+    <xsl:variable name="effective-phase">
+      <xsl:choose>
+        <xsl:when test="$phase = '#DEFAULT' or $phase = ''">
+          <xsl:choose>
+            <xsl:when test="/sch:schema/@defaultPhase">
+              <xsl:value-of select="/sch:schema/@defaultPhase"/>
+            </xsl:when>
+            <xsl:otherwise>#ALL</xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$phase"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
     <xsl:if test="@queryBinding and translate(@queryBinding, 'XSLT', 'xslt') != 'xslt'">
       <xsl:message terminate="yes">

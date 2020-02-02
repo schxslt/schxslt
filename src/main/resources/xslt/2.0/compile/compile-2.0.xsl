@@ -26,20 +26,20 @@
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
-  <xsl:variable name="effective-phase" select="schxslt:effective-phase(sch:schema, $phase)" as="xs:string"/>
-  <xsl:variable name="active-patterns" select="schxslt:active-patterns(sch:schema, $effective-phase)" as="element(sch:pattern)+"/>
-
-  <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
-    <xsl:call-template name="schxslt:validation-stylesheet-body">
-      <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
-    </xsl:call-template>
-  </xsl:variable>
-
   <xsl:template match="sch:schema">
     <xsl:apply-templates select="." mode="schxslt:compile"/>
   </xsl:template>
 
   <xsl:template match="sch:schema" mode="schxslt:compile">
+
+    <xsl:variable name="effective-phase" select="schxslt:effective-phase(., $phase)" as="xs:string"/>
+    <xsl:variable name="active-patterns" select="schxslt:active-patterns(., $effective-phase)" as="element(sch:pattern)+"/>
+
+    <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
+      <xsl:call-template name="schxslt:validation-stylesheet-body">
+        <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
+      </xsl:call-template>
+    </xsl:variable>
 
     <transform version="{schxslt:xslt-version(.)}">
       <xsl:for-each select="sch:ns">
