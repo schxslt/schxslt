@@ -14,8 +14,8 @@
 
     <svrl:schematron-output>
       <xsl:copy-of select="$schema/@schemaVersion"/>
-      <xsl:if test="$effective-phase != '#ALL'">
-        <xsl:attribute name="phase"><xsl:value-of select="$effective-phase"/></xsl:attribute>
+      <xsl:if test="$phase != '#ALL'">
+        <xsl:attribute name="phase"><xsl:value-of select="$phase"/></xsl:attribute>
       </xsl:if>
       <xsl:if test="$schema/sch:title">
         <xsl:attribute name="title"><xsl:value-of select="$schema/sch:title"/></xsl:attribute>
