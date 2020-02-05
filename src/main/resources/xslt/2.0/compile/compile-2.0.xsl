@@ -26,14 +26,17 @@
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
-  <xsl:template match="sch:schema">
-    <xsl:apply-templates select="." mode="schxslt:compile"/>
+  <xsl:template match="/">
+    <xsl:call-template name="schxslt:compile">
+      <xsl:with-param name="schematron" as="element(sch:schema)" select="sch:schema"/>
+    </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="sch:schema" mode="schxslt:compile">
+  <xsl:template name="schxslt:compile">
+    <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
 
-    <xsl:variable name="effective-phase" select="schxslt:effective-phase(., $phase)" as="xs:string"/>
-    <xsl:variable name="active-patterns" select="schxslt:active-patterns(., $effective-phase)" as="element(sch:pattern)+"/>
+    <xsl:variable name="effective-phase" select="schxslt:effective-phase($schematron, $phase)" as="xs:string"/>
+    <xsl:variable name="active-patterns" select="schxslt:active-patterns($schematron, $effective-phase)" as="element(sch:pattern)+"/>
 
     <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
       <xsl:call-template name="schxslt:validation-stylesheet-body">
@@ -41,25 +44,25 @@
       </xsl:call-template>
     </xsl:variable>
 
-    <transform version="{schxslt:xslt-version(.)}">
-      <xsl:for-each select="sch:ns">
+    <transform version="{schxslt:xslt-version($schematron)}">
+      <xsl:for-each select="$schematron/sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
-      <xsl:sequence select="@xml:base"/>
+      <xsl:sequence select="$schematron/@xml:base"/>
 
       <xsl:call-template name="schxslt:version"/>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
-        <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+        <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
       </xsl:call-template>
 
       <output indent="yes"/>
 
-      <xsl:sequence select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="xsl:function[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schematron/xsl:key[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schematron/xsl:function[not(preceding-sibling::sch:pattern)]"/>
 
       <!-- See https://github.com/dmj/schxslt/issues/25 -->
-      <xsl:variable name="global-bindings" as="element(sch:let)*" select="(sch:let, sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
+      <xsl:variable name="global-bindings" as="element(sch:let)*" select="($schematron/sch:let, $schematron/sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       <xsl:if test="count($global-bindings) ne count(distinct-values($global-bindings/@name))">
         <xsl:variable name="message">
           Compilation aborted because of variable name conflicts:
@@ -71,18 +74,18 @@
       </xsl:if>
 
       <xsl:call-template name="schxslt:let-param">
-        <xsl:with-param name="bindings" select="sch:let"/>
+        <xsl:with-param name="bindings" select="$schematron/sch:let"/>
       </xsl:call-template>
 
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="bindings" select="(sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
+        <xsl:with-param name="bindings" select="($schematron/sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       </xsl:call-template>
 
       <template match="/">
-        <xsl:sequence select="sch:phase[@id eq $effective-phase]/@xml:base"/>
+        <xsl:sequence select="$schematron/sch:phase[@id eq $effective-phase]/@xml:base"/>
 
         <xsl:call-template name="schxslt:let-variable">
-          <xsl:with-param name="bindings" select="sch:phase[@id eq $effective-phase]/sch:let"/>
+          <xsl:with-param name="bindings" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
         </xsl:call-template>
 
         <variable name="report" as="element(schxslt:report)">
@@ -102,7 +105,7 @@
         </variable>
 
         <xsl:call-template name="schxslt-api:report">
-          <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+          <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
           <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
         </xsl:call-template>
 
@@ -116,7 +119,7 @@
       <xsl:sequence select="$validation-stylesheet-body"/>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
-        <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+        <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
       </xsl:call-template>
 
     </transform>
