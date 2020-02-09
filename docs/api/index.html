@@ -10,6 +10,7 @@
         var parametersBoxes= new Array('prs_T_reportS_api-2.0.xsl', 
 				'prs_T_active-patternS_api-2.0.xsl', 
 				'prs_T_fired-ruleS_api-2.0.xsl', 
+				'prs_T_suppressed-ruleS_api-2.0.xsl', 
 				'prs_T_failed-assertS_api-2.0.xsl', 
 				'prs_T_successful-reportS_api-2.0.xsl', 
 				'prs_T_validation-stylesheet-body-top-hookS_api-2.0.xsl', 
@@ -21,6 +22,7 @@
 				'dS_T_reportS_api-2.0.xsl', 
 				'dS_T_active-patternS_api-2.0.xsl', 
 				'dS_T_fired-ruleS_api-2.0.xsl', 
+				'dS_T_suppressed-ruleS_api-2.0.xsl', 
 				'dS_T_failed-assertS_api-2.0.xsl', 
 				'dS_T_successful-reportS_api-2.0.xsl', 
 				'dS_T_validation-stylesheet-body-top-hookS_api-2.0.xsl', 
@@ -29,6 +31,7 @@
         var sourceBoxes= new Array('src_T_reportS_api-2.0.xsl', 
 				'src_T_active-patternS_api-2.0.xsl', 
 				'src_T_fired-ruleS_api-2.0.xsl', 
+				'src_T_suppressed-ruleS_api-2.0.xsl', 
 				'src_T_failed-assertS_api-2.0.xsl', 
 				'src_T_successful-reportS_api-2.0.xsl', 
 				'src_T_validation-stylesheet-body-top-hookS_api-2.0.xsl', 
@@ -691,6 +694,100 @@
                               <table class="pWCont">
                                  <tr>
                                     <td width="100%"><pre><span class="tXSLEl">&lt;xsl:template</span><span class="tAN"> name=</span><span class="tAV">"schxslt-api:fired-rule"</span><span class="tXSLEl">&gt;</span><span class="tI">
+  </span><span class="tXSLEl">&lt;xsl:param</span><span class="tAN"> name=</span><span class="tAV">"rule"</span><span class="tAN"> as=</span><span class="tAV">"element(sch:rule)"</span><span class="tAN"> required=</span><span class="tAV">"yes"</span><span class="tXSLEl">/&gt;</span><span class="tI">
+</span><span class="tXSLEl">&lt;/xsl:template&gt;</span></pre></td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+            </td>
+            <td class="rt_lR"></td>
+         </tr>
+         <tr>
+            <td class="rt_cBL"></td>
+            <td class="rt_lB"></td>
+            <td class="rt_cBR"></td>
+         </tr>
+      </table>
+      <div class="toTop"><a href="#INDEX"> [ top ] </a></div><a id="T_suppressed-ruleS_api-2.0.xsl"></a><div class="cmpT">Template
+         <span class="titleTemplateName">schxslt-api:suppressed-rule</span></div>
+      <table class="rt">
+         <tr>
+            <td class="rt_cTL"></td>
+            <td class="rt_lT"></td>
+            <td class="rt_cTR"></td>
+         </tr>
+         <tr>
+            <td class="rt_lL"></td>
+            <td class="rt_cnt">
+               <table class="component">
+                  <tbody>
+                     <tr>
+                        <td class="fCol">
+                           <div class="flL">Documentation</div>
+                           <div class="flR"><input id="bt_dS_T_suppressed-ruleS_api-2.0.xsl" type="image" src="img/btM.gif" value="-" onclick="switchState('dS_T_suppressed-ruleS_api-2.0.xsl');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="dS_T_suppressed-ruleS_api-2.0.xsl" style="display:block">
+                              <div>
+                                 <h3>Description</h3>
+                                 
+                                 <p>Create part of the validation stylesheet that reports a suppressed rule</p>
+                                 
+                                 <table>
+                                    <tr>
+                                       <h4>Parameters</h4>
+                                       <td class="paramName"><b>rule</b></td>
+                                       <td>Schematron element of the suppressed rule</td>
+                                    </tr>
+                                 </table>
+                              </div>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="fCol">Namespace</td>
+                        <td>https://doi.org/10.5281/zenodo.1495494#api</td>
+                     </tr>
+                     <tr>
+                        <td class="fCol">
+                           <div class="flL">Parameters</div>
+                           <div class="flR"><input id="bt_prs_T_suppressed-ruleS_api-2.0.xsl" type="image" src="img/btM.gif" value="-" onclick="switchState('prs_T_suppressed-ruleS_api-2.0.xsl');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="prs_T_suppressed-ruleS_api-2.0.xsl" style="display:block">
+                              <table class="attsT">
+                                 <thead>
+                                    <tr>
+                                       <th>QName</th>
+                                       <th>Namespace</th>
+                                       <th>Type</th>
+                                       <th>Required</th>
+                                    </tr>
+                                 </thead>
+                                 <tr>
+                                    <td class="fCol">rule</td>
+                                    <td>No namespace</td>
+                                    <td>element(sch:rule)</td>
+                                    <td>yes</td>
+                                 </tr>
+                              </table>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="fCol">
+                           <div class="flL">Source</div>
+                           <div class="flR"><input id="bt_src_T_suppressed-ruleS_api-2.0.xsl" type="image" src="img/btM.gif" value="-" onclick="switchState('src_T_suppressed-ruleS_api-2.0.xsl');" class="control" /></div>
+                        </td>
+                        <td>
+                           <div id="src_T_suppressed-ruleS_api-2.0.xsl" style="display:block">
+                              <table class="pWCont">
+                                 <tr>
+                                    <td width="100%"><pre><span class="tXSLEl">&lt;xsl:template</span><span class="tAN"> name=</span><span class="tAV">"schxslt-api:suppressed-rule"</span><span class="tXSLEl">&gt;</span><span class="tI">
   </span><span class="tXSLEl">&lt;xsl:param</span><span class="tAN"> name=</span><span class="tAV">"rule"</span><span class="tAN"> as=</span><span class="tAV">"element(sch:rule)"</span><span class="tAN"> required=</span><span class="tAV">"yes"</span><span class="tXSLEl">/&gt;</span><span class="tI">
 </span><span class="tXSLEl">&lt;/xsl:template&gt;</span></pre></td>
                                  </tr>
