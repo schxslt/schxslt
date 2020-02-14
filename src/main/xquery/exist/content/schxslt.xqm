@@ -27,12 +27,25 @@ declare %private variable $schxslt:base-dir :=
  : @param  $phase      Validation phase
  : @return Validation report
  :)
-declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as element(svrl:schematron-output) {
-  let $options := if ($phase) then <parameters><param name="phase" value="{$phase}"/></parameters> else ()
+declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?, $parameters as map(*)) as element(svrl:schematron-output) {
+  let $compileOptions := if ($phase) then <parameters><param name="phase" value="{$phase}"/></parameters> else ()
+  let $validateOptions := if (map:contains($parameters, "validate")) then schxslt:transform-parameters($parameters("validate")) else ()
   let $schematron := if ($schematron instance of document-node()) then $schematron/sch:schema else $schematron
   let $xsltver := schxslt:processor-path(lower-case($schematron/@queryBinding))
   return
-    $document => transform:transform(schxslt:compile($schematron, $options, $xsltver), ())
+    $document => transform:transform(schxslt:compile($schematron, $compileOptions, $xsltver), $validateOptions)
+};
+
+(:~
+ : Validate document against Schematron and return the validation report.
+ :
+ : @param  $document   Document to be validated
+ : @param  $schematron Schematron schema
+ : @param  $phase      Validation phase
+ : @return Validation report
+ :)
+declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as element(svrl:schematron-output) {
+  schxslt:validate($document, $schematron, $phase, map{});
 };
 
 (:~
@@ -80,4 +93,17 @@ declare %private function schxslt:compile ($schematron as node(), $options as el
   let $compile := $basedir || "compile-for-svrl.xsl"
   return
     $schematron => transform:transform($include, ()) => transform:transform($expand, ()) => transform:transform($compile, $options)
+};
+
+(:~
+ : Convert map of transformation parameters into tree structure.
+ :
+ : @param  $parameters Transformation parameters as map
+ : @return Transformation parameters as tree
+ :)
+declare %private function schxslt:transform-parameters ($parameters as map(*)) as element(parameters) {
+  <parameters>{
+    for $key in map:keys($parameters)
+    return <param name="{$key}" value="{$parameters($key)}"/>}
+  </parameters>
 };
