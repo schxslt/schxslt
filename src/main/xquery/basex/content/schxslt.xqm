@@ -21,14 +21,28 @@ declare namespace xsl = "http://www.w3.org/1999/XSL/Transform";
  : @param  $document   Document to be validated
  : @param  $schematron Schematron schema
  : @param  $phase      Validation phase
+ : @param  $parameters Validation parameters
  : @return Validation report
  :)
-declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as document-node(element(svrl:schematron-output)) {
-  let $options := if ($phase) then map{"phase": $phase} else map{}
+declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?, $parameters as map(*)) as document-node(element(svrl:schematron-output)) {
+  let $compileOptions := if ($phase) then map{"phase": $phase} else map{}
+  let $validateOptions := if (map:contains($parameters, "validate")) then $parameters("validate") else map{}
   let $schematron := if ($schematron instance of document-node()) then $schematron/sch:schema else $schematron
   let $xsltver := schxslt:processor-path(lower-case($schematron/@queryBinding))
   return
-    $document => xslt:transform(schxslt:compile($schematron, $options, $xsltver))
+    $document => xslt:transform(schxslt:compile($schematron, $compileOptions, $xsltver), $validateOptions)
+};
+
+(:~
+ : Validate document against Schematron and return the validation report.
+ :
+ : @param  $document   Document to be validated
+ : @param  $schematron Schematron schema
+ : @param  $phase      Validation phase
+ : @return Validation report
+ :)
+declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as document-node(element(svrl:schematron-output)) {
+  schxslt:validate($document, $schematron, $phase, map{})
 };
 
 (:~
