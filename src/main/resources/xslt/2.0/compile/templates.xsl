@@ -8,7 +8,7 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- Match templates -->
-  <xsl:template match="sch:assert" mode="schxslt:compile">
+  <xsl:template match="sch:assert">
     <if test="not({@test})">
       <xsl:sequence select="@xml:base"/>
       <xsl:call-template name="schxslt-api:failed-assert">
@@ -17,7 +17,7 @@
     </if>
   </xsl:template>
 
-  <xsl:template match="sch:report" mode="schxslt:compile">
+  <xsl:template match="sch:report">
     <if test="{@test}">
       <xsl:sequence select="@xml:base"/>
       <xsl:call-template name="schxslt-api:successful-report">
@@ -26,13 +26,13 @@
     </if>
   </xsl:template>
 
-  <xsl:template match="sch:name" mode="schxslt:compile">
+  <xsl:template match="sch:name">
     <value-of select="{if (@path) then @path else 'name()'}">
       <xsl:sequence select="@xml:base"/>
     </value-of>
   </xsl:template>
 
-  <xsl:template match="sch:value-of" mode="schxslt:compile">
+  <xsl:template match="sch:value-of">
     <value-of select="{@select}">
       <xsl:sequence select="@xml:base"/>
     </value-of>

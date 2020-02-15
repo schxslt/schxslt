@@ -18,10 +18,6 @@
   <xsl:param name="phase">#DEFAULT</xsl:param>
 
   <xsl:template match="/sch:schema">
-    <xsl:apply-templates select="." mode="schxslt:compile"/>
-  </xsl:template>
-
-  <xsl:template match="/sch:schema" mode="schxslt:compile">
 
     <xsl:variable name="effective-phase">
       <xsl:choose>
@@ -118,10 +114,10 @@
 
       <xsl:choose>
         <xsl:when test="$effective-phase = '#ALL'">
-          <xsl:apply-templates select="sch:pattern" mode="schxslt:compile"/>
+          <xsl:apply-templates select="sch:pattern"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]" mode="schxslt:compile"/>
+          <xsl:apply-templates select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]"/>
         </xsl:otherwise>
       </xsl:choose>
 
@@ -133,7 +129,7 @@
 
   </xsl:template>
 
-  <xsl:template match="sch:pattern" mode="schxslt:compile">
+  <xsl:template match="sch:pattern">
 
     <template name="{generate-id()}">
 
@@ -156,7 +152,7 @@
 
     </template>
 
-    <xsl:apply-templates select="sch:rule" mode="schxslt:compile"/>
+    <xsl:apply-templates select="sch:rule"/>
 
     <template mode="{generate-id()}" match="*" priority="-10">
       <apply-templates mode="{generate-id()}" select="node() | @*"/>
@@ -166,7 +162,7 @@
 
   </xsl:template>
 
-  <xsl:template match="sch:rule" mode="schxslt:compile">
+  <xsl:template match="sch:rule">
 
     <template match="{@context}" mode="{generate-id(..)}" priority="{count(following-sibling::sch:rule)}">
       <xsl:call-template name="schxslt:let-variable">
@@ -177,7 +173,7 @@
         <xsl:with-param name="rule" select="."/>
       </xsl:call-template>
 
-      <xsl:apply-templates select="sch:assert | sch:report" mode="schxslt:compile"/>
+      <xsl:apply-templates select="sch:assert | sch:report"/>
 
       <apply-templates mode="{generate-id(..)}" select="node() | @*"/>
 
@@ -185,7 +181,7 @@
 
   </xsl:template>
 
-  <xsl:template match="sch:assert" mode="schxslt:compile">
+  <xsl:template match="sch:assert">
     <if test="not({@test})">
       <xsl:call-template name="schxslt-api:failed-assert">
         <xsl:with-param name="assert" select="."/>
@@ -193,7 +189,7 @@
     </if>
   </xsl:template>
 
-  <xsl:template match="sch:report" mode="schxslt:compile">
+  <xsl:template match="sch:report">
     <if test="{@test}">
       <xsl:call-template name="schxslt-api:successful-report">
         <xsl:with-param name="report" select="."/>
@@ -201,21 +197,21 @@
     </if>
   </xsl:template>
 
-  <xsl:template match="sch:name[@path]" mode="schxslt:compile">
+  <xsl:template match="sch:name[@path]">
     <value-of select="{@path}"/>
   </xsl:template>
 
-  <xsl:template match="sch:name[not(@path)]" mode="schxslt:compile">
+  <xsl:template match="sch:name[not(@path)]">
     <value-of select="name()"/>
   </xsl:template>
 
-  <xsl:template match="sch:value-of" mode="schxslt:compile">
+  <xsl:template match="sch:value-of">
     <value-of select="{@select}"/>
   </xsl:template>
 
-  <xsl:template match="node() | @*" mode="schxslt:compile">
+  <xsl:template match="node() | @*">
     <xsl:copy>
-      <xsl:apply-templates select="node() | @*" mode="schxslt:compile"/>
+      <xsl:apply-templates select="node() | @*"/>
     </xsl:copy>
   </xsl:template>
 
