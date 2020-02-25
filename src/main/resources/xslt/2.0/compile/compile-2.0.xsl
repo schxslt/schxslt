@@ -22,7 +22,7 @@
 
   <xsl:include href="functions.xsl"/>
   <xsl:include href="templates.xsl"/>
-  <xsl:include href="../../version.xsl"/>
+  <xsl:include href="../version.xsl"/>
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 

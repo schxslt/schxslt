@@ -7,7 +7,7 @@
 
   <xsl:import href="api-1.0.xsl"/>
 
-  <xsl:include href="../../version.xsl"/>
+  <xsl:include href="../version.xsl"/>
 
   <xsl:output indent="yes"/>
   <xsl:namespace-alias stylesheet-prefix="#default" result-prefix="xsl"/>
