@@ -24,7 +24,7 @@ declare %unit:test("expected", "schxslt:UnsupportedQueryBinding") function test:
 };
 
 declare %unit:test function test:validate-with-param () {
-  let $schema := <sch:schema><sch:let name="variable"/><sch:pattern><sch:rule context="sch:schema"><sch:report test="$variable = 1"/></sch:rule></sch:pattern></sch:schema>
+  let $schema := <sch:schema><sch:let name="variable" value="''"/><sch:pattern><sch:rule context="sch:schema"><sch:report test="$variable = 1"/></sch:rule></sch:pattern></sch:schema>
   let $report := schxslt:validate($schema, $schema, (), map{"validate": map{"variable": 1}})
   return
     unit:assert($report//svrl:successful-report)
