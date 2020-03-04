@@ -30,7 +30,9 @@ declare function schxslt:validate ($document as node(), $schematron as node(), $
   let $schematron := if ($schematron instance of document-node()) then $schematron/sch:schema else $schematron
   let $xsltver := schxslt:processor-path(lower-case($schematron/@queryBinding))
   return
-    $document => xslt:transform(schxslt:compile($schematron, $compileOptions, $xsltver), $validateOptions)
+    if ($xsltver = ("2.0", "3.0") and xslt:version() ne "3.0")
+      then error(xs:QName("schxslt:UnsupportedQueryBinding"))
+      else $document => xslt:transform(schxslt:compile($schematron, $compileOptions, $xsltver), $validateOptions)
 };
 
 (:~
