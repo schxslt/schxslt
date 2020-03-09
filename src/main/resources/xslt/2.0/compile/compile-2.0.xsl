@@ -63,15 +63,9 @@
 
       <!-- See https://github.com/dmj/schxslt/issues/25 -->
       <xsl:variable name="global-bindings" as="element(sch:let)*" select="($schematron/sch:let, $schematron/sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
-      <xsl:if test="count($global-bindings) ne count(distinct-values($global-bindings/@name))">
-        <xsl:variable name="message">
-          Compilation aborted because of variable name conflicts:
-          <xsl:for-each-group select="$global-bindings" group-by="@name">
-            <xsl:value-of select="current-grouping-key()"/> (<xsl:value-of select="current-group()/../local-name()" separator=", "/>)
-          </xsl:for-each-group>
-        </xsl:variable>
-        <xsl:message terminate="yes" select="error(xs:QName('error:E0003'), normalize-space($message))"/>
-      </xsl:if>
+      <xsl:call-template name="schxslt:check-multiply-defined">
+        <xsl:with-param name="bindings" select="$global-bindings" as="element(sch:let)*"/>
+      </xsl:call-template>
 
       <xsl:call-template name="schxslt:let-param">
         <xsl:with-param name="bindings" select="$schematron/sch:let"/>
