@@ -68,7 +68,7 @@
       <xsl:choose>
         <xsl:when test="$effective-phase = '#ALL'">
           <xsl:call-template name="schxslt:check-multiply-defined">
-            <xsl:with-param name="bindings-1" select="sch:phase[@id = $effective-phase]/sch:let | sch:let"/>
+            <xsl:with-param name="bindings-1" select="sch:let"/>
             <xsl:with-param name="bindings-2" select="sch:pattern/sch:let"/>
           </xsl:call-template>
           <xsl:call-template name="schxslt:let-variable">
@@ -165,6 +165,10 @@
   <xsl:template match="sch:rule">
 
     <template match="{@context}" mode="{generate-id(..)}" priority="{count(following-sibling::sch:rule)}">
+      <xsl:call-template name="schxslt:check-multiply-defined">
+        <xsl:with-param name="bindings-1" select="sch:let"/>
+        <xsl:with-param name="bindings-2" select="/.."/>
+      </xsl:call-template>
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="bindings" select="sch:let"/>
       </xsl:call-template>
