@@ -258,7 +258,8 @@
     <xsl:for-each select="$bindings-1 | $bindings-2">
       <xsl:if test="count($bindings-1/self::sch:let[@name = current()/@name]) + count($bindings-2/self::sch:let[@name = current()/@name]) != 1">
         <xsl:message terminate="yes">
-          Compilation aborted because of variable name conflicts: <xsl:value-of select="@name"/>
+          Compilation aborted: It is an error for a variable to be multiply defined
+          <xsl:value-of select="@name"/>
         </xsl:message>
       </xsl:if>
     </xsl:for-each>
