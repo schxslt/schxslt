@@ -67,7 +67,7 @@
       </xsl:call-template>
       <xsl:choose>
         <xsl:when test="$effective-phase = '#ALL'">
-          <xsl:call-template name="schxslt:detect-name-collisions">
+          <xsl:call-template name="schxslt:check-multiply-defined">
             <xsl:with-param name="bindings-1" select="sch:phase[@id = $effective-phase]/sch:let | sch:let"/>
             <xsl:with-param name="bindings-2" select="sch:pattern/sch:let"/>
           </xsl:call-template>
@@ -76,7 +76,7 @@
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="schxslt:detect-name-collisions">
+          <xsl:call-template name="schxslt:check-multiply-defined">
             <xsl:with-param name="bindings-1" select="sch:phase[@id = $effective-phase]/sch:let | sch:let"/>
             <xsl:with-param name="bindings-2" select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]/sch:let"/>
           </xsl:call-template>
@@ -252,7 +252,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="schxslt:detect-name-collisions">
+  <xsl:template name="schxslt:check-multiply-defined">
     <xsl:param name="bindings-1"/>
     <xsl:param name="bindings-2"/>
     <xsl:for-each select="$bindings-1 | $bindings-2">
