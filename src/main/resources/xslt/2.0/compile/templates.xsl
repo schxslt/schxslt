@@ -1,6 +1,7 @@
 <!-- Compiler templates -->
 <xsl:transform version="2.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
