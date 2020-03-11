@@ -76,45 +76,45 @@ public class Task extends org.apache.tools.ant.Task
 
     public void execute () throws BuildException
     {
-        if (this.file == null) {
+        if (file == null) {
             throw new BuildException("You must provide the file to be validated in the 'file' attribute");
         }
-        if (this.schema == null) {
+        if (schema == null) {
             throw new BuildException("You must provide the file containing the schema in the 'schema' attribute");
         }
-        if (!this.file.exists() || !this.file.canRead()) {
-            throw new BuildException("Unable to read " + this.file);
+        if (!file.exists() || !file.canRead()) {
+            throw new BuildException("Unable to read " + file);
         }
-        if (!this.schema.exists() || !this.schema.canRead()) {
-            throw new BuildException("Unable to read " + this.schema);
+        if (!schema.exists() || !schema.canRead()) {
+            throw new BuildException("Unable to read " + schema);
         }
 
-        this.log("Generating validation stylesheet for Schematron '" + this.schema + "'");
-        this.validator = new Schematron(new StreamSource(this.schema), this.phase);
+        log("Generating validation stylesheet for Schematron '" + schema + "'");
+        validator = new Schematron(new StreamSource(schema), phase);
 
-        this.log("Validating '" + this.file + "'");
-        this.validate(this.file);
+        log("Validating '" + file + "'");
+        validate();
 
-        log("The file '" + this.file + "' is valid");
+        log("The file '" + file + "' is valid");
     }
 
-    private void validate (final File file)
+    private void validate ()
     {
         try {
             StreamSource source = new StreamSource(file);
             source.setSystemId(file);
 
-            Result report = this.validator.validate(source);
-            for (String message: report.getValidationMessages()) {
+            Result result = validator.validate(source);
+            for (String message: result.getValidationMessages()) {
                 log(message, Project.MSG_WARN);
             }
 
-            if (this.report != null) {
-                save(this.report, report.getValidationReport());
+            if (report != null) {
+                save(result.getValidationReport());
             }
 
-            if (report.isValid() == false) {
-                String message = "The file '" + this.file + "' is invalid";
+            if (result.isValid() == false) {
+                String message = "The file '" + file + "' is invalid";
                 log(message, Project.MSG_ERR);
                 throw new BuildException(message);
             }
@@ -124,11 +124,11 @@ public class Task extends org.apache.tools.ant.Task
 
     }
 
-    private void save (final File file, final Document document)
+    private void save (final Document document)
     {
         try {
             Transformer serializer = TransformerFactory.newInstance().newTransformer();
-            serializer.transform(new DOMSource(document), new StreamResult(file));
+            serializer.transform(new DOMSource(document), new StreamResult(report));
         } catch (TransformerException e) {
             throw new RuntimeException(e);
         }
