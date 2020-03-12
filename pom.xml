@@ -3,6 +3,7 @@
   <groupId>name.dmaus.schxslt</groupId>
   <artifactId>schxslt</artifactId>
   <version>1.5-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
   <name>SchXslt</name>
   <description>An XSLT-based Schematron processor</description>
@@ -28,6 +29,21 @@
     <url>https://github.com/schxslt/schxslt</url>
     <connection>scm:git:https://github.com/schxslt/schxslt.git</connection>
   </scm>
+
+  <modules>
+    <!-- <module>basex</module> -->
+    <module>exist</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>ro.kuberam.maven.plugins</groupId>
+        <artifactId>kuberam-expath-plugin</artifactId>
+        <version>0.6.3</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <issueManagement>
     <url>https://github.com/schxslt/schxslt/issues</url>

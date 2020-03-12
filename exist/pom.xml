@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>name.dmaus.schxslt</groupId>
+    <artifactId>schxslt</artifactId>
+    <version>1.5-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>exist-schxslt</artifactId>
+
+  <name>Schematron validation with SchXslt</name>
+  <description>Library module for using schxslt based Schematron processing in exist-db</description>
+  <url>https://doi.org/10.5281/zenodo.1495494</url>
+
+  <contributors>
+    <contributor>
+      <name>Duncan Paterson</name>
+      <email>duncan@exist-db.org</email>
+    </contributor>
+  </contributors>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://opensource.org/licenses/MIT</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>https://github.com/schxslt/schxslt</url>
+    <connection>scm:git:https://github.com/schxslt/schxslt.git</connection>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/schxslt/schxslt/issues</url>
+  </issueManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.source>1.8</project.build.source>
+    <project.build.target>1.8</project.build.target>
+
+    <exist.min.version>3.0.0</exist.min.version>
+    <exist.max.version>5.2.0</exist.max.version>
+
+    <!-- used in the EXPath Package Descriptor -->
+    <package-name>https://doi.org/10.5281/zenodo.1495494</package-name>
+
+    <module.namespace>https://doi.org/10.5281/zenodo.1495494</module.namespace>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.exist-db</groupId>
+      <artifactId>exist-core</artifactId>
+      <version>${exist.max.version}</version>
+    </dependency>
+
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.xmlunit</groupId>
+      <artifactId>xmlunit-core</artifactId>
+      <version>2.6.3</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+
+  <build>
+          <!-- TODO there are no xar-resources, other than the parent's xsl (originally symlinked) -->
+    <!-- <resources>
+      <resource>
+        <directory>src/main/xar-resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>templates/**</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/xar-resources</directory>
+        <filtering>false</filtering>
+        <excludes>
+          <exclude>templates/**</exclude>
+        </excludes>
+      </resource>
+    </resources> -->
+
+    <plugins>
+      <plugin>
+        <groupId>ro.kuberam.maven.plugins</groupId>
+        <artifactId>kuberam-expath-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-xar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>make-xar</goal>
+            </goals>
+            <configuration>
+              <descriptor>xar-assembly.xml</descriptor>
+              <finalName>${package-final-name}</finalName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
