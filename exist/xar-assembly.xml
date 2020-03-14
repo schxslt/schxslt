@@ -18,8 +18,11 @@
     <fileSets>
         <fileSet>
             <directory>${basedir}/src/main/xar-resources</directory>
+            <outputDirectory>content</outputDirectory>
         </fileSet>
     </fileSets>
+
+    <!-- TODO register xsl to allow import by URI see #100 -->
 
     <!-- include the XQuery Library modules written in XQuery from this project -->
     <xquerySets>

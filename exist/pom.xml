@@ -90,7 +90,6 @@
                   <directory>../core/target/classes</directory>
                   <filtering>false</filtering>
                   <includes>
-                    <include>xproc/**</include>
                     <include>xslt/**</include>
                   </includes>
                 </resource>

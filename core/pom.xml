@@ -15,13 +15,7 @@
   <description>An XSLT-based Schematron processor</description>
   <url>https://doi.org/10.5281/zenodo.1495494</url>
 
-  <!-- <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>https://opensource.org/licenses/MIT</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses> -->
+  <!-- <licenses> <license> <name>MIT License</name> <url>https://opensource.org/licenses/MIT</url> <distribution>repo</distribution> </license> </licenses> -->
 
   <developers>
     <developer>
@@ -35,18 +29,6 @@
       <email>duncan@exist-db.org</email>
     </developer>
   </developers>
-
-
-  <!-- <scm>
-    <url>https://github.com/schxslt/schxslt</url>
-    <connection>scm:git:https://github.com/schxslt/schxslt.git</connection>
-  </scm>
-
-
-  <issueManagement>
-    <url>https://github.com/schxslt/schxslt/issues</url>
-    <system>GitHub Issues</system>
-  </issueManagement> -->
 
   <distributionManagement>
     <repository>
