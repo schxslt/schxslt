@@ -3,4 +3,4 @@
 *.sch.xsl
 xspec/
 target/
-!/lib/xspec
+xar-resources
