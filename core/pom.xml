@@ -15,8 +15,6 @@
   <description>An XSLT-based Schematron processor</description>
   <url>https://doi.org/10.5281/zenodo.1495494</url>
 
-  <!-- <licenses> <license> <name>MIT License</name> <url>https://opensource.org/licenses/MIT</url> <distribution>repo</distribution> </license> </licenses> -->
-
   <developers>
     <developer>
       <id>dmaus</id>
@@ -46,6 +44,12 @@
   </properties>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>io.xspec.maven</groupId>
