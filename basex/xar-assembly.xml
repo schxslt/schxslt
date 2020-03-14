@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://expath.org/ns/pkg" name="${package.name}" abbrev="schxslt" version="${project.version}"
+    spec="1.0">
+    <title>${project.name}</title>
+    <dependency processor="basex"/>
+    <fileSets>
+        <fileSet>
+            <directory>${basedir}/src/main/xar-resources</directory>
+            <outputDirectory>content</outputDirectory>
+        </fileSet>
+        <fileSet>
+          <>
+        </fileSet>
+    </fileSets>
+
+    <!-- TODO register xsl to allow import by URI see #100 -->
+
+    <!-- include the XQuery Library modules written in XQuery from this project -->
+    <xquerySets>
+        <xquerySet>
+            <namespace>https://doi.org/10.5281/zenodo.1495494</namespace>
+            <directory>${basedir}/src/main/xquery</directory>
+            <includes>
+                <include>schxslt.xqm</include>
+            </includes>
+            <outputDirectory>content</outputDirectory>
+        </xquerySet>
+    </xquerySets>
+
+</package>

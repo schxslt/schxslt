@@ -32,7 +32,7 @@
 
   <modules>
     <module>core</module>
-    <!-- <module>basex</module> -->
+    <module>basex</module>
     <module>exist</module>
   </modules>
 
@@ -75,6 +75,10 @@
           <filesets>
             <fileset>
               <directory>exist/src/main/xar-resources</directory>
+              <followSymlinks>false</followSymlinks>
+            </fileset>
+            <fileset>
+              <directory>basex/src/main/xar-resources</directory>
               <followSymlinks>false</followSymlinks>
             </fileset>
           </filesets>
