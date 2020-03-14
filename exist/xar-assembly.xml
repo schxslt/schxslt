@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://expath.org/ns/pkg" name="${package-name}" abbrev="${package-abbrev}" version="${project.version}"
+<package xmlns="http://expath.org/ns/pkg" name="${package.name}" abbrev="schxslt" version="${project.version}"
     spec="1.0">
-    <title>${package-title}</title>
-    <author>David Maus</author>
-    <author>Duncan Paterson</author>
+    <title>${project.name}</title>
+    <author id="dmaus">David Maus</author>
+    <author id="duncdrum">Duncan Paterson</author>
     <website>${project.url}</website>
     <license>The MIT License</license>
     <copyright>true</copyright>
@@ -11,8 +11,15 @@
     <status>stable</status>
 
     <tag>${project.artifactId}</tag>
+    <description>${project.description}</description>
 
     <dependency processor="http://exist-db.org" semver-min="${exist.min.version}" />
+
+    <fileSets>
+        <fileSet>
+            <directory>${basedir}/src/main/xar-resources</directory>
+        </fileSet>
+    </fileSets>
 
     <!-- include the XQuery Library modules written in XQuery from this project -->
     <xquerySets>

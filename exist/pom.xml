@@ -22,24 +22,6 @@
     </contributor>
   </contributors>
 
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>https://opensource.org/licenses/MIT</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-
-  <scm>
-    <url>https://github.com/schxslt/schxslt</url>
-    <connection>scm:git:https://github.com/schxslt/schxslt.git</connection>
-  </scm>
-
-  <issueManagement>
-    <system>GitHub</system>
-    <url>https://github.com/schxslt/schxslt/issues</url>
-  </issueManagement>
-
   <properties>
     <project.build.source>1.8</project.build.source>
     <project.build.target>1.8</project.build.target>
@@ -48,12 +30,18 @@
     <exist.max.version>5.2.0</exist.max.version>
 
     <!-- used in the EXPath Package Descriptor -->
-    <package-name>https://doi.org/10.5281/zenodo.1495494</package-name>
+    <package.name>https://doi.org/10.5281/zenodo.1495494</package.name>
 
     <module.namespace>https://doi.org/10.5281/zenodo.1495494</module.namespace>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>schxslt</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+    </dependency>
     <dependency>
       <groupId>org.exist-db</groupId>
       <artifactId>exist-core</artifactId>
@@ -76,30 +64,45 @@
 
   </dependencies>
 
-
   <build>
-          <!-- TODO there are no xar-resources, other than the parent's xsl (originally symlinked) -->
-    <!-- <resources>
-      <resource>
-        <directory>src/main/xar-resources</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>templates/**</include>
-        </includes>
-      </resource>
+    <!-- TODO there are no xar-resources, other than the parent's xsl (originally symlinked) -->
+    <resources>
       <resource>
         <directory>src/main/xar-resources</directory>
         <filtering>false</filtering>
-        <excludes>
-          <exclude>templates/**</exclude>
-        </excludes>
       </resource>
-    </resources> -->
-
+    </resources>
     <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>src/main/xar-resources</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>../core/target/classes</directory>
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>xproc/**</include>
+                    <include>xslt/**</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>ro.kuberam.maven.plugins</groupId>
         <artifactId>kuberam-expath-plugin</artifactId>
+        <version>0.6.3</version>
         <executions>
           <execution>
             <id>create-xar</id>
