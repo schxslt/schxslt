@@ -1,21 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>name.dmaus.schxslt</groupId>
+    <artifactId>schxslt-parent</artifactId>
+    <version>1.5-SNAPSHOT</version>
+  </parent>
+
   <groupId>name.dmaus.schxslt</groupId>
-  <artifactId>schxslt-parent</artifactId>
+  <artifactId>schxslt</artifactId>
   <version>1.5-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
 
   <name>SchXslt</name>
   <description>An XSLT-based Schematron processor</description>
   <url>https://doi.org/10.5281/zenodo.1495494</url>
-
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>https://opensource.org/licenses/MIT</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
 
   <developers>
     <developer>
@@ -23,33 +21,12 @@
       <name>David Maus</name>
       <email>schxslt@dmaus.name</email>
     </developer>
+    <developer>
+      <id>duncdrum</id>
+      <name>Duncan Paterson</name>
+      <email>duncan@exist-db.org</email>
+    </developer>
   </developers>
-
-  <scm>
-    <url>https://github.com/schxslt/schxslt</url>
-    <connection>scm:git:https://github.com/schxslt/schxslt.git</connection>
-  </scm>
-
-  <modules>
-    <module>core</module>
-    <module>basex</module>
-    <module>exist</module>
-  </modules>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>ro.kuberam.maven.plugins</groupId>
-        <artifactId>kuberam-expath-plugin</artifactId>
-        <version>0.6.3</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
-  <issueManagement>
-    <url>https://github.com/schxslt/schxslt/issues</url>
-    <system>GitHub Issues</system>
-  </issueManagement>
 
   <distributionManagement>
     <repository>
@@ -64,25 +41,82 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <saxon.version>9.9.1-6</saxon.version>
   </properties>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.1.0</version>
+        <groupId>io.xspec.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <version>1.5.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>${saxon.version}</version>
+          </dependency>
+        </dependencies>
         <configuration>
-          <filesets>
-            <fileset>
-              <directory>exist/src/main/xar-resources</directory>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-            <fileset>
-              <directory>basex/src/main/xar-resources</directory>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
+          <testDir>src/test/resources/xslt</testDir>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>run-xspec</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>name.dmaus.schxslt</groupId>
+        <artifactId>testsuite-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>${saxon.version}</version>
+          </dependency>
+          <!-- https://mvnrepository.com/artifact/xalan/xalan -->
+          <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.2</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <testDir>src/test/schematron</testDir>
+          <configFile>test-schematron.xml</configFile>
+          <processors>
+            <processor>
+              <id>saxon</id>
+            </processor>
+            <processor>
+              <id>xalan</id>
+              <skip>
+                <param>include-baseuri-fixup</param>
+                <param>extends-baseuri-fixup</param>
+                <param>pattern-subordinate-document-01</param>
+                <param>svrl-suppressed-rule</param>
+              </skip>
+            </processor>
+            <processor>
+              <id>xsltproc</id>
+              <skip>
+                <param>include-baseuri-fixup</param>
+                <param>extends-baseuri-fixup</param>
+                <param>pattern-subordinate-document-01</param>
+                <param>svrl-suppressed-rule</param>
+              </skip>
+            </processor>
+          </processors>
         </configuration>
       </plugin>
     </plugins>

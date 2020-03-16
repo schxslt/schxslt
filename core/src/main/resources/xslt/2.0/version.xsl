@@ -3,7 +3,7 @@
   <xsl:template name="schxslt:version">
     <xsl:variable name="product" select="normalize-space(concat(system-property('xsl:product-name'), ' ', system-property('xsl:product-version')))"/>
     <xsl:comment>
-      Schematron validation stylesheet created with SchXslt <xsl:text xml:id="version">1.5-SNAPSHOT</xsl:text> running
+      Schematron validation stylesheet created with SchXslt <xsl:text xml:id="version">${project.version}</xsl:text> running
       XSLT processor <xsl:value-of select="$product"/> by <xsl:value-of select="system-property('xsl:vendor')"/>.
     </xsl:comment>
   </xsl:template>

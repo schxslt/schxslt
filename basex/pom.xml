@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>name.dmaus.schxslt</groupId>
+    <artifactId>schxslt-parent</artifactId>
+    <version>1.5-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>basex-schxslt</artifactId>
+
+  <name>Schematron validation with SchXslt</name>
+  <description>Library module for using schxslt based Schematron processing in basex</description>
+  <url>https://doi.org/10.5281/zenodo.1495494</url>
+
+  <contributors>
+    <contributor>
+      <name>Duncan Paterson</name>
+      <email>duncan@exist-db.org</email>
+    </contributor>
+  </contributors>
+
+  <properties>
+    <project.build.source>1.8</project.build.source>
+    <project.build.target>1.8</project.build.target>
+    <!-- DP: I have no idea this is the first mavenized basex i could find -->
+    <basex.min.version>7.3.1</basex.min.version>
+    <basex.max.version>9.2.4</basex.max.version>
+
+    <!-- used in the EXPath Package Descriptor -->
+    <package.name>https://doi.org/10.5281/zenodo.1495494</package.name>
+
+    <module.namespace>https://doi.org/10.5281/zenodo.1495494</module.namespace>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>schxslt</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.basex</groupId>
+      <artifactId>basex</artifactId>
+      <version>${basex.max.version}</version>
+    </dependency>
+    <!-- TODO test dependencies see https://mailman.uni-konstanz.de/pipermail/basex-talk/2020-March/015225.html -->
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/xar-resources</directory>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>src/main/xar-resources</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>../core/target/classes</directory>
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>xslt/**</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- TODO ditch repo.xml see https://github.com/claudius108/kuberam-expath-plugin/issues/19 -->
+      <plugin>
+        <groupId>ro.kuberam.maven.plugins</groupId>
+        <artifactId>kuberam-expath-plugin</artifactId>
+        <version>0.6.3</version>
+        <executions>
+          <execution>
+            <id>create-xar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>make-xar</goal>
+            </goals>
+            <configuration>
+              <descriptor>xar-assembly.xml</descriptor>
+              <finalName>${package-final-name}</finalName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
