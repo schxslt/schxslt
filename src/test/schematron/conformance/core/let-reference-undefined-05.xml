@@ -1,0 +1,20 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="error" id="let-reference-undefined-05">
+  <label>It is an error to reference a variable in the @select expression of a sch:value-of element that has not been defined globally</label>
+  <reference>ISO Schematron 2016: Section 5.4.5 Clause 3</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:rule context="*">
+          <sch:assert test="false()">
+            <sch:value-of select="$variable"/>
+          </sch:assert>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

@@ -1,0 +1,18 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="error" id="let-reference-undefined-03">
+  <label>It is an error to reference a variable in an report test expression that has not been defined globally</label>
+  <reference>ISO Schematron 2016: Section 5.4.5 Clause 3</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:rule context="*">
+          <sch:report test="$variable = 1"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

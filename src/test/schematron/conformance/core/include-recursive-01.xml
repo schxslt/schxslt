@@ -1,0 +1,24 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="include-recursive">
+  <label>Include is recursive</label>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+    <secondary filename="pattern.sch">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron">
+        <include href="rule.sch"/>
+      </pattern>
+    </secondary>
+    <secondary filename="rule.sch">
+      <rule xmlns="http://purl.oclc.org/dsdl/schematron" context="/">
+        <report test="true()"/>
+      </rule>
+    </secondary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:include href="pattern.sch"/>
+      <sch:pattern/>
+    </sch:schema>
+  </schemas>
+</testcase>

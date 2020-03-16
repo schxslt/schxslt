@@ -1,0 +1,18 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="error" id="let-reference-undefined-07" features="iso2016">
+  <label>It is an error to reference an undefined variable in the @documents expression of a sch:pattern element</label>
+  <reference>ISO Schematron 2016: Section 5.4.5 Clause 3</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern documents="$variable">
+        <sch:rule context="*">
+          <sch:assert test="true()"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

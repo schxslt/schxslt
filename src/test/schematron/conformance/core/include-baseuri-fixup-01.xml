@@ -1,0 +1,21 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="include-baseuri-fixup">
+  <label>Include performs base URI fixup</label>
+  <reference>XML Inclusions (XInclude) Version 1.1, Section 4.7.5.</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+    <secondary filename="subdir/include.sch">
+      <rule xmlns="http://purl.oclc.org/dsdl/schematron" context="/">
+        <report test="local-name(document('include.sch')/*[1]) = 'rule'"/>
+      </rule>
+    </secondary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:include href="subdir/include.sch"/>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

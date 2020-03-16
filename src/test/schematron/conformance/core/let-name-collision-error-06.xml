@@ -1,0 +1,25 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" id="let-name-collision-error-06" expect="error">
+  <label>It is an error to define a pattern variable with the same name as a global variable</label>
+  <reference>ISO Schematron 2016: Section 5.4.5 clause 3</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:let name="foobar" value="1"/>
+      <sch:pattern>
+        <sch:let name="foobar" value="1"/>
+        <sch:rule context="/">
+          <sch:assert test="true()"/>
+        </sch:rule>
+      </sch:pattern>
+      <sch:pattern>
+        <sch:rule context="/">
+          <sch:assert test="$foobar = 1"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

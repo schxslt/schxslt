@@ -1,0 +1,24 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" id="let-pattern-global-01" expect="valid">
+  <label>A pattern variable has global scope</label>
+  <reference>ISO Schematron 2016: Section 5.4.5 clause 1</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:let name="foobar" value="1"/>
+        <sch:rule context="/">
+          <sch:assert test="true()"/>
+        </sch:rule>
+      </sch:pattern>
+      <sch:pattern>
+        <sch:rule context="/">
+          <sch:assert test="$foobar = 1"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

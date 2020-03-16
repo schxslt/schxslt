@@ -54,7 +54,7 @@
       <plugin>
         <groupId>io.xspec.maven</groupId>
         <artifactId>xspec-maven-plugin</artifactId>
-        <version>1.5.1</version>        
+        <version>1.5.1</version>
         <dependencies>
           <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -70,6 +70,57 @@
             <phase>test</phase>
             <goals>
               <goal>run-xspec</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>name.dmaus.schxslt</groupId>
+        <artifactId>testsuite-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.9.1-6</version>
+          </dependency>
+          <!-- https://mvnrepository.com/artifact/xalan/xalan -->
+          <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.2</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <testDir>${basedir}/src/test/schematron</testDir>
+          <configFile>test-schematron.xml</configFile>
+          <processors>
+            <processor>
+              <id>saxon</id>
+            </processor>
+            <processor>
+              <id>xalan</id>
+              <skip>
+                <param>include-baseuri-fixup</param>
+                <param>extends-baseuri-fixup</param>
+                <param>pattern-subordinate-document-01</param>
+              </skip>
+            </processor>
+            <processor>
+              <id>xsltproc</id>
+              <skip>
+                <param>include-baseuri-fixup</param>
+                <param>extends-baseuri-fixup</param>
+                <param>pattern-subordinate-document-01</param>
+              </skip>
+            </processor>
+          </processors>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>test-schematron</goal>
             </goals>
           </execution>
         </executions>

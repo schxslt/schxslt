@@ -1,0 +1,18 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" id="rule-context-attribute-01" expect="invalid" >
+  <label>Context node is an attribute node</label>
+  <reference>ISO Schematron 2016: Annex C Clause 2 (xslt), Annex H Clause 2 (xslt2), Annex I Clause 2 (xpath2)</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element attribute="value"/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:rule context="@attribute">
+          <sch:assert test="false()"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

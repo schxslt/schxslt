@@ -1,0 +1,27 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="extends-recursive">
+  <label>Extends is recursive</label>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+    <secondary filename="include.sch">
+      <rule xmlns="http://purl.oclc.org/dsdl/schematron">
+        <extends href="true.sch"/>
+      </rule>
+    </secondary>
+    <secondary filename="true.sch">
+      <rule xmlns="http://purl.oclc.org/dsdl/schematron" context="/">
+        <report test="true()"/>
+      </rule>
+    </secondary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:rule context="/">
+          <sch:extends href="include.sch"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

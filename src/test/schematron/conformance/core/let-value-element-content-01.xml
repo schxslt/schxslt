@@ -1,0 +1,33 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" id="let-value-element-content-01" expect="valid">
+  <label>Let uses the element content as value</label>
+  <reference>ISO Schematron 2016: Section 5.4.5 clause 2</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
+      <sch:let name="foobar">
+        <html:p xmlns:html="http://www.w3.org/1999/xhtml">This is a paragraph</html:p>
+      </sch:let>
+      <sch:pattern>
+        <sch:rule context="/">
+          <sch:assert test="count($foobar/html:p) = 1"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt">
+      <sch:ns prefix="html" uri="http://www.w3.org/1999/xhtml"/>
+      <sch:let name="foobar">
+        <html:p xmlns:html="http://www.w3.org/1999/xhtml">This is a paragraph</html:p>
+      </sch:let>
+      <sch:pattern>
+        <sch:rule context="/">
+          <sch:assert test="contains($foobar, 'paragraph')"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>

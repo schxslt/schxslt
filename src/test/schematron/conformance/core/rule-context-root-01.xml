@@ -1,0 +1,18 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" id="rule-context-root-01" expect="invalid">
+  <label>Context node is the root node</label>
+  <reference>ISO Schematron 2016: Annex C clause 2 (xslt), Annex H clause 2 (xslt2)</reference>
+  <documents>
+    <primary filename="document.xml">
+      <root/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:rule context="/">
+          <sch:assert test="false()"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+</testcase>
