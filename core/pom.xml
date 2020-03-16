@@ -118,6 +118,14 @@
             </processor>
           </processors>
         </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>test-schematron</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
 
