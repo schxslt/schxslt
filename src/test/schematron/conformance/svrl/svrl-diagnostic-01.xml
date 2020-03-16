@@ -22,7 +22,7 @@
       </sch:diagnostics>
     </sch:schema>
   </schemas>
-  <expectations>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
     <expectation test="count(//svrl:successful-report/svrl:diagnostic-reference[@diagnostic = 'd1' or @diagnostic = 'd2']) = 2"/>
   </expectations>
 </testcase>

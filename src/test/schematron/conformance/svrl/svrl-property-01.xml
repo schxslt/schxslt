@@ -22,7 +22,7 @@
       </sch:properties>
     </sch:schema>
   </schemas>
-  <expectations>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
     <expectation test="count(//svrl:successful-report/svrl:property-reference[@property = 'p1' or @property = 'p2']) = 2"/>
   </expectations>
 </testcase>

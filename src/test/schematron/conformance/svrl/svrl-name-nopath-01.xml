@@ -17,7 +17,7 @@
       </sch:pattern>
     </sch:schema>
   </schemas>
-  <expectations>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
     <expectation test="normalize-space(//svrl:successful-report) = 'element'"/>
   </expectations>
 </testcase>

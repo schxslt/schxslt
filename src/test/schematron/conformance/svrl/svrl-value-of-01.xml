@@ -11,13 +11,13 @@
       <sch:pattern>
         <sch:rule context="/element">
           <sch:report test="true()">
-            <sch:value-of select="element"/>
+            <sch:value-of select="."/>
           </sch:report>
         </sch:rule>
       </sch:pattern>
     </sch:schema>
   </schemas>
-  <expectations>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
     <expectation test="normalize-space(//svrl:successful-report) = 'Text content'"/>
   </expectations>
 </testcase>

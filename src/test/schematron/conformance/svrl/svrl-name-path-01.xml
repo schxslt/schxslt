@@ -3,7 +3,7 @@
   <reference>ISO Schematron 2016: Section 5.4.6, Annex C clause 4 (xslt), Annex H clause 4 (xslt2), Annex I clause 4 (xpath2)</reference>
   <documents>
     <primary filename="document.xml">
-      <element xmlns=""/>
+      <element attribute="value" xmlns=""/>
     </primary>
   </documents>
   <schemas>
@@ -17,7 +17,7 @@
       </sch:pattern>
     </sch:schema>
   </schemas>
-  <expectations>
-    <expectation test="normalize-space(//svrl:successful-report) eq 'value'"/>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+    <expectation test="normalize-space(//svrl:successful-report) = 'value'"/>
   </expectations>
 </testcase>
