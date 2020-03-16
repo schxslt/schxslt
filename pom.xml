@@ -47,6 +47,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <saxon.version>9.9.1-6</saxon.version>
   </properties>
 
   <build>
@@ -59,7 +60,7 @@
           <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
-            <version>9.8.0-15</version>
+            <version>${saxon.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -82,7 +83,7 @@
           <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
-            <version>9.9.1-6</version>
+            <version>${saxon.version}</version>
           </dependency>
           <!-- https://mvnrepository.com/artifact/xalan/xalan -->
           <dependency>
