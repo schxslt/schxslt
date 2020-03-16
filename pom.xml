@@ -104,6 +104,7 @@
                 <param>include-baseuri-fixup</param>
                 <param>extends-baseuri-fixup</param>
                 <param>pattern-subordinate-document-01</param>
+                <param>svrl-suppressed-rule</param>
               </skip>
             </processor>
             <processor>
@@ -112,6 +113,7 @@
                 <param>include-baseuri-fixup</param>
                 <param>extends-baseuri-fixup</param>
                 <param>pattern-subordinate-document-01</param>
+                <param>svrl-suppressed-rule</param>
               </skip>
             </processor>
           </processors>
