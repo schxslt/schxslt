@@ -45,7 +45,7 @@ declare function schxslt:validate ($document as node(), $schematron as node(), $
  : @return Validation report
  :)
 declare function schxslt:validate ($document as node(), $schematron as node(), $phase as xs:string?) as element(svrl:schematron-output) {
-  schxslt:validate($document, $schematron, $phase, map{});
+  schxslt:validate($document, $schematron, $phase, map{})
 };
 
 (:~
