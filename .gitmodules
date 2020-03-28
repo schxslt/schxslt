@@ -1,0 +1,3 @@
+[submodule "core/src/test/schematron-conformance"]
+	path = core/src/test/schematron-conformance
+	url = https://github.com/Schematron/schematron-conformance.git
