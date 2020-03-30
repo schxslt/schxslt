@@ -77,7 +77,7 @@
       <plugin>
         <groupId>name.dmaus.schxslt</groupId>
         <artifactId>testsuite-maven-plugin</artifactId>
-        <version>1.0</version>
+        <version>1.0.1</version>
         <dependencies>
           <dependency>
             <groupId>net.sf.saxon</groupId>
