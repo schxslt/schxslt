@@ -1,17 +1,32 @@
 Ant task for Schematron validation with SchXslt
 ==
 
-SchXslt Ant is copyright (c) 2019 by David Maus &lt;dmaus@dmaus.name&gt; and released under the
+SchXslt Ant is copyright (c) 2019,2020 by David Maus &lt;dmaus@dmaus.name&gt; and released under the
 terms of the MIT license.
 
 This project implements a task for [Apache Ant](https://ant.apache.org/) that performs Schematron
 validation with SchXslt.
 
-## Using SchXslt Ant
+## Installing SchXslt Ant
 
 Download or compile the .jar file and define a new task using ```name.dmaus.schxslt.ant.Task``` as
 class name. The .jar contains the Java classes of a Schematron validation task as well as the
 SchXslt transformation stylesheets.
+
+You can download the .jar from the [list of releases](https://github.com/schxslt/schxslt-ant/releases)
+or build it using the [Maven](https://maven.apache.org) build tool.
+
+To create the .jar file from its sources clone this repository and run the Maven build tool.
+
+```
+git clone https://github.com/schxslt/schxslt-ant.git
+cd schxslt-ant
+mvn clean package
+```
+
+This creates the jar file inside the ```target``` directory.
+
+## Using SchXslt Ant
 
 It supports the following options:
 
