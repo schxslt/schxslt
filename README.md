@@ -59,7 +59,7 @@ It supports the following options:
 
 ```
 <project name="Test" basedir="." default="build">
-  <taskdef name="schematron" classname="name.dmaus.schxslt.ant.Task" classpath="/path/to/ant-schxsl-1.3.jar"/>
+  <taskdef name="schematron" classname="name.dmaus.schxslt.ant.Task" classpath="/path/to/ant-schxslt-1.3.jar"/>
   <target name="build">
     <schematron schema="schema.sch" file="document.xml" report="report.xml" phase="myPhase"/>
   </target>
