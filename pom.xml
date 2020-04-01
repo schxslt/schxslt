@@ -40,6 +40,7 @@
           <appendAssemblyId>false</appendAssemblyId>
           <archive>
             <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               <mainClass>name.dmaus.schxslt.cli.Application</mainClass>
             </manifest>
           </archive>

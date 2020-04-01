@@ -120,11 +120,7 @@ public class Configuration
 
     private String getVersion ()
     {
-        BufferedReader r = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/VERSION")));
-        try {
-            return r.readLine();
-        } catch (IOException e) { };
-        return "";
+        return getClass().getPackage().getImplementationVersion();
     }
 
 }
