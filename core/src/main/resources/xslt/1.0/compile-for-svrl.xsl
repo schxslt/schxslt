@@ -55,7 +55,10 @@
     <xsl:param name="rule"/>
 
     <svrl:fired-rule>
-      <xsl:copy-of select="$rule/@id | $rule/@context | $rule/@role | $rule/@flag"/>
+      <xsl:copy-of select="$rule/@id | $rule/@role | $rule/@flag"/>
+      <attribute name="context">
+        <xsl:value-of select="$rule/@context"/>
+      </attribute>
     </svrl:fired-rule>
   </xsl:template>
 
@@ -78,7 +81,10 @@
       </call-template>
     </variable>
     <svrl:failed-assert location="{{normalize-space($location)}}">
-      <xsl:copy-of select="$assert/@role | $assert/@flag | $assert/@id | $assert/@test"/>
+      <xsl:copy-of select="$assert/@role | $assert/@flag | $assert/@id"/>
+      <attribute name="test">
+        <xsl:value-of select="$assert/@test"/>
+      </attribute>
       <xsl:call-template name="schxslt:detailed-report"/>
     </svrl:failed-assert>
   </xsl:template>
@@ -102,7 +108,10 @@
       </call-template>
     </variable>
     <svrl:successful-report location="{{normalize-space($location)}}">
-      <xsl:copy-of select="$report/@role | $report/@flag | $report/@id | $report/@test"/>
+      <xsl:copy-of select="$report/@role | $report/@flag | $report/@id"/>
+      <attribute name="test">
+        <xsl:value-of select="$report/@test"/>
+      </attribute>
       <xsl:call-template name="schxslt:detailed-report"/>
     </svrl:successful-report>
   </xsl:template>

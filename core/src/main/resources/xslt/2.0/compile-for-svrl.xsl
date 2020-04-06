@@ -53,7 +53,10 @@
   <xsl:template name="schxslt-api:fired-rule">
     <xsl:param name="rule" as="element(sch:rule)" required="yes"/>
     <svrl:fired-rule>
-      <xsl:sequence select="($rule/@id, $rule/@context, $rule/@role, $rule/@flag)"/>
+      <xsl:sequence select="($rule/@id, $rule/@role, $rule/@flag)"/>
+      <attribute name="context">
+        <xsl:value-of select="$rule/@context"/>
+      </attribute>
     </svrl:fired-rule>
   </xsl:template>
 
@@ -65,14 +68,20 @@
     <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
     <message> <xsl:sequence select="normalize-space($message)"/> </message>
     <svrl:suppressed-rule>
-      <xsl:sequence select="($rule/@id, $rule/@context, $rule/@role, $rule/@flag)"/>
+      <xsl:sequence select="($rule/@id, $rule/@role, $rule/@flag)"/>
+      <attribute name="context">
+        <xsl:value-of select="$rule/@context"/>
+      </attribute>
     </svrl:suppressed-rule>
   </xsl:template>
 
   <xsl:template name="schxslt-api:failed-assert">
     <xsl:param name="assert" as="element(sch:assert)" required="yes"/>
     <svrl:failed-assert location="{{schxslt:location({($assert/@subject, $assert/../@subject, '.')[1]})}}">
-      <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id, $assert/@test)"/>
+      <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id)"/>
+      <attribute name="test">
+        <xsl:value-of select="$assert/@test"/>
+      </attribute>
       <xsl:call-template name="schxslt:handle-detailed-report">
         <xsl:with-param name="schema" as="element(sch:schema)" tunnel="yes" select="$assert/../../.."/>
       </xsl:call-template>
@@ -82,7 +91,10 @@
   <xsl:template name="schxslt-api:successful-report">
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
     <svrl:successful-report location="{{schxslt:location({($report/@subject, $report/../@subject, '.')[1]})}}">
-      <xsl:sequence select="($report/@role, $report/@flag, $report/@id, $report/@test)"/>
+      <xsl:sequence select="($report/@role, $report/@flag, $report/@id)"/>
+      <attribute name="test">
+        <xsl:value-of select="$report/@test"/>
+      </attribute>
       <xsl:call-template name="schxslt:handle-detailed-report">
         <xsl:with-param name="schema" as="element(sch:schema)" tunnel="yes" select="$report/../../.."/>
       </xsl:call-template>
