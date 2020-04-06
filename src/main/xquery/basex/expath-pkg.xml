@@ -1,4 +1,4 @@
-<package xmlns="http://expath.org/ns/pkg" name="https://doi.org/10.5281/zenodo.1495494" abbrev="schxslt" spec="1.0" version="1.4.2">
+<package xmlns="http://expath.org/ns/pkg" name="https://doi.org/10.5281/zenodo.1495494" abbrev="schxslt" spec="1.0" version="1.4.4">
 
   <title>Schematron validation with SchXslt</title>
   <dependency processor="basex"/>
