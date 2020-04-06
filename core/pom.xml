@@ -77,7 +77,7 @@
       <plugin>
         <groupId>name.dmaus.schxslt</groupId>
         <artifactId>testsuite-maven-plugin</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
         <dependencies>
           <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -93,6 +93,7 @@
         </dependencies>
         <configuration>
           <testDir>src/test/schematron</testDir>
+          <testDir>src/test/schematron-conformance/src/main/resources/tests</testDir>
           <configFile>test-schematron.xml</configFile>
           <processors>
             <processor>
