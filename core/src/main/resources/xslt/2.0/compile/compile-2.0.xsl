@@ -126,7 +126,7 @@
     </desc>
     <param name="mode">Template mode</param>
   </doc>
-  <xsl:template match="sch:rule">
+  <xsl:template match="sch:rule" mode="schxslt:compile">
     <xsl:param name="mode" as="xs:string" required="yes"/>
 
     <xsl:call-template name="schxslt:check-multiply-defined">
@@ -149,7 +149,7 @@
             <xsl:call-template name="schxslt-api:fired-rule">
               <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
             </xsl:call-template>
-            <xsl:apply-templates select="sch:assert | sch:report"/>
+            <xsl:apply-templates select="sch:assert | sch:report" mode="schxslt:compile"/>
           </when>
           <otherwise>
             <xsl:call-template name="schxslt-api:suppressed-rule">
@@ -216,7 +216,7 @@
 
       </template>
 
-      <xsl:apply-templates select="current-group()/sch:rule">
+      <xsl:apply-templates select="current-group()/sch:rule" mode="schxslt:compile">
         <xsl:with-param name="mode" as="xs:string" select="$mode"/>
       </xsl:apply-templates>
 
