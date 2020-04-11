@@ -23,7 +23,7 @@
       <xsl:for-each select="$schema/sch:p">
         <svrl:text>
           <xsl:copy-of select="@id | @class | @icon"/>
-          <xsl:apply-templates select="node()"/>
+          <xsl:apply-templates select="node()" mode="schxslt:compile"/>
         </svrl:text>
       </xsl:for-each>
 
@@ -130,7 +130,7 @@
     </xsl:if>
     <xsl:if test="text() | *">
       <svrl:text>
-        <xsl:apply-templates select="node()"/>
+        <xsl:apply-templates select="node()" mode="schxslt:compile"/>
       </svrl:text>
     </xsl:if>
   </xsl:template>
@@ -152,7 +152,7 @@
     <svrl:diagnostic-reference diagnostic="{$head}">
       <svrl:text>
         <xsl:copy-of select="key('schxslt:diagnostics', $head)/@*"/>
-        <xsl:apply-templates select="key('schxslt:diagnostics', $head)/node()"/>
+        <xsl:apply-templates select="key('schxslt:diagnostics', $head)/node()" mode="schxslt:compile"/>
       </svrl:text>
     </svrl:diagnostic-reference>
 
@@ -188,7 +188,7 @@
         <xsl:choose>
           <xsl:when test="self::text() and normalize-space(.)">
             <svrl:text>
-              <xsl:apply-templates select="."/>
+              <xsl:apply-templates select="." mode="schxslt:compile"/>
             </svrl:text>
           </xsl:when>
           <xsl:otherwise>
