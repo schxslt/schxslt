@@ -27,6 +27,11 @@
       <artifactId>commons-cli</artifactId>
       <version>1.4</version>
     </dependency>
+    <dependency>
+      <groupId>net.sf.saxon</groupId>
+      <artifactId>Saxon-HE</artifactId>
+      <version>9.9.1-7</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -57,21 +62,4 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>saxon-he</id>
-      <activation>
-        <property>
-          <name>!dmaus.saxon-cp</name>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>net.sf.saxon</groupId>
-          <artifactId>Saxon-HE</artifactId>
-          <version>9.8.0-15</version>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
 </project>
