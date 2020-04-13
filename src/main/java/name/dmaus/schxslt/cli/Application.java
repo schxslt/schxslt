@@ -26,6 +26,7 @@ package name.dmaus.schxslt.cli;
 
 import name.dmaus.schxslt.Result;
 import name.dmaus.schxslt.Schematron;
+import name.dmaus.schxslt.SchematronException;
 
 import java.io.File;
 import java.io.Console;
@@ -47,7 +48,7 @@ import org.w3c.dom.Document;
 
 public class Application
 {
-    public static void main (final String[] args)
+    public static void main (final String[] args) throws SchematronException
     {
         Configuration configuration = new Configuration();
         configuration.parse(args);
@@ -88,7 +89,7 @@ public class Application
         this.schematron = schematron;
     }
 
-    public void execute (final File input)
+    public void execute (final File input) throws SchematronException
     {
         StreamSource in = new StreamSource(input);
         in.setSystemId(input);
@@ -100,7 +101,7 @@ public class Application
         }
     }
 
-    public void execute (final InputStream input)
+    public void execute (final InputStream input) throws SchematronException
     {
         Result result = schematron.validate(new StreamSource(input));
         printResult(result, "<stdin>");
@@ -109,7 +110,7 @@ public class Application
         }
     }
 
-    public void execute (final Console console)
+    public void execute (final Console console) throws SchematronException
     {
         if (console == null) {
             return;
