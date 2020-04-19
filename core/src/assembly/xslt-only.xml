@@ -7,7 +7,7 @@
   </formats>
   <fileSets>
     <fileSet>
-      <directory>src/main/resources/xslt</directory>
+      <directory>${project.build.directory}/xslt-only</directory>
       <outputDirectory/>
     </fileSet>
   </fileSets>
