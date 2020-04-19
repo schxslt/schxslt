@@ -10,6 +10,39 @@
 
   <xsl:import href="compile/compile-2.0.xsl"/>
 
+  <xsl:variable name="location-function" as="element()">
+    <function name="schxslt:location" as="xs:string">
+      <param name="node" as="node()"/>
+      <variable name="segments" as="xs:string*">
+        <for-each select="($node/ancestor-or-self::node())">
+          <variable name="position">
+            <number level="single"/>
+          </variable>
+          <choose>
+            <when test=". instance of element()">
+              <value-of select="concat('Q{', namespace-uri(.), '}', local-name(.), '[', $position, ']')"/>
+            </when>
+            <when test=". instance of attribute()">
+              <value-of select="concat('@Q{', namespace-uri(.), '}', local-name(.))"/>
+            </when>
+            <when test=". instance of processing-instruction()">
+              <value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
+            </when>
+            <when test=". instance of comment()">
+              <value-of select="concat('comment()[', $position, ']')"/>
+            </when>
+            <when test=". instance of text()">
+              <value-of select="concat('text()[', $position, ']')"/>
+            </when>
+            <otherwise/>
+          </choose>
+        </for-each>
+      </variable>
+
+      <value-of select="concat('/', string-join($segments, '/'))"/>
+    </function>
+  </xsl:variable>
+
   <xsl:template name="schxslt-api:report">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="phase" as="xs:string" required="yes"/>
@@ -103,14 +136,7 @@
 
   <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <xsl:variable name="location-function" select="($schema/sch:schema/xsl:function, document('compile-for-svrl.xsl')//xsl:function)[schxslt:is-location-function(.)][1]"/>
-    <xsl:if test="empty($location-function)">
-      <xsl:variable name="message">
-        Can't find required function Q{https://doi.org/10.5281/zenodo.1495494}location.
-      </xsl:variable>
-      <xsl:message terminate="yes" select="error(xs:QName('error:E0004'), normalize-space($message))"/>
-    </xsl:if>
-    <xsl:sequence select="$location-function"/>
+    <xsl:sequence select="($schema/xsl:function, $location-function)[schxslt:is-location-function(.)][1]"/>
   </xsl:template>
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
@@ -184,37 +210,6 @@
       </svrl:diagnostic-reference>
     </xsl:for-each>
   </xsl:template>
-
-  <xsl:function name="schxslt:location" as="xs:string">
-    <xsl:param name="node" as="node()"/>
-    <xsl:variable name="segments" as="xs:string*">
-      <xsl:for-each select="($node/ancestor-or-self::node())">
-        <xsl:variable name="position">
-          <xsl:number level="single"/>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test=". instance of element()">
-            <xsl:value-of select="concat('Q{', namespace-uri(.), '}', local-name(.), '[', $position, ']')"/>
-          </xsl:when>
-          <xsl:when test=". instance of attribute()">
-            <xsl:value-of select="concat('@Q{', namespace-uri(.), '}', local-name(.))"/>
-          </xsl:when>
-          <xsl:when test=". instance of processing-instruction()">
-            <xsl:value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
-          </xsl:when>
-          <xsl:when test=". instance of comment()">
-            <xsl:value-of select="concat('comment()[', $position, ']')"/>
-          </xsl:when>
-          <xsl:when test=". instance of text()">
-            <xsl:value-of select="concat('text()[', $position, ']')"/>
-          </xsl:when>
-          <xsl:otherwise/>
-        </xsl:choose>
-      </xsl:for-each>
-    </xsl:variable>
-
-    <xsl:value-of select="concat('/', string-join($segments, '/'))"/>
-  </xsl:function>
 
   <xsl:function name="schxslt:is-location-function" as="xs:boolean">
     <xsl:param name="function" as="element(xsl:function)"/>
