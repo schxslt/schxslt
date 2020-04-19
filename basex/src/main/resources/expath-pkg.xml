@@ -1,0 +1,27 @@
+<package xmlns="http://expath.org/ns/pkg" name="https://doi.org/10.5281/zenodo.1495494" abbrev="schxslt-basex" version="${project.version}" spec="1.0">
+  <title>${project.name}</title>
+  <xquery>
+    <namespace>https://doi.org/10.5281/zenodo.1495494</namespace>
+    <file>schxslt.xqm</file>
+  </xquery>
+  <xslt>
+    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/pipeline-for-svrl.xsl</import-uri>
+    <file>xslt/2.0/pipeline-for-svrl.xsl</file>
+  </xslt>
+  <xslt>
+    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/pipeline.xsl</import-uri>
+    <file>xslt/2.0/pipeline.xsl</file>
+  </xslt>
+  <xslt>
+    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/compile.xsl</import-uri>
+    <file>xslt/2.0/compile/compile.xsl</file>
+  </xslt>
+  <xslt>
+    <import-uri>https://schxslt.dmaus.name/import-uri/1.0/compile-for-svrl.xsl</import-uri>
+    <file>xslt/1.0/compile-for-svrl.xsl</file>
+  </xslt>
+  <xslt>
+    <import-uri>https://schxslt.dmaus.name/import-uri/1.0/compile.xsl</import-uri>
+    <file>xslt/1.0/compile/compile.xsl</file>
+  </xslt>
+</package>
