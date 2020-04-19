@@ -18,7 +18,7 @@
         <xsl:attribute name="xml:base" select="base-uri()"/>
       </xsl:if>
       <xsl:sequence select="@* except @xml:base"/>
-      <xsl:apply-templates mode="schxslt:expand">
+      <xsl:apply-templates mode="schxslt:expand" select="$schema">
         <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
         <xsl:with-param name="abstract-rules" as="element(sch:rule)*" tunnel="yes" select="$schema/sch:pattern/sch:rule[@abstract = 'true']"/>
       </xsl:apply-templates>
