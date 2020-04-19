@@ -4,7 +4,6 @@
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:key name="schxslt:abstract-patterns" match="sch:pattern[@abstract = 'true']" use="@id"/>
   <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
 
   <xsl:template match="sch:schema">
@@ -21,7 +20,9 @@
         <xsl:attribute name="xml:base" select="base-uri()"/>
       </xsl:if>
       <xsl:sequence select="@* except @xml:base"/>
-      <xsl:apply-templates mode="schxslt:expand"/>
+      <xsl:apply-templates mode="schxslt:expand">
+        <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
+      </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
 
@@ -45,7 +46,8 @@
 
   <!-- Instantiate an abstract pattern -->
   <xsl:template match="sch:pattern[@is-a]" mode="schxslt:expand">
-    <xsl:variable name="is-a" select="key('schxslt:abstract-patterns', @is-a)"/>
+    <xsl:param name="abstract-patterns" tunnel="yes" as="element(sch:pattern)*"/>
+    <xsl:variable name="is-a" select="$abstract-patterns[@id = current()/@is-a]"/>
     <xsl:copy>
       <xsl:sequence select="@* except @is-a"/>
       <xsl:apply-templates select="(if (not(@documents)) then $is-a/@documents else (), $is-a/node())" mode="schxslt:expand">
