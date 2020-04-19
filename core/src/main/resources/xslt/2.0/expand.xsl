@@ -4,8 +4,6 @@
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
-
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:expand">
       <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
@@ -22,6 +20,7 @@
       <xsl:sequence select="@* except @xml:base"/>
       <xsl:apply-templates mode="schxslt:expand">
         <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
+        <xsl:with-param name="abstract-rules" as="element(sch:rule)*" tunnel="yes" select="$schema/sch:pattern/sch:rule[@abstract = 'true']"/>
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
@@ -41,7 +40,8 @@
 
   <!-- Instantiate an abstract rule -->
   <xsl:template match="sch:extends[@rule]" mode="schxslt:expand">
-    <xsl:sequence select="key('schxslt:abstract-rules', @rule)/node()"/>
+    <xsl:param name="abstract-rules" tunnel="yes" as="element(sch:rule)*"/>
+    <xsl:sequence select="$abstract-rules[@id = current()/@rule]/node()"/>
   </xsl:template>
 
   <!-- Instantiate an abstract pattern -->
