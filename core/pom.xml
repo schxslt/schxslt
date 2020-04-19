@@ -196,24 +196,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>com.coderplus.maven.plugins</groupId>
-        <artifactId>copy-rename-maven-plugin</artifactId>
-        <version>1.0.1</version>
-        <executions>
-          <execution>
-            <id>rename-file</id>
-            <phase>package</phase>
-            <goals>
-              <goal>rename</goal>
-            </goals>
-            <configuration>
-              <sourceFile>${project.build.directory}/${project.artifactId}-${project.version}.xar.zip</sourceFile>
-              <destinationFile>${project.build.directory}/${project.artifactId}-${project.version}.xar</destinationFile>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
 
   </build>
