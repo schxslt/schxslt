@@ -194,20 +194,6 @@
               <finalName>${project.artifactId}-${project.version}</finalName>
             </configuration>
           </execution>
-          <execution>
-            <id>xar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>src/assembly/xar.xml</descriptor>
-              </descriptors>
-              <finalName>${project.artifactId}-${project.version}.xar</finalName>
-              <appendAssemblyId>false</appendAssemblyId>
-            </configuration>
-          </execution>
         </executions>
       </plugin>
       <plugin>
