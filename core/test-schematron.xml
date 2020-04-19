@@ -48,9 +48,9 @@
   <bean id="steps-2.0" class="java.util.ArrayList">
     <constructor-arg>
       <array value-type="java.lang.String">
-        <value>core/src/main/resources/xslt/2.0/include.xsl</value>
-        <value>core/src/main/resources/xslt/2.0/expand.xsl</value>
-        <value>core/src/main/resources/xslt/2.0/compile-for-svrl.xsl</value>
+        <value>src/main/resources/xslt/2.0/include.xsl</value>
+        <value>src/main/resources/xslt/2.0/expand.xsl</value>
+        <value>src/main/resources/xslt/2.0/compile-for-svrl.xsl</value>
       </array>
     </constructor-arg>
   </bean>
@@ -58,9 +58,9 @@
   <bean id="steps-1.0" class="java.util.ArrayList">
     <constructor-arg>
       <array value-type="java.lang.String">
-        <value>core/src/main/resources/xslt/1.0/include.xsl</value>
-        <value>core/src/main/resources/xslt/1.0/expand.xsl</value>
-        <value>core/src/main/resources/xslt/1.0/compile-for-svrl.xsl</value>
+        <value>src/main/resources/xslt/1.0/include.xsl</value>
+        <value>src/main/resources/xslt/1.0/expand.xsl</value>
+        <value>src/main/resources/xslt/1.0/compile-for-svrl.xsl</value>
       </array>
     </constructor-arg>
   </bean>
