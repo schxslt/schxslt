@@ -52,6 +52,28 @@
     </resources>
     <plugins>
       <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>prepare-zip</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/xslt-only</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources/xslt</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>io.xspec.maven</groupId>
         <artifactId>xspec-maven-plugin</artifactId>
         <version>1.5.1</version>
@@ -133,17 +155,51 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.2.0</version>
-        <configuration>
-          <descriptors>
-            <descriptor>src/assembly/xslt-only.xml</descriptor>
-          </descriptors>
-        </configuration>
         <executions>
           <execution>
+            <id>zip</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/assembly/xslt-only.xml</descriptor>
+              </descriptors>
+              <finalName>${project.artifactId}-${project.version}</finalName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>xar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/assembly/xar.xml</descriptor>
+              </descriptors>
+              <finalName>${project.artifactId}-${project.version}.xar</finalName>
+              <appendAssemblyId>false</appendAssemblyId>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.coderplus.maven.plugins</groupId>
+        <artifactId>copy-rename-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+          <execution>
+            <id>rename-file</id>
+            <phase>package</phase>
+            <goals>
+              <goal>rename</goal>
+            </goals>
+            <configuration>
+              <sourceFile>${project.build.directory}/${project.artifactId}-${project.version}.xar.zip</sourceFile>
+              <destinationFile>${project.build.directory}/${project.artifactId}-${project.version}.xar</destinationFile>
+            </configuration>
           </execution>
         </executions>
       </plugin>
