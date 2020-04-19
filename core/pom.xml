@@ -144,6 +144,11 @@
               <processorId>saxon</processorId>
             </testsuite>
             <testsuite>
+              <label>Schematron Conformance Tests for Saxon HE (${saxon.version}) using the micro pipeline</label>
+              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
+              <processorId>saxon-pipeline</processorId>
+            </testsuite>
+            <testsuite>
               <label>Bugs and features w/ Xalan (${xalan.version})</label>
               <directory>src/test/schematron</directory>
               <processorId>xalan</processorId>
