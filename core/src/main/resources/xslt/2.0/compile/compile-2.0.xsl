@@ -26,9 +26,9 @@
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
 
-  <xsl:template match="/">
+  <xsl:template match="/sch:schema">
     <xsl:call-template name="schxslt:compile">
-      <xsl:with-param name="schematron" as="element(sch:schema)" select="sch:schema"/>
+      <xsl:with-param name="schematron" as="element(sch:schema)" select="."/>
     </xsl:call-template>
   </xsl:template>
 
