@@ -143,7 +143,7 @@
         <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
       </xsl:call-template>
 
-      <schxslt:rule pattern="{generate-id(..)}">
+      <schxslt:rule pattern="{generate-id(..)}" context="{{generate-id(.)}}">
         <choose>
           <when test="empty($schxslt:rules[@pattern = '{generate-id(..)}'][@context = generate-id(current())])">
             <xsl:call-template name="schxslt-api:fired-rule">
