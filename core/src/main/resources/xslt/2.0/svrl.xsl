@@ -18,10 +18,10 @@
           </variable>
           <choose>
             <when test=". instance of element()">
-              <value-of select="concat('Q{', namespace-uri(.), '}', local-name(.), '[', $position, ']')"/>
+              <value-of select="concat('Q{{', namespace-uri(.), '}}', local-name(.), '[', $position, ']')"/>
             </when>
             <when test=". instance of attribute()">
-              <value-of select="concat('@Q{', namespace-uri(.), '}', local-name(.))"/>
+              <value-of select="concat('@Q{{', namespace-uri(.), '}}', local-name(.))"/>
             </when>
             <when test=". instance of processing-instruction()">
               <value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
