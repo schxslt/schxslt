@@ -33,10 +33,7 @@
         </svrl:ns-prefix-in-attribute-values>
       </xsl:for-each>
 
-      <for-each select="$schxslt:report/schxslt:pattern">
-        <copy-of select="node()"/>
-        <copy-of select="$schxslt:report/schxslt:rule[@pattern = current()/@id]/node()"/>
-      </for-each>
+      <copy-of select="$schxslt:report"/>
 
     </svrl:schematron-output>
 

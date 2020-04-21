@@ -134,20 +134,16 @@
       <xsl:choose>
         <xsl:when test="@documents">
           <for-each select="{@documents}">
-            <schxslt:pattern id="{generate-id(.)}">
-              <xsl:call-template name="schxslt-api:active-pattern">
-                <xsl:with-param name="pattern" select="."/>
-              </xsl:call-template>
-            </schxslt:pattern>
+            <xsl:call-template name="schxslt-api:active-pattern">
+              <xsl:with-param name="pattern" select="."/>
+            </xsl:call-template>
             <apply-templates select="document(normalize-space())" mode="{generate-id()}"/>
           </for-each>
         </xsl:when>
         <xsl:otherwise>
-          <schxslt:pattern id="{generate-id(.)}">
-            <xsl:call-template name="schxslt-api:active-pattern">
-              <xsl:with-param name="pattern" select="."/>
-            </xsl:call-template>
-          </schxslt:pattern>
+          <xsl:call-template name="schxslt-api:active-pattern">
+            <xsl:with-param name="pattern" select="."/>
+          </xsl:call-template>
           <apply-templates select="/" mode="{generate-id()}"/>
         </xsl:otherwise>
       </xsl:choose>
@@ -174,15 +170,14 @@
         <xsl:with-param name="bindings" select="sch:let"/>
       </xsl:call-template>
 
-      <schxslt:rule context="{{generate-id(.)}}" pattern="{generate-id(..)}">
-        <xsl:call-template name="schxslt-api:fired-rule">
-          <xsl:with-param name="rule" select="."/>
-        </xsl:call-template>
+      <xsl:call-template name="schxslt-api:fired-rule">
+        <xsl:with-param name="rule" select="."/>
+      </xsl:call-template>
 
-        <xsl:apply-templates select="sch:assert | sch:report" mode="schxslt:compile"/>
-      </schxslt:rule>
+      <xsl:apply-templates select="sch:assert | sch:report" mode="schxslt:compile"/>
 
       <apply-templates mode="{generate-id(..)}" select="node() | @*"/>
+
     </template>
 
   </xsl:template>

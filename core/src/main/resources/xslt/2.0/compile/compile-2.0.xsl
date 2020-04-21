@@ -82,12 +82,20 @@
           <xsl:with-param name="bindings" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
         </xsl:call-template>
 
-        <variable name="schxslt:report" as="element(schxslt:report)">
+        <variable name="report" as="element(schxslt:report)">
           <schxslt:report>
             <xsl:for-each select="$validation-stylesheet-body/@name">
               <call-template name="{.}"/>
             </xsl:for-each>
           </schxslt:report>
+        </variable>
+
+        <!-- Unwrap the intermediary report -->
+        <variable name="schxslt:report" as="node()*">
+          <for-each select="$report/schxslt:pattern">
+            <sequence select="node()"/>
+            <sequence select="$report/schxslt:rule[@pattern = current()/@id]/node()"/>
+          </for-each>
         </variable>
 
         <xsl:call-template name="schxslt-api:report">
