@@ -204,7 +204,7 @@
 
         <for-each select="$documents">
           <xsl:for-each select="current-group()">
-            <schxslt:pattern id="{generate-id()}">
+            <schxslt:pattern id="{generate-id()}" document="{.}">
               <xsl:call-template name="schxslt-api:active-pattern">
                 <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
               </xsl:call-template>
