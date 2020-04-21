@@ -66,7 +66,10 @@
         </svrl:ns-prefix-in-attribute-values>
       </xsl:for-each>
 
-      <sequence select="$schxslt:report"/>
+      <for-each select="$schxslt:report/schxslt:pattern">
+        <sequence select="node()"/>
+        <sequence select="$schxslt:report/schxslt:rule[@pattern = current()/@id]/node()"/>
+      </for-each>
 
     </svrl:schematron-output>
   </xsl:template>
