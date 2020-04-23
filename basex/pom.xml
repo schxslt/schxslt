@@ -39,7 +39,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/classes/content</outputDirectory>
+              <outputDirectory>src/main/resources/content</outputDirectory>
               <resources>
                 <resource>
                   <directory>../core/target/classes</directory>
