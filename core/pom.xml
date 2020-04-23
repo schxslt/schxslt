@@ -162,6 +162,11 @@
               <processorId>saxon</processorId>
             </testsuite>
             <testsuite>
+              <label>Bugs and features w/ Saxon (${saxon.version}) using the micro pipeline</label>
+              <directory>src/test/schematron</directory>
+              <processorId>saxon</processorId>
+            </testsuite>
+            <testsuite>
               <label>Bugs and features w/ xsltproc</label>
               <directory>src/test/schematron</directory>
               <processorId>xsltproc</processorId>
