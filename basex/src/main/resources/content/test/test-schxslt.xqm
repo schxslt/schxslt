@@ -43,3 +43,10 @@ declare %unit:test function test:validate-with-xslt2 () {
   return
     unit:assert($report//svrl:fired-rule)
 };
+
+declare %unit:test function test:validate-with-xslt3 () {
+  let $schema := <sch:schema queryBinding="xslt3"><sch:pattern><sch:rule context="sch:schema"><sch:assert test="true()"/></sch:rule></sch:pattern></sch:schema>
+  let $report := schxslt:validate($schema, $schema)
+  return
+    unit:assert($report//svrl:fired-rule)
+};
