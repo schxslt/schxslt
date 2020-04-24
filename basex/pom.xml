@@ -40,7 +40,7 @@
           </dependency>
         </dependencies>
         <configuration>
-          <path>src/main/resources/content/test</path>
+          <path>src/test/xquery</path>
         </configuration>
         <executions>
           <execution>

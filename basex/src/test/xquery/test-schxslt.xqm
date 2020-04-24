@@ -11,7 +11,7 @@ xquery version "3.1";
 
 module namespace test = 'http://basex.org/modules/xqunit-tests';
 
-import module namespace schxslt = "https://doi.org/10.5281/zenodo.1495494" at "../schxslt.xqm";
+import module namespace schxslt = "https://doi.org/10.5281/zenodo.1495494" at "../../main/resources/content/schxslt.xqm";
 
 declare namespace svrl = "http://purl.oclc.org/dsdl/svrl";
 declare namespace sch = "http://purl.oclc.org/dsdl/schematron";
