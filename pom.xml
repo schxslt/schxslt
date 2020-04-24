@@ -36,16 +36,6 @@
     <module>exist</module>
   </modules>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>ro.kuberam.maven.plugins</groupId>
-        <artifactId>kuberam-expath-plugin</artifactId>
-        <version>0.6.3</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <issueManagement>
     <url>https://github.com/schxslt/schxslt/issues</url>
     <system>GitHub Issues</system>
@@ -67,28 +57,6 @@
     <saxon.version>9.9.1-6</saxon.version>
     <xalan.version>2.7.2</xalan.version>
   </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>exist/src/main/xar-resources</directory>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-            <fileset>
-              <directory>basex/src/main/xar-resources</directory>
-              <followSymlinks>false</followSymlinks>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-    </plugins>
-
-  </build>
 
   <profiles>
     <profile>
