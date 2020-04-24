@@ -71,6 +71,22 @@
               </resources>
             </configuration>
           </execution>
+          <execution>
+            <id>prepare-xproc</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/xproc</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -185,12 +201,12 @@
           </execution>
         </executions>
       </plugin>
-      <!-- Build a ZIP file with only the XSLT stylesheets -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.2.0</version>
         <executions>
+          <!-- Build a ZIP file with only the XSLT stylesheets -->
           <execution>
             <id>zip</id>
             <phase>package</phase>
@@ -200,6 +216,20 @@
             <configuration>
               <descriptors>
                 <descriptor>src/assembly/xslt-only.xml</descriptor>
+              </descriptors>
+              <finalName>${project.artifactId}-${project.version}</finalName>
+            </configuration>
+          </execution>
+          <!-- Build a ZIP file with only XProc pipelines and XSLT stylesheets -->
+          <execution>
+            <id>xproc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/assembly/xproc.xml</descriptor>
               </descriptors>
               <finalName>${project.artifactId}-${project.version}</finalName>
             </configuration>
