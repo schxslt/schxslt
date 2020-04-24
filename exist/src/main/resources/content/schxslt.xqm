@@ -75,6 +75,8 @@ declare %private function schxslt:processor-path ($queryBinding as xs:string) as
       return "1.0"
     case "xslt2"
       return "2.0"
+    case "xslt3"
+      return "2.0"
     default
       return error(xs:QName("schxslt:UnsupportedQueryBinding"))
 };
