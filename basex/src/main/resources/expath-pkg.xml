@@ -17,6 +17,10 @@
     <file>xslt/2.0/compile/compile.xsl</file>
   </xslt>
   <xslt>
+    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/compile-for-svrl.xsl</import-uri>
+    <file>xslt/2.0/compile/compile-for-svrl.xsl</file>
+  </xslt>
+  <xslt>
     <import-uri>https://schxslt.dmaus.name/import-uri/1.0/compile-for-svrl.xsl</import-uri>
     <file>xslt/1.0/compile-for-svrl.xsl</file>
   </xslt>
