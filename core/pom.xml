@@ -21,11 +21,6 @@
       <name>David Maus</name>
       <email>schxslt@dmaus.name</email>
     </developer>
-    <developer>
-      <id>duncdrum</id>
-      <name>Duncan Paterson</name>
-      <email>duncan@exist-db.org</email>
-    </developer>
   </developers>
 
   <distributionManagement>
