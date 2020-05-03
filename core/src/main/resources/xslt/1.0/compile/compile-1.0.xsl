@@ -216,6 +216,23 @@
     </xsl:copy>
   </xsl:template>
 
+  <!-- Copy variable content -->
+  <xsl:template match="comment() | processing-instruction()" mode="schxslt:variable-content">
+    <xsl:copy-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="schxslt:variable-content">
+    <element namespace="{namespace-uri(.)}" name="{local-name(.)}">
+      <xsl:apply-templates select="node() | @*" mode="schxslt:variable-content"/>
+    </element>
+  </xsl:template>
+
+  <xsl:template match="@*" mode="schxslt:variable-content">
+    <attribute namespace="{namespace-uri(.)}" name="{local-name(.)}">
+      <value-of select="."/>
+    </attribute>
+  </xsl:template>
+
   <!-- Named templates -->
   <xsl:template name="schxslt:let-variable">
     <xsl:param name="bindings"/>
@@ -227,7 +244,7 @@
           </xsl:when>
           <xsl:otherwise>
             <variable name="{@name}">
-              <xsl:copy-of select="node()"/>
+              <xsl:apply-templates select="node()" mode="schxslt:variable-content"/>
             </variable>
           </xsl:otherwise>
         </xsl:choose>
@@ -245,7 +262,7 @@
           </xsl:when>
           <xsl:otherwise>
             <param name="{@name}">
-              <xsl:copy-of select="node()"/>
+              <xsl:apply-templates select="node()" mode="schxslt:variable-content"/>
             </param>
           </xsl:otherwise>
         </xsl:choose>
