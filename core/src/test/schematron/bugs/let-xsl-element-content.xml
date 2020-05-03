@@ -9,11 +9,10 @@
     <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern>
         <sch:let name="variable">
-          <xsl:element xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="foobar"/>
+          <xsl:element xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name=""/>
         </sch:let>
         <sch:rule context="/">
-          <sch:assert test="namespace-uri($variable/*) = 'http://www.w3.org/1999/XSL/Transform'"/>
-          <sch:assert test="local-name($variable/*) = 'element'"/>
+          <sch:assert test="true()"/>
         </sch:rule>
       </sch:pattern>
     </sch:schema>
