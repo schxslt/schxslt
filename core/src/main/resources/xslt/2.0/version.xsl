@@ -8,9 +8,9 @@
       <dct:creator>
         <dct:Agent>
           <skos:prefLabel><xsl:value-of select="schxslt:user-agent()"/></skos:prefLabel>
-          <dct:created><xsl:value-of select="current-dateTime()"/></dct:created>
         </dct:Agent>
       </dct:creator>
+      <dct:created><xsl:value-of select="current-dateTime()"/></dct:created>
     </rdf:Description>
   </xsl:template>
 
