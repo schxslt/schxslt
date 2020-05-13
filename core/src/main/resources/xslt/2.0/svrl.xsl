@@ -1,5 +1,6 @@
 <xsl:transform version="2.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
@@ -135,6 +136,22 @@
   <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:sequence select="($schema/xsl:function, $location-function)[schxslt:is-location-function(.)][1]"/>
+  </xsl:template>
+
+  <xsl:template name="schxslt-api:metadata">
+    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
+    <xsl:param name="source" as="element(rdf:Description)" required="yes"/>
+    <svrl:metadata xmlns:dct="http://purl.org/dc/terms/" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+      <dct:creator>
+        <dct:Agent>
+          <skos:prefLabel><value-of separator="/" select="(system-property('xsl:product-name'), system-property('xsl:product-version'))"/></skos:prefLabel>
+        </dct:Agent>
+      </dct:creator>
+      <dct:created><value-of select="current-dateTime()"/></dct:created>
+      <dct:source>
+        <xsl:sequence select="$source"/>
+      </dct:source>
+    </svrl:metadata>
   </xsl:template>
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">

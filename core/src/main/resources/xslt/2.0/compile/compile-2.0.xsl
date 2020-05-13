@@ -3,6 +3,7 @@
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
+               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -44,13 +45,17 @@
       </xsl:call-template>
     </xsl:variable>
 
+    <xsl:variable name="version" as="element(rdf:Description)">
+      <xsl:call-template name="schxslt:version"/>
+    </xsl:variable>
+
     <transform version="{schxslt:xslt-version($schematron)}">
       <xsl:for-each select="$schematron/sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
       <xsl:sequence select="$schematron/@xml:base"/>
 
-      <xsl:call-template name="schxslt:version"/>
+      <xsl:sequence select="$version"/>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
@@ -82,6 +87,13 @@
           <xsl:with-param name="bindings" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
         </xsl:call-template>
 
+        <variable name="metadata" as="element()?">
+          <xsl:call-template name="schxslt-api:metadata">
+            <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
+            <xsl:with-param name="source" as="element(rdf:Description)" select="$version"/>
+          </xsl:call-template>
+        </variable>
+
         <variable name="report" as="element(schxslt:report)">
           <schxslt:report>
             <xsl:for-each select="$validation-stylesheet-body/@name">
@@ -92,6 +104,7 @@
 
         <!-- Unwrap the intermediary report -->
         <variable name="schxslt:report" as="node()*">
+          <sequence select="$metadata"/>
           <for-each select="$report/schxslt:pattern">
             <sequence select="node()"/>
             <sequence select="$report/schxslt:rule[@pattern = current()/@id]/node()"/>

@@ -89,6 +89,12 @@
       <template match="/">
 
         <variable name="schxslt:report">
+          <xsl:call-template name="schxslt-api:metadata">
+            <xsl:with-param name="schema" select="."/>
+            <xsl:with-param name="source">
+              <xsl:call-template name="schxslt:version"/>
+            </xsl:with-param>
+          </xsl:call-template>
           <xsl:choose>
             <xsl:when test="$effective-phase = '#ALL'">
               <xsl:for-each select="sch:pattern">

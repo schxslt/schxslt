@@ -121,6 +121,16 @@
     <xsl:copy-of select="document('')/xsl:transform/xsl:template[@name = 'schxslt:location']"/>
   </xsl:template>
 
+  <xsl:template name="schxslt-api:metadata">
+    <xsl:param name="schema"/>
+    <xsl:param name="source"/>
+    <svrl:metadata xmlns:dct="http://purl.org/dc/terms/">
+      <dct:source>
+        <xsl:copy-of select="$source"/>
+      </dct:source>
+    </svrl:metadata>
+  </xsl:template>
+
   <xsl:template name="schxslt:detailed-report">
     <xsl:if test="@diagnostics">
       <xsl:call-template name="schxslt:copy-diagnostics"/>
