@@ -90,4 +90,16 @@
     <xsl:param name="schema"/>
   </xsl:template>
 
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Create metadata about the validaton process</p>
+    </desc>
+    <param name="schema">Schematron schema</param>
+    <param name="source">Description of the validation stylesheet</param>
+  </doc>
+  <xsl:template name="schxslt-api:metadata">
+    <xsl:param name="schema"/>
+    <xsl:param name="source"/>
+  </xsl:template>
+
 </xsl:transform>

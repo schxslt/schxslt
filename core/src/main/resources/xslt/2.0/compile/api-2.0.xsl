@@ -1,5 +1,6 @@
 <xsl:transform version="2.0"
                xmlns="http://www.w3.org/1999/XSL/TransformAlias"
+               xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
@@ -100,6 +101,18 @@
   </doc>
   <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
+  </xsl:template>
+
+  <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+    <desc>
+      <p>Create metadata about the validaton process</p>
+    </desc>
+    <param name="schema">Schematron schema</param>
+    <param name="source">Description of the validation stylesheet</param>
+  </doc>
+  <xsl:template name="schxslt-api:metadata">
+    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
+    <xsl:param name="source" as="element(rdf:Description)" required="yes"/>
   </xsl:template>
 
 </xsl:transform>
