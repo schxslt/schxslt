@@ -5,8 +5,7 @@
   <version>1.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>SchXslt</name>
-  <description>An XSLT-based Schematron processor</description>
+  <name>SchXslt Parent</name>
   <url>https://doi.org/10.5281/zenodo.1495494</url>
 
   <licenses>
@@ -21,7 +20,7 @@
     <developer>
       <id>dmaus</id>
       <name>David Maus</name>
-      <email>schxslt@dmaus.name</email>
+      <email>dmaus@dmaus.name</email>
     </developer>
   </developers>
 
@@ -34,6 +33,8 @@
     <module>core</module>
     <module>basex</module>
     <module>exist</module>
+    <module>ant</module>
+    <module>cli</module>
   </modules>
 
   <issueManagement>
@@ -41,81 +42,10 @@
     <system>GitHub Issues</system>
   </issueManagement>
 
-  <distributionManagement>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <saxon.version>9.9.1-6</saxon.version>
     <xalan.version>2.7.2</xalan.version>
   </properties>
 
-  <profiles>
-    <profile>
-      <id>release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.1</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.2.0</version>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.8</version>
-            <extensions>true</extensions>
-            <configuration>
-              <serverId>ossrh</serverId>
-              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-              <autoReleaseAfterClose>true</autoReleaseAfterClose>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

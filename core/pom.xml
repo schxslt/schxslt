@@ -11,17 +11,9 @@
   <version>1.5-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>SchXslt</name>
+  <name>SchXslt Core</name>
   <description>An XSLT-based Schematron processor</description>
   <url>https://doi.org/10.5281/zenodo.1495494</url>
-
-  <developers>
-    <developer>
-      <id>dmaus</id>
-      <name>David Maus</name>
-      <email>schxslt@dmaus.name</email>
-    </developer>
-  </developers>
 
   <distributionManagement>
     <repository>
@@ -33,10 +25,6 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
 
   <build>
     <resources>
@@ -110,7 +98,7 @@
       <plugin>
         <groupId>name.dmaus.schxslt</groupId>
         <artifactId>testsuite-maven-plugin</artifactId>
-        <version>1.4</version>
+        <version>1.5</version>
         <dependencies>
           <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -167,6 +155,7 @@
               <processorId>xalan</processorId>
               <skip>
                 <param>svrl-suppressed-rule</param>
+                <param>xslt-key-element-content-01</param>
               </skip>
             </testsuite>
             <testsuite>
@@ -185,6 +174,7 @@
               <processorId>xsltproc</processorId>
               <skip>
                 <param>svrl-suppressed-rule</param>
+                <param>xslt-key-element-content-01</param>
               </skip>
             </testsuite>
           </testsuites>

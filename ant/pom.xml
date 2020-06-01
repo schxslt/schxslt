@@ -1,28 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>name.dmaus.schxslt</groupId>
+  <parent>
+    <groupId>name.dmaus.schxslt</groupId>
+    <artifactId>schxslt-parent</artifactId>
+    <version>1.5-SNAPSHOT</version>
+  </parent>
+
   <artifactId>ant</artifactId>
-  <version>1.4</version>
 
   <name>SchXslt Ant</name>
   <description>Ant task for Schematron validation with SchXslt</description>
   <url>https://github.com/schxslt/schxslt-ant</url>
-
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>https://opensource.org/licenses/MIT</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-
-  <developers>
-    <developer>
-      <id>dmaus</id>
-      <name>David Maus</name>
-      <email>schxslt@dmaus.name</email>
-    </developer>
-  </developers>
 
   <scm>
     <url>https://github.com/schxslt/schxslt-ant</url>
@@ -58,12 +46,12 @@
     <dependency>
       <groupId>name.dmaus.schxslt</groupId>
       <artifactId>java</artifactId>
-      <version>2.0.1</version>
+      <version>[2.0.1,)</version>
     </dependency>
     <dependency>
       <groupId>name.dmaus.schxslt</groupId>
       <artifactId>schxslt</artifactId>
-      <version>1.4.5</version>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 
