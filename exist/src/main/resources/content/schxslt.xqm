@@ -60,6 +60,20 @@ declare function schxslt:validate ($document as node(), $schematron as node()) a
 };
 
 (:~
+ : Return URI of compiler stylesheet.
+ :
+ : @error  Query language not supported
+ :
+ : @param  $queryBinding Query language token
+ : @return URI of compiler stylesheet.
+ :)
+declare function schxslt:resolve-compiler-uri ($queryBinding as xs:string) as xs:string {
+  let $xsltver := schxslt:processor-path($queryBinding)
+  return
+    "xmldb:exist://" || $schxslt:base-dir || "/content/xslt/" || $xsltver || "/compile/compile-" || $xsltver || ".xsl" 
+};
+
+(:~
  : Return path segment to processor for requested query language.
  :
  : @error  Query language not supported
