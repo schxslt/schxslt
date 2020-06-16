@@ -5,27 +5,27 @@
     <file>schxslt.xqm</file>
   </xquery>
   <xslt>
-    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/pipeline-for-svrl.xsl</import-uri>
+    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-pipeline-for-svrl-2.0</import-uri>
     <file>xslt/2.0/pipeline-for-svrl.xsl</file>
   </xslt>
   <xslt>
-    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/pipeline.xsl</import-uri>
+    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-pipeline-2.0</import-uri>
     <file>xslt/2.0/pipeline.xsl</file>
   </xslt>
   <xslt>
-    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/compile.xsl</import-uri>
+    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-compile-2.0</import-uri>
     <file>xslt/2.0/compile/compile.xsl</file>
   </xslt>
   <xslt>
-    <import-uri>https://schxslt.dmaus.name/import-uri/2.0/compile-for-svrl.xsl</import-uri>
+    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-compile-for-svrl-2.0</import-uri>
     <file>xslt/2.0/compile/compile-for-svrl.xsl</file>
   </xslt>
   <xslt>
-    <import-uri>https://schxslt.dmaus.name/import-uri/1.0/compile-for-svrl.xsl</import-uri>
+    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-compile-for-svrl-1.0</import-uri>
     <file>xslt/1.0/compile-for-svrl.xsl</file>
   </xslt>
   <xslt>
-    <import-uri>https://schxslt.dmaus.name/import-uri/1.0/compile.xsl</import-uri>
+    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-compile-for-svrl-1.0</import-uri>
     <file>xslt/1.0/compile/compile.xsl</file>
   </xslt>
 </package>
