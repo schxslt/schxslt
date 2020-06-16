@@ -10,13 +10,8 @@
   <p:input  port="source"/>
   <p:input  port="schema"/>
 
-  <p:output port="result" pipe="result@identity"/>
+  <p:output port="result" pipe="source@validate-with-schematron"/>
   <p:output port="report" pipe="result@validate"/>
-
-  <!-- Workaround as of 2020-05-14; See: https://sourceforge.net/p/morganaxproc/tickets/20/ -->
-  <p:identity name="identity">
-    <p:with-input port="source" pipe="source@validate-with-schematron"/>
-  </p:identity>
 
   <schxslt:compile-schematron name="compile-schematron" phase="{$phase}">
     <p:with-input pipe="source@validate-with-schematron"/>
