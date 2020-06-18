@@ -73,6 +73,34 @@ declare function schxslt:resolve-compiler-uri ($queryBinding as xs:string) as xs
 };
 
 (:~
+ : Perform inclusions.
+ :
+ : @param  $schema Schematron
+ : @return Schematron
+ :)
+declare function schxslt:include ($schema as element(sch:schema)) as element(sch:schema) {
+  let $queryBinding := $schema/@queryBinding
+  let $xsltver := schxslt:processor-path($queryBinding)
+  let $include := file:base-dir() || "/xslt/" || $xsltver || "/include.xsl"
+  return
+    $schema => xslt:transform($include, map{})
+};
+
+(:~
+ : Expand abstract rules and patterns.
+ :
+ : @param  $schema Schematron
+ : @return Schematron
+ :)
+declare function schxslt:expand ($schema as element(sch:schema)) as element(sch:schema) {
+  let $queryBinding := $schema/@queryBinding
+  let $xsltver := schxslt:processor-path($queryBinding)
+  let $expand := file:base-dir() || "/xslt/" || $xsltver || "/expand.xsl"
+  return
+    $schema => xslt:transform($expand, map{})
+};
+
+(:~
  : Return path segment to processor for requested query language.
  :
  : @error  Query language not supported

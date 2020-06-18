@@ -60,6 +60,34 @@ declare function schxslt:validate ($document as node(), $schematron as node()) a
 };
 
 (:~
+ : Perform inclusions.
+ :
+ : @param  $schema Schematron
+ : @return Schematron
+ :)
+declare function schxslt:include ($schema as element(sch:schema)) as element(sch:schema) {
+  let $queryBinding := $schema/@queryBinding
+  let $xsltver := schxslt:processor-path($queryBinding)
+  let $include := "xmldb:exist://" || $schxslt:base-dir || "/content/xslt/" || $xsltver || "/include.xsl"
+  return
+    $schema => transform:transform($include, ())
+};
+
+(:~
+ : Expand abstract rules and patterns.
+ :
+ : @param  $schema Schematron
+ : @return Schematron
+ :)
+declare function schxslt:expand ($schema as element(sch:schema)) as element(sch:schema) {
+  let $queryBinding := $schema/@queryBinding
+  let $xsltver := schxslt:processor-path($queryBinding)
+  let $expand := "xmldb:exist://" || $schxslt:base-dir || "/content/xslt/" || $xsltver || "/expand.xsl"
+  return
+    $schema => transform:transform($expand, ())
+};
+
+(:~
  : Return URI of compiler stylesheet.
  :
  : @error  Query language not supported
@@ -70,7 +98,7 @@ declare function schxslt:validate ($document as node(), $schematron as node()) a
 declare function schxslt:resolve-compiler-uri ($queryBinding as xs:string) as xs:string {
   let $xsltver := schxslt:processor-path($queryBinding)
   return
-    "xmldb:exist://" || $schxslt:base-dir || "/content/xslt/" || $xsltver || "/compile/compile-" || $xsltver || ".xsl" 
+    "xmldb:exist://" || $schxslt:base-dir || "/content/xslt/" || $xsltver || "/compile/compile-" || $xsltver || ".xsl"
 };
 
 (:~
