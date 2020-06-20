@@ -17,7 +17,6 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>schxslt</artifactId>
       <version>${project.version}</version>
-      <type>jar</type>
     </dependency>
   </dependencies>
 

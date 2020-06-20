@@ -6,10 +6,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>name.dmaus.schxslt</groupId>
   <artifactId>schxslt</artifactId>
-  <version>1.5-SNAPSHOT</version>
-  <packaging>jar</packaging>
 
   <name>SchXslt Core</name>
   <description>An XSLT-based Schematron processor</description>
