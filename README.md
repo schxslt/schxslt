@@ -1,110 +1,114 @@
-# SchXslt \[ʃˈɛksl̩t\] – An XSLT-based Schematron processor
+SchXslt \[ʃˈɛksl̩t\] – An XSLT-based Schematron processor
+==
 
-SchXslt is copyright (c) 2018-2020 by David Maus &lt;dmaus@dmaus.name&gt;
-and released under the terms of the MIT license.
+SchXslt is copyright (c) 2018–2020 by David Maus &lt;dmaus@dmaus.name&gt; and released under the terms of the MIT
+license.
 
-[![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911)
+[![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911) 
+[![Build Status](https://travis-ci.org/schxslt/schxslt.svg?branch=master)](https://travis-ci.org/schxslt/schxslt)
 
-SchXslt is a conforming Schematron processor implemented entirely in
-XSLT. It operates as a three-stage transformation process that
-translates a Schematron to an XSLT validation stylesheet. This
-stylesheet outputs a validation report in the Schematron Validation
-Report Language (SVRL) when applied to an instance document.
+SchXslt is a Schematron processor implemented entirely in XSLT. It transforms a Schemtron schema document to an XSLT
+stylesheet that you apply to the document(s) to be validated.
 
-With this respect it operates much like the
-["skeleton" implementation](https://github.com/schematron/schematron)
-by Rick Jelliffe and others.
+Installation
+--
 
-## Installation and Building
-This repo contains the source code for the `core` schxslt module as well as two expath packages for use with:
--   [exist-db](https://www.exist-db.org)
--   [basex](https://www.basex.org)
+Depending on your environment there are several ways to install SchXslt.
 
-Compiled `.xar` files for `exist` and `basex` can be downloaded from the [releases](https://github.com/schxslt/schxslt/releases) page here on github. Alternatively, to build from source you need [maven](https://maven.apache.org/index.html) version `3.6.0` or later. After forking or cloning this repo call:
-```bash
-mvn clean package
+* Starting with version 1.5 every release on [this repository's release
+  page](https://github.com/schxslt/schxslt/releases) provides a ZIP file with just the XSLT stylesheets. This page also
+  provides a ZIP file with the XSLT stylesheets and two [XProc 1.0](https://w3.org/tr/xproc) steps. Just download and
+  unzip.
+
+* A Java package is published to [Maven Central](https://mvnrepository.com/artifact/name.dmaus.schxslt/schxslt). Use it
+  with Maven or the Java dependency management tool of your choice.
+
+* If you use [BaseX](https://basex.org) or [eXist](https://exist-db.org) you can download installable XQuery modulesq
+  from [this repository's release page](https://github.com/schxslt/schxslt/releases) as well.
+
+Using SchXslt
+--
+
+### XSLT Stylesheets
+
+The simplest way to use SchXslt is to download the ZIP file with just the stylesheets from the
+[releaes](https://github.com/schxslt/schxslt/releases) page. To validate documents with your Schematron you first
+transform it with the ```pipeline-for-svrl.xsl``` stylesheet. This creates the XSL transformation that creates a
+validation report when applied to a document.
+
+### Java applications
+
+To use SchXslt in your Java application define the following Maven dependency:
+
+```xml
+<dependency>
+  <groupId>name.dmaus.schxslt</groupId>
+  <artifactId>schxslt</artifactId>
+  <version>{VERSION}</version>
+</dependency>
 ```
 
-You will find the core's `jar` file and the `xar` packages inside the `target` directories of each module.
+Where {VERSION} is replaced with the current SchXslt version.
 
-To run unit tests for each module call:
+Also take a look at [SchXslt Java](https://github.com/schxslt/schxslt-java), a set of Java classes for Schematron
+validation with SchXslt.
 
-```bash
-mvn test
-```
+### XQuery
 
-## Compiling Schematron to validation stylesheet
-Compiling validation stylesheets consists of up to three steps.
-
-### Step 1: Incorporate external definitions
-All external definitions referenced by `sch:include` and `sch:extends`
-are recursively copied into the source Schematron. The base URI of external
-definitions is preserved such that relative URI references still resolve
-to the right documents.
-
-This step can be skipped if the Schematron does not reference external
-definitions.
-
-The responsible stylesheet is [include.xsl](src/main/resources/xslt/2.0/include.xsl).
+The XQuery module provides a function ```schxslt:validate()``` that validates a document and returns a validation report
+expressed in the Schematron Validation Report Language (SVRL). You import the module using its namespace URI.
 
 ```
-saxon -xsl:src/main/resources/xslt/2.0/include.xsl -o:stage-1.sch </path/to/schematron>
-```
+import module namespace schxslt = "https://doi.org/10.5281/zenodo.1495494";
 
-### Step 2: Expand abstract patterns and rules
-Abstract patterns and rules are instantiated.
+let $document := <ex:example xmlns:ex="https://example.com/ns"/>
+let $schema := 
+  <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
+    <sch:pattern>
+      <sch:rule context="/">
+        <sch:assert test="true()">Always true</sch:assert>
+      </sch:rule>
+    </sch:pattern>
+  </sch:schema>
 
-This step can be skipped if the Schematron does not define abstract
-patterns or rules.
-
-The responsible stylesheet is [expand.xsl](src/main/resources/xslt/2.0/expand.xsl).
-
-```
-saxon -xsl:src/main/resources/xslt/2.0/expand.xsl -o:stage-2.sch stage-1.sch
-```
-
-### Step 3: Compile validation stylesheet
-Compiles an XSLT 2.0 validation stylesheet that creates an SVRL report
-document.
-
-The responsible stylesheet is [compile-for-svrl.xsl](src/main/resources/xslt/2.0/compile-for-svrl.xsl).
-
-This stylesheet takes an optional argument `phase` to validate in the selected
-phase. If no phase is requested the value of the `@defaultPhase` attribute is
-used if present. Otherwise, it defaults to phase `#ALL` and validates
-all patterns.
+return
+  schxslt:validate($document, $schema)
 
 ```
-saxon -xsl:src/main/resources/xslt/2.0/compile-for-svrl.xsl -o:stage-3.xsl stage-2.sch [phase=myphase]
-```
 
-## Using XProc
+### Ant
 
-With an XProc 1.0 processor installed you can create the validation
-stylesheet with the step `compile-schematron.xpl`.
+TBD
 
-```
-calabash -i </path/to/schematron> -o:stage-3.xsl src/main/resources/xproc/compile-schematron.xpl
-```
+### Command line
 
-Lastly, SchXslt comes with another XProc step
-`validate-with-schematron.xpl` that performs schematron validation
-using SchXslt's stylesheets. To run it from the command line you have
-to pipe the document to validate in the input port `source`, and
-the Schematron in the input port `schema.` The step sends the
-validation report to the `result` output port.
+TBD
+
+Building
+--
+
+SchXslt uses the [Maven](https://maven.apache.org) build tool to create installable packages. To create the packages for
+yourself clone this repository, install [Maven](https://maven.apache.org) and run it with the ```package``` phase.
 
 ```
-calabash -i source=</path/to/document> -i schema=</path/to/schema> src/main/resources/xproc/validate-with-schematron.xpl
+dmaus@carbon ~ % git clone https://github.com/schxslt/schxslt.git
+Cloning into 'schxslt'...
+remote: Enumerating objects: 450, done.
+remote: Counting objects: 100% (450/450), done.
+remote: Compressing objects: 100% (298/298), done.
+remote: Total 3789 (delta 172), reused 374 (delta 111), pack-reused 3339
+Receiving objects: 100% (3789/3789), 470.87 KiB | 1.05 MiB/s, done.
+Resolving deltas: 100% (1607/1607), done.
+
+dmaus@carbon ~ % mvn package
 ```
 
-## The callback API
-SchXslt lets you customize the parts of the validation stylesheet that
-report on active patterns, fired rule, failed assertions, and
-successful reports. The compiler calls named templates in the
-`https://doi.org/10.5281/zenodo.1495494#api` namespace that are
-expected to create the part of the validation stylesheet that handles
-respective reporting.
+This runs the unit tests and creates the following files:
 
-You can find the API documentation in the [docs/api](docs/api/index.html)
-directory.
+* core/target/schxslt-{VERSION}.jar (Java archive)
+* core/target/schxslt-{VERSION}-xslt-only.zip (ZIP file with stylesheets)
+* exist/target/schxslt-exist-{VERSION}.xar (XQuery package for eXist)
+* basex/target/schxslt-basex-{VERSION}.xar (XQuery package for BaseX)
+
+Where {VERSION} is replaced with the current SchXslt version.
+
