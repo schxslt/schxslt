@@ -50,9 +50,3 @@ declare %unit:test function test:validate-with-xslt3 () {
   return
     unit:assert($report//svrl:fired-rule)
 };
-
-declare %unit:test function test:resolve-compiler-uri () {
-  let $compilerUri := schxslt:resolve-compiler-uri("xslt2")
-  return
-    unit:assert($compilerUri != "")
-};
