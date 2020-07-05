@@ -25,7 +25,7 @@
     <file>xslt/1.0/compile-for-svrl.xsl</file>
   </xslt>
   <xslt>
-    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-compile-for-svrl-1.0</import-uri>
+    <import-uri>https://doi.org/10.5281/zenodo.1495494#import-compile-1.0</import-uri>
     <file>xslt/1.0/compile/compile.xsl</file>
   </xslt>
 </package>
