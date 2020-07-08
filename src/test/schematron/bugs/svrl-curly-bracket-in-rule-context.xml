@@ -1,0 +1,22 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="svrl-curly-bracket-in-rule-context">
+  <label>Literal curly brackets can be used in a rule context expression</label>
+  <reference>https://github.com/schxslt/schxslt/issues/113</reference>
+  <documents>
+    <primary filename="document.xml">
+      <element xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:rule context="/*['}foo{' = '}foo{']">
+          <sch:assert test="false()"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+    <expectation test="//svrl:fired-rule/@context = &quot;/*['}foo{' = '}foo{']&quot;"/>
+  </expectations>
+</testcase>
+
