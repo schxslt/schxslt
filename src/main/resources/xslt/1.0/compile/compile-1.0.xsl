@@ -67,18 +67,16 @@
       </xsl:call-template>
       <xsl:choose>
         <xsl:when test="$effective-phase = '#ALL'">
-          <xsl:call-template name="schxslt:detect-name-collisions">
-            <xsl:with-param name="bindings-1" select="sch:phase[@id = $effective-phase]/sch:let | sch:let"/>
-            <xsl:with-param name="bindings-2" select="sch:pattern/sch:let"/>
+          <xsl:call-template name="schxslt:check-multiply-defined">
+            <xsl:with-param name="bindings" select="sch:pattern/sch:let | sch:phase[@id = $effective-phase]/sch:let | sch:let"/>
           </xsl:call-template>
           <xsl:call-template name="schxslt:let-variable">
             <xsl:with-param name="bindings" select="sch:pattern/sch:let"/>
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="schxslt:detect-name-collisions">
-            <xsl:with-param name="bindings-1" select="sch:phase[@id = $effective-phase]/sch:let | sch:let"/>
-            <xsl:with-param name="bindings-2" select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]/sch:let"/>
+          <xsl:call-template name="schxslt:check-multiply-defined">
+            <xsl:with-param name="bindings" select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]/sch:let | sch:phase[@id = $effective-phase]/sch:let | sch:let"/>
           </xsl:call-template>
           <xsl:call-template name="schxslt:let-variable">
             <xsl:with-param name="bindings" select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]/sch:let"/>
@@ -163,6 +161,10 @@
   </xsl:template>
 
   <xsl:template match="sch:rule">
+
+    <xsl:call-template name="schxslt:check-multiply-defined">
+      <xsl:with-param name="bindings" select="sch:let"/>
+    </xsl:call-template>
 
     <template match="{@context}" mode="{generate-id(..)}" priority="{count(following-sibling::sch:rule)}">
       <xsl:call-template name="schxslt:let-variable">
@@ -252,13 +254,13 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="schxslt:detect-name-collisions">
-    <xsl:param name="bindings-1"/>
-    <xsl:param name="bindings-2"/>
-    <xsl:for-each select="$bindings-1 | $bindings-2">
-      <xsl:if test="count($bindings-1/self::sch:let[@name = current()/@name]) + count($bindings-2/self::sch:let[@name = current()/@name]) != 1">
+  <xsl:template name="schxslt:check-multiply-defined">
+    <xsl:param name="bindings"/>
+    <xsl:for-each select="$bindings">
+      <xsl:if test="count($bindings/self::sch:let[@name = current()/@name]) != 1">
         <xsl:message terminate="yes">
-          Compilation aborted because of variable name conflicts: <xsl:value-of select="@name"/>
+          Compilation aborted: It is an error for a variable to be multiply defined
+          <xsl:value-of select="@name"/>
         </xsl:message>
       </xsl:if>
     </xsl:for-each>

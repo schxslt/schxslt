@@ -129,6 +129,10 @@
   <xsl:template match="sch:rule">
     <xsl:param name="mode" as="xs:string" required="yes"/>
 
+    <xsl:call-template name="schxslt:check-multiply-defined">
+      <xsl:with-param name="bindings" select="sch:let" as="element(sch:let)*"/>
+    </xsl:call-template>
+
     <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
       <xsl:sequence select="(@xml:base, ../@xml:base)"/>
 
