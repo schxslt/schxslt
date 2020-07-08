@@ -47,6 +47,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <saxon.version>9.9.1-6</saxon.version>
+    <xalan.version>2.7.2</xalan.version>
   </properties>
 
   <build>
@@ -70,6 +72,89 @@
             <phase>test</phase>
             <goals>
               <goal>run-xspec</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>name.dmaus.schxslt</groupId>
+        <artifactId>testsuite-maven-plugin</artifactId>
+        <version>1.6.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>${saxon.version}</version>
+          </dependency>
+          <!-- https://mvnrepository.com/artifact/xalan/xalan -->
+          <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>${xalan.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <config>test-schematron.xml</config>
+          <testsuites>
+            <testsuite>
+              <label>Schematron Conformance Tests for Xalan (${xalan.version})</label>
+              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
+              <processorId>xalan</processorId>
+              <skip>
+                <param>include-baseuri-fixup</param>
+                <param>extends-baseuri-fixup</param>
+                <param>pattern-subordinate-document-01</param>
+                <param>pattern-subordinate-document-02</param>
+                <param>svrl-suppressed-rule</param>
+              </skip>
+            </testsuite>
+            <testsuite>
+              <label>Schematron Conformance Tests for xsltproc</label>
+              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
+              <processorId>xsltproc</processorId>
+              <skip>
+                <param>include-baseuri-fixup</param>
+                <param>extends-baseuri-fixup</param>
+                <param>pattern-subordinate-document-01</param>
+                <param>pattern-subordinate-document-02</param>w
+                <param>svrl-suppressed-rule</param>
+              </skip>
+            </testsuite>
+            <testsuite>
+              <label>Schematron Conformance Tests for Saxon HE (${saxon.version})</label>
+              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
+              <processorId>saxon</processorId>
+            </testsuite>
+            <testsuite>
+              <label>Bugs and features w/ Xalan (${xalan.version})</label>
+              <directory>src/test/schematron</directory>
+              <processorId>xalan</processorId>
+              <skip>
+                <param>svrl-suppressed-rule</param>
+                <param>xslt-key-element-content-01</param>
+              </skip>
+            </testsuite>
+            <testsuite>
+              <label>Bugs and features w/ Saxon (${saxon.version})</label>
+              <directory>src/test/schematron</directory>
+              <processorId>saxon</processorId>
+            </testsuite>
+            <testsuite>
+              <label>Bugs and features w/ xsltproc</label>
+              <directory>src/test/schematron</directory>
+              <processorId>xsltproc</processorId>
+              <skip>
+                <param>svrl-suppressed-rule</param>
+                <param>xslt-key-element-content-01</param>
+              </skip>
+            </testsuite>
+          </testsuites>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>test-schematron</goal>
             </goals>
           </execution>
         </executions>

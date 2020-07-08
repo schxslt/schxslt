@@ -1,0 +1,89 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+  <bean id="saxon" class="name.dmaus.schxslt.testsuite.JavaValidationFactory">
+    <constructor-arg><value>SchXslt / Saxon</value></constructor-arg>
+    <constructor-arg><value>xslt2</value></constructor-arg>
+    <constructor-arg ref="xslt-saxon"/>
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>svrl</value>
+        <value>iso2016</value>
+      </array>
+    </constructor-arg>
+    <constructor-arg ref="steps-2.0"/>
+  </bean>
+
+  <bean id="saxon-pipeline" class="name.dmaus.schxslt.testsuite.JavaValidationFactory">
+    <constructor-arg><value>SchXslt Pipeline / Saxon</value></constructor-arg>
+    <constructor-arg><value>xslt2</value></constructor-arg>
+    <constructor-arg ref="xslt-saxon"/>
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>svrl</value>
+        <value>iso2016</value>
+      </array>
+    </constructor-arg>
+    <constructor-arg ref="pipeline-2.0"/>
+  </bean>
+
+  <bean id="xalan" class="name.dmaus.schxslt.testsuite.JavaValidationFactory">
+    <constructor-arg><value>SchXslt / Xalan</value></constructor-arg>
+    <constructor-arg><value>xslt</value></constructor-arg>
+    <constructor-arg ref="xslt-xalan"/>
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>svrl</value>
+        <value>iso2016</value>
+      </array>
+    </constructor-arg>
+    <constructor-arg ref="steps-1.0"/>
+  </bean>
+
+  <bean id="xsltproc" class="name.dmaus.schxslt.testsuite.CommandlineValidationFactory">
+    <constructor-arg><value>SchXslt / xsltproc</value></constructor-arg>
+    <constructor-arg><value>xslt</value></constructor-arg>
+    <constructor-arg ref="xslt-xsltproc"/>
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>svrl</value>
+        <value>iso2016</value>
+      </array>
+    </constructor-arg>
+    <constructor-arg ref="steps-1.0"/>
+  </bean>
+
+  <bean id="xslt-saxon" class="net.sf.saxon.TransformerFactoryImpl"/>
+  <bean id="xslt-xalan" class="org.apache.xalan.processor.TransformerFactoryImpl"/>
+  <bean id="xslt-xsltproc" class="name.dmaus.schxslt.testsuite.XsltprocCommandlineBuilder"/>
+
+  <bean id="pipeline-2.0" class="java.util.ArrayList">
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>src/main/resources/xslt/2.0/pipeline-for-svrl.xsl</value>
+      </array>
+    </constructor-arg>
+  </bean>
+
+  <bean id="steps-2.0" class="java.util.ArrayList">
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>src/main/resources/xslt/2.0/include.xsl</value>
+        <value>src/main/resources/xslt/2.0/expand.xsl</value>
+        <value>src/main/resources/xslt/2.0/compile-for-svrl.xsl</value>
+      </array>
+    </constructor-arg>
+  </bean>
+
+  <bean id="steps-1.0" class="java.util.ArrayList">
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>src/main/resources/xslt/1.0/include.xsl</value>
+        <value>src/main/resources/xslt/1.0/expand.xsl</value>
+        <value>src/main/resources/xslt/1.0/compile-for-svrl.xsl</value>
+      </array>
+    </constructor-arg>
+  </bean>
+
+</beans>
