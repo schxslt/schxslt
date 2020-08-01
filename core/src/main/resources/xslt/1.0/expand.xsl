@@ -4,7 +4,6 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:key name="schxslt:abstract-patterns" match="sch:pattern[@abstract = 'true']" use="@id"/>
-  <xsl:key name="schxslt:abstract-rules"    match="sch:rule[@abstract = 'true']"    use="@id"/>
   <xsl:key name="schxslt:params"            match="sch:pattern/sch:param"           use="generate-id(..)"/>
 
   <xsl:template match="node() | @*">
@@ -17,7 +16,12 @@
   <xsl:template match="sch:rule[@abstract = 'true']"/>
 
   <xsl:template match="sch:extends[@rule]">
-    <xsl:copy-of select="key('schxslt:abstract-rules', @rule)/node()"/>
+    <xsl:if test="not(ancestor::sch:pattern/sch:rule[@abstract = 'true'][@id = current()/@rule])">
+      <xsl:message terminate="yes">
+        The current pattern defines no abstract rule named '<xsl:value-of select="@rule"/>'.
+      </xsl:message>
+    </xsl:if>
+    <xsl:copy-of select="ancestor::sch:pattern/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()"/>
   </xsl:template>
 
   <xsl:template match="sch:pattern[@is-a]">

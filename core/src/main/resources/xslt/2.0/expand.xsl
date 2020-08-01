@@ -2,6 +2,7 @@
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
+               xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:template match="sch:schema">
@@ -20,7 +21,6 @@
       <xsl:sequence select="@* except @xml:base"/>
       <xsl:apply-templates mode="schxslt:expand" select="$schema/node()">
         <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
-        <xsl:with-param name="abstract-rules" as="element(sch:rule)*" tunnel="yes" select="$schema/sch:pattern/sch:rule[@abstract = 'true']"/>
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
@@ -40,8 +40,14 @@
 
   <!-- Instantiate an abstract rule -->
   <xsl:template match="sch:extends[@rule]" mode="schxslt:expand">
-    <xsl:param name="abstract-rules" tunnel="yes" as="element(sch:rule)*"/>
-    <xsl:sequence select="$abstract-rules[@id = current()/@rule]/node()"/>
+    <xsl:variable name="parent" as="element(sch:rule)?" select="ancestor::sch:pattern/sch:rule[@abstract = 'true'][@id = current()/@rule]"/>
+    <xsl:if test="empty($parent)">
+      <xsl:variable name="message">
+        The current pattern defines no abstract rule named '<xsl:value-of select="@rule"/>'.
+      </xsl:variable>
+      <xsl:message terminate="yes" select="error(xs:QName('error:E0004'), normalize-space($message))"/>
+    </xsl:if>
+    <xsl:sequence select="$parent/node()"/>
   </xsl:template>
 
   <!-- Instantiate an abstract pattern -->
