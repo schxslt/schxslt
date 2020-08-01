@@ -88,7 +88,7 @@ declare %private function schxslt:processor-path ($queryBinding as xs:string) as
  : @param  $options Schematron compiler parameters
  : @return Validation stylesheet
  :)
-declare %private function schxslt:compile ($schematron as node(), $options as element(parameters)?, $xsltver as xs:string) as element(xsl:transform) {
+declare function schxslt:compile ($schematron as node(), $options as element(parameters)?, $xsltver as xs:string) as element(xsl:transform) {
   let $basedir := "xmldb:exist://" || $schxslt:base-dir || "/content/xslt/" || $xsltver || "/"
   let $include := $basedir || "include.xsl"
   let $expand  := $basedir || "expand.xsl"
