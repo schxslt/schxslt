@@ -98,7 +98,7 @@
   <xsl:template name="schxslt:check-multiply-defined">
     <xsl:param name="bindings" as="element(sch:let)*"/>
     <xsl:if test="count($bindings) ne count(distinct-values($bindings/@name))">
-      <xsl:variable name="message" as="xs:string">
+      <xsl:variable name="message" as="xs:string+">
         Compilation aborted: It is an error for a variable to be multiply defined
         <xsl:for-each-group select="$bindings" group-by="@name">
           <xsl:sort select="current-grouping-key()"/>
@@ -107,7 +107,7 @@
           </xsl:if>
         </xsl:for-each-group>
       </xsl:variable>
-      <xsl:message terminate="yes" select="error(xs:QName('error:E0003'), normalize-space($message))">
+      <xsl:message terminate="yes" select="error(xs:QName('error:E0003'), normalize-space(string-join($message, ' ')))">
         <xsl:value-of select="$message"/>
       </xsl:message>
     </xsl:if>
