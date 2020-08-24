@@ -10,6 +10,13 @@ license.
 SchXslt is a Schematron processor implemented entirely in XSLT. It transforms a Schemtron schema document to an XSLT
 stylesheet that you apply to the document(s) to be validated.
 
+Limitations
+--
+
+As of date SchXslt does not properly implement the scoping rules of pattern and phase variables (see #135 and
+#136). Schema, pattern, and phase variables are all implemented as global XSLT variables. This is a condition for them
+to be used in a rule context expression.
+
 Installation
 --
 
