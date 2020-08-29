@@ -4,7 +4,7 @@ SchXslt \[ʃˈɛksl̩t\] – An XSLT-based Schematron processor
 SchXslt is copyright (c) 2018–2020 by David Maus &lt;dmaus@dmaus.name&gt; and released under the terms of the MIT
 license.
 
-[![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911) 
+[![DOI](https://zenodo.org/badge/157821911.svg)](https://zenodo.org/badge/latestdoi/157821911)
 [![Build Status](https://travis-ci.org/schxslt/schxslt.svg?branch=master)](https://travis-ci.org/schxslt/schxslt)
 
 SchXslt is a Schematron processor implemented entirely in XSLT. It transforms a Schemtron schema document to an XSLT
@@ -13,9 +13,15 @@ stylesheet that you apply to the document(s) to be validated.
 Limitations
 --
 
-As of date SchXslt does not properly implement the scoping rules of pattern and phase variables (see #135 and
-#136). Schema, pattern, and phase variables are all implemented as global XSLT variables. This is a condition for them
-to be used in a rule context expression.
+As of date SchXslt does not properly implement the scoping rules of pattern and phase variables (see
+[#315](https://github.com/schxslt/schxslt/issues/315) and [#316](https://github.com/schxslt/schxslt/issues/316)).
+
+Schema, pattern, and phase variables are all implemented as global XSLT variables. As a consequence the name of a
+schema, pattern, or phase variable must be unique in the entire schema.
+
+Due to the constrains of XSLT 1.0 and the way rules are implemented it is not possible to use a variable inside a rule
+context expression of a Schematron using the XSLT 1.0 query binding (see
+[#318](https://github.com/schxslt/schxslt/issues/138)).
 
 Installation
 --
@@ -69,7 +75,7 @@ expressed in the Schematron Validation Report Language (SVRL). You import the mo
 import module namespace schxslt = "https://doi.org/10.5281/zenodo.1495494";
 
 let $document := <ex:example xmlns:ex="https://example.com/ns"/>
-let $schema := 
+let $schema :=
   <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
     <sch:pattern>
       <sch:rule context="/">
@@ -118,4 +124,3 @@ This runs the unit tests and creates the following files:
 * basex/target/schxslt-basex-{VERSION}.xar (XQuery package for BaseX)
 
 Where {VERSION} is replaced with the current SchXslt version.
-
