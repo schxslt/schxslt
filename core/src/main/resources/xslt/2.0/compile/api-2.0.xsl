@@ -31,6 +31,7 @@
   <xsl:template name="schxslt-api:report">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="phase" as="xs:string" required="yes"/>
+    <sequence select="$schxslt:report"/>
   </xsl:template>
 
   <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
