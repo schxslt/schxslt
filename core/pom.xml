@@ -122,6 +122,11 @@
                 <param>pattern-subordinate-document-01</param>
                 <param>pattern-subordinate-document-02</param>
                 <param>svrl-suppressed-rule</param>
+                <param>rule-context-variable-01</param>
+                <param>rule-context-variable-02</param>
+                <param>rule-context-variable-03</param>
+                <param>let-scope-phase-01</param>
+                <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
             <testsuite>
@@ -134,12 +139,21 @@
                 <param>pattern-subordinate-document-01</param>
                 <param>pattern-subordinate-document-02</param>w
                 <param>svrl-suppressed-rule</param>
+                <param>rule-context-variable-01</param>
+                <param>rule-context-variable-02</param>
+                <param>rule-context-variable-03</param>
+                <param>let-scope-phase-01</param>
+                <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
             <testsuite>
               <label>Schematron Conformance Tests for Saxon HE (${saxon.version})</label>
               <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
               <processorId>saxon</processorId>
+              <skip>
+                <param>let-scope-phase-01</param>
+                <param>let-scope-pattern-01</param>
+              </skip>
             </testsuite>
             <testsuite>
               <label>Schematron Conformance Tests for Saxon HE (${saxon.version}) using the micro pipeline</label>
