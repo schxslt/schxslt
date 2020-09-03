@@ -150,33 +150,30 @@
       <xsl:sequence select="(@xml:base, ../@xml:base)"/>
 
       <!-- Check if a context node was already matched by a rule of the current pattern. -->
-      <param name="schxslt:rules" as="element(schxslt:rule)*"/>
+      <param name="schxslt:patterns-matched" as="xs:string*"/>
 
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
       </xsl:call-template>
 
-      <schxslt:rule pattern="{generate-id(..)}" context="{{generate-id(.)}}">
+      <schxslt:rule pattern="{generate-id(..)}">
         <choose>
-          <when test="empty($schxslt:rules[@pattern = '{generate-id(..)}'][@context = generate-id(current())])">
+          <when test="$schxslt:patterns-matched[. = '{generate-id(..)}']">
+            <xsl:call-template name="schxslt-api:suppressed-rule">
+              <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
+            </xsl:call-template>
+          </when>
+          <otherwise>
             <xsl:call-template name="schxslt-api:fired-rule">
               <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
             </xsl:call-template>
             <xsl:apply-templates select="sch:assert | sch:report" mode="schxslt:compile"/>
-          </when>
-          <otherwise>
-            <xsl:call-template name="schxslt-api:suppressed-rule">
-              <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
-            </xsl:call-template>
           </otherwise>
         </choose>
       </schxslt:rule>
 
       <next-match>
-        <with-param name="schxslt:rules" as="element(schxslt:rule)*">
-          <sequence select="$schxslt:rules"/>
-          <schxslt:rule context="{{generate-id()}}" pattern="{generate-id(..)}"/>
-        </with-param>
+        <with-param name="schxslt:patterns-matched" as="xs:string*" select="($schxslt:patterns-matched, '{generate-id(..)}')"/>
       </next-match>
     </template>
 
