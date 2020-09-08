@@ -104,7 +104,7 @@ SchXslt uses the [Maven](https://maven.apache.org) build tool to create installa
 yourself clone this repository, install [Maven](https://maven.apache.org) and run it with the ```package``` phase.
 
 ```
-dmaus@carbon ~ % git clone https://github.com/schxslt/schxslt.git
+dmaus@carbon ~ % git clone --recursive https://github.com/schxslt/schxslt.git
 Cloning into 'schxslt'...
 remote: Enumerating objects: 450, done.
 remote: Counting objects: 100% (450/450), done.
