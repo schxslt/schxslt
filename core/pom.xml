@@ -95,7 +95,7 @@
       <plugin>
         <groupId>name.dmaus.schxslt</groupId>
         <artifactId>testsuite-maven-plugin</artifactId>
-        <version>1.7</version>
+        <version>1.7.1</version>
         <dependencies>
           <dependency>
             <groupId>net.sf.saxon</groupId>
