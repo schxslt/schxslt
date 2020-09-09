@@ -80,6 +80,11 @@
         <xsl:with-param name="bindings" select="($schematron/sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
       </xsl:call-template>
 
+      <mode streamable="yes"/>
+      <xsl:for-each select="distinct-values($validation-stylesheet-body/@mode)">
+        <mode name="{.}" streamable="yes" on-no-match="shallow-skip"/>
+      </xsl:for-each>
+
       <template match="/">
         <xsl:sequence select="$schematron/sch:phase[@id eq $effective-phase]/@xml:base"/>
 
@@ -96,8 +101,8 @@
 
         <variable name="report" as="element(schxslt:report)">
           <schxslt:report>
-            <xsl:for-each select="$validation-stylesheet-body/@name">
-              <call-template name="{.}"/>
+            <xsl:for-each select="distinct-values($validation-stylesheet-body/@mode)">
+              <apply-templates select="." mode="{.}"/>
             </xsl:for-each>
           </schxslt:report>
         </variable>
@@ -105,10 +110,7 @@
         <!-- Unwrap the intermediary report -->
         <variable name="schxslt:report" as="node()*">
           <sequence select="$metadata"/>
-          <for-each select="$report/schxslt:pattern">
-            <sequence select="node()"/>
-            <sequence select="$report/schxslt:rule[@pattern = current()/@id]/node()"/>
-          </for-each>
+          <sequence select="$report"/>
         </variable>
 
         <xsl:call-template name="schxslt-api:report">
@@ -116,11 +118,6 @@
           <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
         </xsl:call-template>
 
-      </template>
-
-      <template match="text() | @*" mode="#all" priority="-10"/>
-      <template match="*" mode="#all" priority="-10">
-        <apply-templates mode="#current" select="@* | node()"/>
       </template>
 
       <xsl:sequence select="$validation-stylesheet-body"/>
@@ -191,36 +188,6 @@
     <xsl:for-each-group select="$patterns" group-by="string-join((base-uri(.), @documents), '~')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
       <xsl:variable name="baseUri" as="xs:anyURI" select="base-uri(.)"/>
-
-      <template name="{$mode}">
-        <xsl:sequence select="@xml:base"/>
-
-        <variable name="documents" as="item()+">
-          <xsl:choose>
-            <xsl:when test="@documents">
-              <for-each select="{@documents}">
-                <sequence select="document(resolve-uri(., '{$baseUri}'))"/>
-              </for-each>
-            </xsl:when>
-            <xsl:otherwise>
-              <sequence select="/"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </variable>
-
-        <for-each select="$documents">
-          <xsl:for-each select="current-group()">
-            <schxslt:pattern id="{generate-id()}" document="{base-uri(.)}">
-              <xsl:call-template name="schxslt-api:active-pattern">
-                <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
-              </xsl:call-template>
-            </schxslt:pattern>
-          </xsl:for-each>
-
-          <apply-templates mode="{$mode}" select="."/>
-        </for-each>
-
-      </template>
 
       <xsl:apply-templates select="current-group()/sch:rule" mode="schxslt:compile">
         <xsl:with-param name="mode" as="xs:string" select="$mode"/>

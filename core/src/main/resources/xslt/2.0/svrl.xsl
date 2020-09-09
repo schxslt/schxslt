@@ -12,33 +12,7 @@
     <xsl:variable name="location-function" as="element()">
     <function name="schxslt:location" as="xs:string">
       <param name="node" as="node()"/>
-      <variable name="segments" as="xs:string*">
-        <for-each select="($node/ancestor-or-self::node())">
-          <variable name="position">
-            <number level="single"/>
-          </variable>
-          <choose>
-            <when test=". instance of element()">
-              <value-of select="concat('Q{{', namespace-uri(.), '}}', local-name(.), '[', $position, ']')"/>
-            </when>
-            <when test=". instance of attribute()">
-              <value-of select="concat('@Q{{', namespace-uri(.), '}}', local-name(.))"/>
-            </when>
-            <when test=". instance of processing-instruction()">
-              <value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
-            </when>
-            <when test=". instance of comment()">
-              <value-of select="concat('comment()[', $position, ']')"/>
-            </when>
-            <when test=". instance of text()">
-              <value-of select="concat('text()[', $position, ']')"/>
-            </when>
-            <otherwise/>
-          </choose>
-        </for-each>
-      </variable>
-
-      <value-of select="concat('/', string-join($segments, '/'))"/>
+      <value-of select="generate-id($node)"/>
     </function>
   </xsl:variable>
 
