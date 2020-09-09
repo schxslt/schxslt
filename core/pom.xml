@@ -153,6 +153,9 @@
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
+                <param>let-reference-undefined-07</param>
+                <param>pattern-subordinate-document-01</param>
+                <param>pattern-subordinate-document-02</param>
               </skip>
             </testsuite>
             <testsuite>
@@ -162,6 +165,9 @@
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
+                <param>let-reference-undefined-07</param>
+                <param>pattern-subordinate-document-01</param>
+                <param>pattern-subordinate-document-02</param>
               </skip>
             </testsuite>
             <testsuite>
