@@ -195,10 +195,6 @@
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
 
-        <xsl:call-template name="schxslt:let-variable">
-          <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
-        </xsl:call-template>
-
         <variable name="documents" as="item()+">
           <xsl:choose>
             <xsl:when test="@documents">
