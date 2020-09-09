@@ -14,7 +14,7 @@ Limitations
 --
 
 As of date SchXslt does not properly implement the scoping rules of pattern and phase variables (see
-[#315](https://github.com/schxslt/schxslt/issues/315) and [#316](https://github.com/schxslt/schxslt/issues/316)).
+[#135](https://github.com/schxslt/schxslt/issues/135) and [#136](https://github.com/schxslt/schxslt/issues/136)).
 
 Schema, pattern, and phase variables are all implemented as global XSLT variables. As a consequence the name of a
 schema, pattern, or phase variable must be unique in the entire schema.
