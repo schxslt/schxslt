@@ -21,7 +21,7 @@
         <sch:pattern is-a="table">
           <sch:param name="table" value="table"/>
           <sch:param name="row"   value="tr"/>
-          <sch:param name="entry" value="td"/>
+          <sch:param name="entry" value="td[matches(., '\n')]"/>
           <sch:param name="value" value="$variable"/>
         </sch:pattern>
       </sch:schema>
@@ -33,9 +33,9 @@
             <sch:assert test="tr"/>
           </sch:rule>
           <sch:rule context="tr">
-            <sch:assert test="td"/>
+            <sch:assert test="td[matches(., '\n')]"/>
           </sch:rule>
-          <sch:rule context="td">
+          <sch:rule context="td[matches(., '\n')]">
             <sch:let name="variable" value="1"/>
             <sch:assert test="$variable = $variable"/>
           </sch:rule>
