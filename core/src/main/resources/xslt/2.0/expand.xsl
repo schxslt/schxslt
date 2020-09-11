@@ -77,7 +77,7 @@
         <xsl:value-of select="$src"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="value" select="replace($params[1]/@value, '\$', '\\\$')"/>
+        <xsl:variable name="value" select="replace(replace($params[1]/@value, '\\', '\\\\'), '\$', '\\\$')"/>
         <xsl:variable name="src" select="replace($src, concat('(\W*)\$', $params[1]/@name, '(\W*)'), concat('$1', $value, '$2'))"/>
         <xsl:value-of select="schxslt:replace-params($src, $params[position() > 1])"/>
       </xsl:otherwise>
