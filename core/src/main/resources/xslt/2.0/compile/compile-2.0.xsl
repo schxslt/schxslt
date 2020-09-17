@@ -26,6 +26,7 @@
   <xsl:include href="../version.xsl"/>
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
+  <xsl:param name="schxslt.compile.typed-variables" as="xs:boolean" select="true()"/>
 
   <xsl:template match="/sch:schema">
     <xsl:call-template name="schxslt:compile">
@@ -42,6 +43,7 @@
     <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
       <xsl:call-template name="schxslt:validation-stylesheet-body">
         <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
+        <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
       </xsl:call-template>
     </xsl:variable>
 
@@ -74,10 +76,12 @@
 
       <xsl:call-template name="schxslt:let-param">
         <xsl:with-param name="bindings" select="$schematron/sch:let"/>
+        <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
       </xsl:call-template>
 
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="bindings" select="($schematron/sch:phase[@id eq $effective-phase]/sch:let, $active-patterns/sch:let)"/>
+        <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
       </xsl:call-template>
 
       <template match="/">
@@ -85,6 +89,7 @@
 
         <xsl:call-template name="schxslt:let-variable">
           <xsl:with-param name="bindings" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
+          <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
         </xsl:call-template>
 
         <variable name="metadata" as="element()?">
@@ -141,6 +146,7 @@
   </doc>
   <xsl:template match="sch:rule" mode="schxslt:compile">
     <xsl:param name="mode" as="xs:string" required="yes"/>
+    <xsl:param name="typed-variables" as="xs:boolean" required="yes"/>
 
     <xsl:call-template name="schxslt:check-multiply-defined">
       <xsl:with-param name="bindings" select="sch:let" as="element(sch:let)*"/>
@@ -154,6 +160,7 @@
 
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="bindings" as="element(sch:let)*" select="sch:let"/>
+        <xsl:with-param name="typed-variables" as="xs:boolean" select="$typed-variables"/>
       </xsl:call-template>
 
       <schxslt:rule pattern="{generate-id(..)}">
@@ -187,6 +194,7 @@
   </doc>
   <xsl:template name="schxslt:validation-stylesheet-body">
     <xsl:param name="patterns" as="element(sch:pattern)+"/>
+    <xsl:param name="typed-variables" as="xs:boolean" required="yes"/>
 
     <xsl:for-each-group select="$patterns" group-by="string-join((base-uri(.), @documents), '~')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
@@ -224,6 +232,7 @@
 
       <xsl:apply-templates select="current-group()/sch:rule" mode="schxslt:compile">
         <xsl:with-param name="mode" as="xs:string" select="$mode"/>
+        <xsl:with-param name="typed-variables" as="xs:boolean" select="$typed-variables"/>
       </xsl:apply-templates>
 
     </xsl:for-each-group>

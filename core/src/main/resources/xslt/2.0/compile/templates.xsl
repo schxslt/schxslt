@@ -59,15 +59,23 @@
   <!-- Named templates -->
   <xsl:template name="schxslt:let-variable">
     <xsl:param name="bindings" as="element(sch:let)*"/>
+    <xsl:param name="typed-variables" as="xs:boolean" required="yes"/>
+
     <xsl:for-each select="$bindings">
       <xsl:choose>
         <xsl:when test="@value">
           <variable name="{@name}" select="{@value}">
+            <xsl:if test="$typed-variables">
+              <xsl:sequence select="@as"/>
+            </xsl:if>
             <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
           </variable>
         </xsl:when>
         <xsl:otherwise>
           <variable name="{@name}">
+            <xsl:if test="$typed-variables">
+              <xsl:sequence select="@as"/>
+            </xsl:if>
             <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
             <xsl:apply-templates select="node()" mode="schxslt:variable-content"/>
           </variable>
@@ -78,15 +86,23 @@
 
   <xsl:template name="schxslt:let-param">
     <xsl:param name="bindings" as="element(sch:let)*"/>
+    <xsl:param name="typed-variables" as="xs:boolean" required="yes"/>
+
     <xsl:for-each select="$bindings">
       <xsl:choose>
         <xsl:when test="@value">
           <param name="{@name}" select="{@value}">
+            <xsl:if test="$typed-variables">
+              <xsl:sequence select="@as"/>
+            </xsl:if>
             <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
           </param>
         </xsl:when>
         <xsl:otherwise>
           <param name="{@name}">
+            <xsl:if test="$typed-variables">
+              <xsl:sequence select="@as"/>
+            </xsl:if>
             <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
             <xsl:apply-templates select="node()" mode="schxslt:variable-content"/>
           </param>
