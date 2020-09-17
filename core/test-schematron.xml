@@ -10,6 +10,7 @@
       <array value-type="java.lang.String">
         <value>svrl</value>
         <value>iso2016</value>
+        <value>schep-001</value>
       </array>
     </constructor-arg>
     <constructor-arg ref="steps-2.0"/>
@@ -23,6 +24,7 @@
       <array value-type="java.lang.String">
         <value>svrl</value>
         <value>iso2016</value>
+        <value>schep-001</value>
       </array>
     </constructor-arg>
     <constructor-arg ref="pipeline-2.0"/>
