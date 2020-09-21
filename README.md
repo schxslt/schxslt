@@ -21,7 +21,7 @@ schema, pattern, or phase variable must be unique in the entire schema.
 
 Due to the constrains of XSLT 1.0 and the way rules are implemented it is not possible to use a variable inside a rule
 context expression of a Schematron using the XSLT 1.0 query binding (see
-[#318](https://github.com/schxslt/schxslt/issues/138)).
+[#138](https://github.com/schxslt/schxslt/issues/138)).
 
 Installation
 --
