@@ -8,6 +8,9 @@
       <dct:creator>
         <dct:Agent>
           <skos:prefLabel><xsl:value-of select="schxslt:user-agent()"/></skos:prefLabel>
+          <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#" rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">
+            <xsl:value-of select="$schxslt.compile.typed-variables"/>
+          </schxslt.compile.typed-variables>
         </dct:Agent>
       </dct:creator>
       <dct:created><xsl:value-of select="current-dateTime()"/></dct:created>
