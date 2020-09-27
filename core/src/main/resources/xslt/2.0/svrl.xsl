@@ -98,7 +98,6 @@
       WARNING: Rule <xsl:value-of select="normalize-space(@id)"/> for context "<xsl:value-of select="@context"/>" shadowed by preceeding rule
     </xsl:variable>
     <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
-    <message> <xsl:sequence select="normalize-space($message)"/> </message>
     <svrl:suppressed-rule>
       <xsl:sequence select="($rule/@id, $rule/@role, $rule/@flag)"/>
       <attribute name="context">
