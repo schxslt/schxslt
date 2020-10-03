@@ -9,39 +9,6 @@
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:variable name="location-function" as="element()">
-    <function name="schxslt:location" as="xs:string">
-      <param name="node" as="node()"/>
-      <variable name="segments" as="xs:string*">
-        <for-each select="($node/ancestor-or-self::node())">
-          <variable name="position">
-            <number level="single"/>
-          </variable>
-          <choose>
-            <when test=". instance of element()">
-              <value-of select="concat('Q{{', namespace-uri(.), '}}', local-name(.), '[', $position, ']')"/>
-            </when>
-            <when test=". instance of attribute()">
-              <value-of select="concat('@Q{{', namespace-uri(.), '}}', local-name(.))"/>
-            </when>
-            <when test=". instance of processing-instruction()">
-              <value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
-            </when>
-            <when test=". instance of comment()">
-              <value-of select="concat('comment()[', $position, ']')"/>
-            </when>
-            <when test=". instance of text()">
-              <value-of select="concat('text()[', $position, ']')"/>
-            </when>
-            <otherwise/>
-          </choose>
-        </for-each>
-      </variable>
-
-      <value-of select="concat('/', string-join($segments, '/'))"/>
-    </function>
-  </xsl:variable>
-
   <xsl:template name="schxslt-api:report">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="phase" as="xs:string" required="yes"/>
@@ -108,7 +75,8 @@
 
   <xsl:template name="schxslt-api:failed-assert">
     <xsl:param name="assert" as="element(sch:assert)" required="yes"/>
-    <svrl:failed-assert location="{{schxslt:location({($assert/@subject, $assert/../@subject, '.')[1]})}}">
+    <xsl:param name="location-function" as="xs:string" required="yes" tunnel="yes"/>
+    <svrl:failed-assert location="{$location-function}({($assert/@subject, $assert/../@subject, '.')[1]})">
       <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id)"/>
       <attribute name="test">
         <xsl:value-of select="$assert/@test"/>
@@ -121,7 +89,8 @@
 
   <xsl:template name="schxslt-api:successful-report">
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
-    <svrl:successful-report location="{{schxslt:location({($report/@subject, $report/../@subject, '.')[1]})}}">
+    <xsl:param name="location-function" as="xs:string" required="yes" tunnel="yes"/>
+    <svrl:successful-report location="{$location-function}({($report/@subject, $report/../@subject, '.')[1]})">
       <xsl:sequence select="($report/@role, $report/@flag, $report/@id)"/>
       <attribute name="test">
         <xsl:value-of select="$report/@test"/>
@@ -130,11 +99,6 @@
         <xsl:with-param name="schema" as="element(sch:schema)" tunnel="yes" select="$report/../../.."/>
       </xsl:call-template>
     </svrl:successful-report>
-  </xsl:template>
-
-  <xsl:template name="schxslt-api:validation-stylesheet-body-bottom-hook">
-    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <xsl:sequence select="($schema/xsl:function, $location-function)[schxslt:is-location-function(.)][1]"/>
   </xsl:template>
 
   <xsl:template name="schxslt-api:metadata">

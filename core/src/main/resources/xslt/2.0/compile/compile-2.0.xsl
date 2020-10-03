@@ -45,6 +45,16 @@
       <xsl:call-template name="schxslt:validation-stylesheet-body">
         <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
         <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
+        <xsl:with-param name="location-function" as="xs:string" tunnel="yes">
+          <xsl:choose>
+            <xsl:when test="$xslt-version eq '3.0' and empty($schematron/xsl:function[schxslt:is-location-function(.)])">
+              <xsl:text>path</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>schxslt:location</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:with-param>
       </xsl:call-template>
     </xsl:variable>
 
@@ -130,6 +140,39 @@
       </template>
 
       <xsl:sequence select="$validation-stylesheet-body"/>
+
+      <xsl:if test="$xslt-version eq '2.0' and empty($schematron/xsl:function[schxslt:is-location-function(.)])">
+        <function name="schxslt:location" as="xs:string">
+          <param name="node" as="node()"/>
+          <variable name="segments" as="xs:string*">
+            <for-each select="($node/ancestor-or-self::node())">
+              <variable name="position">
+                <number level="single"/>
+              </variable>
+              <choose>
+                <when test=". instance of element()">
+                  <value-of select="concat('Q{{', namespace-uri(.), '}}', local-name(.), '[', $position, ']')"/>
+                </when>
+                <when test=". instance of attribute()">
+                  <value-of select="concat('@Q{{', namespace-uri(.), '}}', local-name(.))"/>
+                </when>
+                <when test=". instance of processing-instruction()">
+                  <value-of select="concat('processing-instruction(&quot;', name(.), '&quot;)[', $position, ']')"/>
+                </when>
+                <when test=". instance of comment()">
+                  <value-of select="concat('comment()[', $position, ']')"/>
+                </when>
+                <when test=". instance of text()">
+                  <value-of select="concat('text()[', $position, ']')"/>
+                </when>
+                <otherwise/>
+              </choose>
+            </for-each>
+          </variable>
+
+          <value-of select="concat('/', string-join($segments, '/'))"/>
+        </function>
+      </xsl:if>
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
