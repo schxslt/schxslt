@@ -37,6 +37,7 @@
   <xsl:template name="schxslt:compile">
     <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
 
+    <xsl:variable name="xslt-version" as="xs:string" select="schxslt:xslt-version($schematron)"/>
     <xsl:variable name="effective-phase" select="schxslt:effective-phase($schematron, $phase)" as="xs:string"/>
     <xsl:variable name="active-patterns" select="schxslt:active-patterns($schematron, $effective-phase)" as="element(sch:pattern)+"/>
 
@@ -51,7 +52,7 @@
       <xsl:call-template name="schxslt:version"/>
     </xsl:variable>
 
-    <transform version="{schxslt:xslt-version($schematron)}">
+    <transform version="{$xslt-version}">
       <xsl:for-each select="$schematron/sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
