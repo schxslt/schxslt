@@ -144,7 +144,15 @@
     <svrl:metadata xmlns:dct="http://purl.org/dc/terms/" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
       <dct:creator>
         <dct:Agent>
-          <skos:prefLabel><value-of separator="/" select="(system-property('xsl:product-name'), system-property('xsl:product-version'))"/></skos:prefLabel>
+          <skos:prefLabel>
+            <variable name="prefix" as="xs:string?" select="in-scope-prefixes(document('')/*[1])[namespace-uri-for-prefix(., document('')/*[1]) eq 'http://www.w3.org/1999/XSL/Transform'][1]"/>
+            <choose>
+              <when test="empty($prefix)">Unknown</when>
+              <otherwise>
+                <value-of separator="/" select="(system-property(concat($prefix, ':product-name')), system-property(concat($prefix,':product-version')))"/>
+              </otherwise>
+            </choose>
+          </skos:prefLabel>
         </dct:Agent>
       </dct:creator>
       <dct:created><value-of select="current-dateTime()"/></dct:created>
