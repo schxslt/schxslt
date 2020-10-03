@@ -225,13 +225,4 @@
     </xsl:for-each>
   </xsl:template>
 
-  <xsl:function name="schxslt:is-location-function" as="xs:boolean">
-    <xsl:param name="function" as="element(xsl:function)"/>
-
-    <xsl:variable name="nsUri" select="namespace-uri-for-prefix(substring-before($function/@name, ':'), $function)"/>
-    <xsl:variable name="localname" select="substring-after($function/@name, ':')"/>
-
-    <xsl:sequence select="boolean($nsUri eq 'https://doi.org/10.5281/zenodo.1495494' and $localname eq 'location')"/>
-  </xsl:function>
-
 </xsl:transform>
