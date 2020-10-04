@@ -104,18 +104,26 @@
   <xsl:template name="schxslt-api:metadata">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <xsl:param name="source" as="element(rdf:Description)" required="yes"/>
+    <xsl:param name="xslt-version" as="xs:string" required="yes" tunnel="yes"/>
     <svrl:metadata xmlns:dct="http://purl.org/dc/terms/" xmlns:skos="http://www.w3.org/2004/02/skos/core#">
       <dct:creator>
         <dct:Agent>
           <skos:prefLabel>
-            <variable name="prefix" as="xs:string?" select="if (doc-available('')) then in-scope-prefixes(document('')/*[1])[namespace-uri-for-prefix(., document('')/*[1]) eq 'http://www.w3.org/1999/XSL/Transform'][1] else ()">
-            </variable>
-            <choose>
-              <when test="empty($prefix)">Unknown</when>
-              <otherwise>
-                <value-of separator="/" select="(system-property(concat($prefix, ':product-name')), system-property(concat($prefix,':product-version')))"/>
-              </otherwise>
-            </choose>
+            <xsl:choose>
+              <xsl:when test="$xslt-version eq '3.0'">
+                <value-of separator="/" select="(system-property('Q{{http://www.w3.org/1999/XSL/Transform}}product-name'), system-property('Q{{http://www.w3.org/1999/XSL/Transform}}product-version'))"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <variable name="prefix" as="xs:string?" select="if (doc-available('')) then in-scope-prefixes(document('')/*[1])[namespace-uri-for-prefix(., document('')/*[1]) eq 'http://www.w3.org/1999/XSL/Transform'][1] else ()">
+                </variable>
+                <choose>
+                  <when test="empty($prefix)">Unknown</when>
+                  <otherwise>
+                    <value-of separator="/" select="(system-property(concat($prefix, ':product-name')), system-property(concat($prefix,':product-version')))"/>
+                  </otherwise>
+                </choose>
+              </xsl:otherwise>
+            </xsl:choose>
           </skos:prefLabel>
         </dct:Agent>
       </dct:creator>
