@@ -145,7 +145,8 @@
       <dct:creator>
         <dct:Agent>
           <skos:prefLabel>
-            <variable name="prefix" as="xs:string?" select="in-scope-prefixes(document('')/*[1])[namespace-uri-for-prefix(., document('')/*[1]) eq 'http://www.w3.org/1999/XSL/Transform'][1]"/>
+            <variable name="prefix" as="xs:string?" select="if (doc-available('')) then in-scope-prefixes(document('')/*[1])[namespace-uri-for-prefix(., document('')/*[1]) eq 'http://www.w3.org/1999/XSL/Transform'][1] else ()">
+            </variable>
             <choose>
               <when test="empty($prefix)">Unknown</when>
               <otherwise>
