@@ -45,6 +45,7 @@
       <xsl:call-template name="schxslt:validation-stylesheet-body">
         <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
         <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
+        <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
         <xsl:with-param name="location-function" as="xs:string" tunnel="yes">
           <xsl:choose>
             <xsl:when test="$xslt-version eq '3.0' and empty($schematron/xsl:function[schxslt:is-location-function(.)])">
@@ -59,7 +60,9 @@
     </xsl:variable>
 
     <xsl:variable name="version" as="element(rdf:Description)">
-      <xsl:call-template name="schxslt:version"/>
+      <xsl:call-template name="schxslt:version">
+        <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
+      </xsl:call-template>
     </xsl:variable>
 
     <transform version="{$xslt-version}">
@@ -72,6 +75,7 @@
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-top-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
+        <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
       </xsl:call-template>
 
       <output indent="yes"/>
@@ -107,6 +111,7 @@
           <xsl:call-template name="schxslt-api:metadata">
             <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
             <xsl:with-param name="source" as="element(rdf:Description)" select="$version"/>
+            <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
           </xsl:call-template>
         </variable>
 
@@ -130,6 +135,7 @@
         <xsl:call-template name="schxslt-api:report">
           <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
           <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
+          <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
         </xsl:call-template>
 
       </template>
@@ -176,6 +182,7 @@
 
       <xsl:call-template name="schxslt-api:validation-stylesheet-body-bottom-hook">
         <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
+        <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
       </xsl:call-template>
 
     </transform>
