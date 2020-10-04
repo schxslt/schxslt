@@ -30,6 +30,34 @@
     <constructor-arg ref="pipeline-2.0"/>
   </bean>
 
+  <bean id="saxon.xslt3" class="name.dmaus.schxslt.testsuite.JavaValidationFactory">
+    <constructor-arg><value>SchXslt / Saxon</value></constructor-arg>
+    <constructor-arg><value>xslt3</value></constructor-arg>
+    <constructor-arg ref="xslt-saxon"/>
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>svrl</value>
+        <value>iso2016</value>
+        <value>schep-001</value>
+      </array>
+    </constructor-arg>
+    <constructor-arg ref="steps-2.0"/>
+  </bean>
+
+  <bean id="saxon-pipeline.xslt3" class="name.dmaus.schxslt.testsuite.JavaValidationFactory">
+    <constructor-arg><value>SchXslt Pipeline / Saxon</value></constructor-arg>
+    <constructor-arg><value>xslt3</value></constructor-arg>
+    <constructor-arg ref="xslt-saxon"/>
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>svrl</value>
+        <value>iso2016</value>
+        <value>schep-001</value>
+      </array>
+    </constructor-arg>
+    <constructor-arg ref="pipeline-2.0"/>
+  </bean>
+
   <bean id="xalan" class="name.dmaus.schxslt.testsuite.JavaValidationFactory">
     <constructor-arg><value>SchXslt / Xalan</value></constructor-arg>
     <constructor-arg><value>xslt</value></constructor-arg>

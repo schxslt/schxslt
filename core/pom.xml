@@ -154,6 +154,24 @@
               </skip>
             </testsuite>
             <testsuite>
+              <label>Schematron Conformance Tests for Saxon HE (${saxon.version}), XSLT 3.0</label>
+              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
+              <processorId>saxon.xslt3</processorId>
+              <skip>
+                <param>let-scope-phase-01</param>
+                <param>let-scope-pattern-01</param>
+              </skip>
+            </testsuite>
+            <testsuite>
+              <label>Schematron Conformance Tests for Saxon HE (${saxon.version}) using the micro pipeline, XSLT 3.0</label>
+              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
+              <processorId>saxon-pipeline.xslt3</processorId>
+              <skip>
+                <param>let-scope-phase-01</param>
+                <param>let-scope-pattern-01</param>
+              </skip>
+            </testsuite>
+            <testsuite>
               <label>Bugs and features w/ Xalan (${xalan.version})</label>
               <directory>src/test/schematron</directory>
               <processorId>xalan</processorId>
