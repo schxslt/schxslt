@@ -171,7 +171,6 @@
               <processorId>xalan</processorId>
               <skip>
                 <param>svrl-suppressed-rule</param>
-                <param>xslt-key-element-content-01</param>
               </skip>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
@@ -190,7 +189,6 @@
               <processorId>xsltproc</processorId>
               <skip>
                 <param>svrl-suppressed-rule</param>
-                <param>xslt-key-element-content-01</param>
               </skip>
             </testsuite>
           </testsuites>
