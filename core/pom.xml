@@ -84,7 +84,7 @@
       <plugin>
         <groupId>name.dmaus.schxslt</groupId>
         <artifactId>testsuite-maven-plugin</artifactId>
-        <version>1.7.1</version>
+        <version>1.8</version>
         <dependencies>
           <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -101,9 +101,8 @@
         <configuration>
           <config>test-schematron.xml</config>
           <testsuites>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
               <label>Schematron Conformance Tests for Xalan (${xalan.version})</label>
-              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
               <processorId>xalan</processorId>
               <skip>
                 <param>include-baseuri-fixup</param>
@@ -118,9 +117,8 @@
                 <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
               <label>Schematron Conformance Tests for xsltproc</label>
-              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
               <processorId>xsltproc</processorId>
               <skip>
                 <param>include-baseuri-fixup</param>
@@ -135,43 +133,39 @@
                 <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
               <label>Schematron Conformance Tests for Saxon HE (${saxon.version})</label>
-              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
               <processorId>saxon</processorId>
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
               <label>Schematron Conformance Tests for Saxon HE (${saxon.version}) using the micro pipeline</label>
-              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
               <processorId>saxon-pipeline</processorId>
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
               <label>Schematron Conformance Tests for Saxon HE (${saxon.version}), XSLT 3.0</label>
-              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
               <processorId>saxon.xslt3</processorId>
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
               <label>Schematron Conformance Tests for Saxon HE (${saxon.version}) using the micro pipeline, XSLT 3.0</label>
-              <directory>src/test/schematron-conformance/src/main/resources/tests</directory>
               <processorId>saxon-pipeline.xslt3</processorId>
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
               </skip>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
               <label>Bugs and features w/ Xalan (${xalan.version})</label>
               <directory>src/test/schematron</directory>
               <processorId>xalan</processorId>
@@ -180,17 +174,17 @@
                 <param>xslt-key-element-content-01</param>
               </skip>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
               <label>Bugs and features w/ Saxon (${saxon.version})</label>
               <directory>src/test/schematron</directory>
               <processorId>saxon</processorId>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
               <label>Bugs and features w/ Saxon (${saxon.version}) using the micro pipeline</label>
               <directory>src/test/schematron</directory>
               <processorId>saxon</processorId>
             </testsuite>
-            <testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
               <label>Bugs and features w/ xsltproc</label>
               <directory>src/test/schematron</directory>
               <processorId>xsltproc</processorId>
