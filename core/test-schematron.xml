@@ -11,6 +11,7 @@
         <value>svrl</value>
         <value>iso2016</value>
         <value>schep-001</value>
+        <value>xslt2</value>
       </array>
     </constructor-arg>
     <constructor-arg ref="steps-2.0"/>
@@ -25,6 +26,7 @@
         <value>svrl</value>
         <value>iso2016</value>
         <value>schep-001</value>
+        <value>xslt2</value>
       </array>
     </constructor-arg>
     <constructor-arg ref="pipeline-2.0"/>
@@ -39,6 +41,7 @@
         <value>svrl</value>
         <value>iso2016</value>
         <value>schep-001</value>
+        <value>xslt3</value>
       </array>
     </constructor-arg>
     <constructor-arg ref="steps-2.0"/>
@@ -53,6 +56,7 @@
         <value>svrl</value>
         <value>iso2016</value>
         <value>schep-001</value>
+        <value>xslt3</value>
       </array>
     </constructor-arg>
     <constructor-arg ref="pipeline-2.0"/>
