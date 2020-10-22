@@ -74,7 +74,7 @@
   <xsl:template name="schxslt-api:failed-assert">
     <xsl:param name="assert" as="element(sch:assert)" required="yes"/>
     <xsl:param name="location-function" as="xs:string" required="yes" tunnel="yes"/>
-    <svrl:failed-assert location="{$location-function}({($assert/@subject, $assert/../@subject, '.')[1]})">
+    <svrl:failed-assert location="{{{$location-function}({($assert/@subject, $assert/../@subject, '.')[1]})}}">
       <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id)"/>
       <attribute name="test">
         <xsl:value-of select="$assert/@test"/>
