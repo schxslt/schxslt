@@ -269,7 +269,10 @@
 
         <for-each select="$documents">
           <xsl:for-each select="current-group()">
-            <schxslt:pattern id="{generate-id()}" document="{base-uri(.)}">
+            <schxslt:pattern id="{generate-id()}">
+              <if test="exists(base-uri(.))">
+                <attribute name="documents" select="base-uri(.)"/>
+              </if>
               <xsl:call-template name="schxslt-api:active-pattern">
                 <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
               </xsl:call-template>
