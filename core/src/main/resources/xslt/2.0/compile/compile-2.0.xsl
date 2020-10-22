@@ -254,33 +254,41 @@
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
 
-        <variable name="documents" as="item()+">
-          <xsl:choose>
-            <xsl:when test="@documents">
-              <for-each select="{@documents}">
-                <sequence select="document(resolve-uri(., '{$baseUri}'))"/>
-              </for-each>
-            </xsl:when>
-            <xsl:otherwise>
-              <sequence select="/"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </variable>
-
-        <for-each select="$documents">
-          <xsl:for-each select="current-group()">
-            <schxslt:pattern id="{generate-id()}">
-              <if test="exists(base-uri(.))">
-                <attribute name="documents" select="base-uri(.)"/>
-              </if>
-              <xsl:call-template name="schxslt-api:active-pattern">
-                <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
-              </xsl:call-template>
-            </schxslt:pattern>
-          </xsl:for-each>
-
-          <apply-templates mode="{$mode}" select="."/>
-        </for-each>
+        <xsl:choose>
+          <xsl:when test="@documents">
+            <for-each select="{@documents}">
+              <variable name="document" as="item()" select="document(resolve-uri(., '{$baseUri}'))"/>
+              <xsl:for-each select="current-group()">
+                <schxslt:pattern id="{generate-id()}">
+                  <if test="exists(base-uri($document))">
+                    <attribute name="documents" select="base-uri($document)"/>
+                  </if>
+                  <for-each select="$document">
+                    <xsl:call-template name="schxslt-api:active-pattern">
+                      <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
+                    </xsl:call-template>
+                  </for-each>
+                  <apply-templates mode="{$mode}" select="$document"/>
+                </schxslt:pattern>
+              </xsl:for-each>
+            </for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:for-each select="current-group()">
+              <schxslt:pattern id="{generate-id()}">
+                <if test="exists(base-uri(/))">
+                  <attribute name="documents" select="base-uri(/)"/>
+                </if>
+                <for-each select="/">
+                  <xsl:call-template name="schxslt-api:active-pattern">
+                    <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
+                  </xsl:call-template>
+                </for-each>
+                <apply-templates mode="{$mode}" select="/"/>
+              </schxslt:pattern>
+            </xsl:for-each>
+          </xsl:otherwise>
+        </xsl:choose>
 
       </template>
 
