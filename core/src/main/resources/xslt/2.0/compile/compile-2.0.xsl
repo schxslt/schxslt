@@ -205,7 +205,7 @@
     </xsl:call-template>
 
     <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
-      <xsl:sequence select="(@xml:base, ../@xml:base)"/>
+      <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
 
       <!-- Check if a context node was already matched by a rule of the current pattern. -->
       <param name="schxslt:patterns-matched" as="xs:string*"/>
