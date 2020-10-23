@@ -41,7 +41,7 @@
     <xsl:variable name="effective-phase" select="schxslt:effective-phase($schematron, $phase)" as="xs:string"/>
     <xsl:variable name="active-patterns" select="schxslt:active-patterns($schematron, $effective-phase)" as="element(sch:pattern)+"/>
 
-    <xsl:variable name="validation-stylesheet-body" as="element(xsl:template)+">
+    <xsl:variable name="validation-stylesheet-body" as="element()+">
       <xsl:call-template name="schxslt:validation-stylesheet-body">
         <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
         <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
@@ -117,7 +117,7 @@
 
         <variable name="report" as="element(schxslt:report)">
           <schxslt:report>
-            <xsl:for-each select="$validation-stylesheet-body/@name">
+            <xsl:for-each select="distinct-values($validation-stylesheet-body/@name)">
               <call-template name="{.}"/>
             </xsl:for-each>
           </schxslt:report>
@@ -252,6 +252,10 @@
     <xsl:for-each-group select="$patterns" group-by="string-join((base-uri(.), @documents), '~')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
       <xsl:variable name="baseUri" as="xs:anyURI" select="base-uri(.)"/>
+
+      <xsl:if test="$xslt-version = '3.0'">
+        <mode name="{$mode}"/>
+      </xsl:if>
 
       <template name="{$mode}">
         <xsl:sequence select="@xml:base"/>
