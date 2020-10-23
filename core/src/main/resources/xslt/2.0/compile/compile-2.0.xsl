@@ -142,7 +142,8 @@
 
       <template match="text() | @*" mode="#all" priority="-10"/>
       <template match="*" mode="#all" priority="-10">
-        <apply-templates mode="#current" select="@* | node()"/>
+        <apply-templates mode="#current" select="@*"/>
+        <apply-templates mode="#current" select="node()"/>
       </template>
 
       <xsl:sequence select="$validation-stylesheet-body"/>
