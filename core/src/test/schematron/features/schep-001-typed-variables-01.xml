@@ -37,5 +37,35 @@
         </sch:rule>
       </sch:pattern>
     </sch:schema>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns="" queryBinding="xslt3">
+      <sch:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
+      <sch:let name="schema" as="element()+">
+        <schema/>
+        <schema/>
+      </sch:let>
+      <sch:phase id="phase">
+        <sch:let name="phase" as="element()+">
+          <phase/>
+          <phase/>
+        </sch:let>
+        <sch:active pattern="pattern"/>
+      </sch:phase>
+      <sch:pattern id="pattern">
+        <sch:let name="pattern" as="element()+">
+          <pattern/>
+          <pattern/>
+        </sch:let>
+        <sch:rule context="/">
+          <sch:let name="rule" as="element()+">
+            <rule/>
+            <rule/>
+          </sch:let>
+          <sch:assert test="count($schema) = 2"/>
+          <sch:assert test="count($phase) = 2"/>
+          <sch:assert test="count($pattern) = 2"/>
+          <sch:assert test="count($rule) = 2"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
   </schemas>
 </testcase>

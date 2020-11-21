@@ -184,6 +184,16 @@
               <processorId>saxon</processorId>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
+              <label>Bugs and features w/ Saxon (${saxon.version}), XSLT 3.0</label>
+              <directory>src/test/schematron</directory>
+              <processorId>saxon.xslt3</processorId>
+            </testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
+              <label>Bugs and features w/ Saxon (${saxon.version}) using the micro pipeline, XSLT 3.0</label>
+              <directory>src/test/schematron</directory>
+              <processorId>saxon.xslt3</processorId>
+            </testsuite>
+            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
               <label>Bugs and features w/ xsltproc</label>
               <directory>src/test/schematron</directory>
               <processorId>xsltproc</processorId>

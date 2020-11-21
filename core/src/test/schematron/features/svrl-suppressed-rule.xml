@@ -16,6 +16,16 @@
         </sch:rule>
       </sch:pattern>
     </sch:schema>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt3">
+      <sch:pattern>
+        <sch:rule context="*">
+          <sch:assert test="true()"/>
+        </sch:rule>
+        <sch:rule context="element" id="suppressed">
+          <sch:assert test="false()"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
   </schemas>
   <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
     <expectation test="count(//svrl:suppressed-rule[@id = 'suppressed']) = 1"/>
