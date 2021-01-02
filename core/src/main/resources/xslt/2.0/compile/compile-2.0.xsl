@@ -27,6 +27,7 @@
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
   <xsl:param name="schxslt.compile.typed-variables" as="xs:boolean" select="true()"/>
+  <xsl:param name="schxslt.compile.streamable" as="xs:boolean" select="false()"/>
   <xsl:variable name="schxslt.compile.allow-accumulators" as="xs:boolean" select="true()"/>
 
   <xsl:template match="/sch:schema">
@@ -46,6 +47,7 @@
       <xsl:call-template name="schxslt:validation-stylesheet-body">
         <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$active-patterns"/>
         <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
+        <xsl:with-param name="streamable" as="xs:boolean" select="$schxslt.compile.streamable"/>
         <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
         <xsl:with-param name="location-function" as="xs:string" tunnel="yes">
           <xsl:choose>
@@ -253,6 +255,7 @@
   <xsl:template name="schxslt:validation-stylesheet-body">
     <xsl:param name="patterns" as="element(sch:pattern)+"/>
     <xsl:param name="typed-variables" as="xs:boolean" required="yes"/>
+    <xsl:param name="streamable" as="xs:boolean" required="yes"/>
     <xsl:param name="xslt-version" as="xs:string" tunnel="yes" required="yes"/>
 
     <xsl:for-each-group select="$patterns" group-by="string-join((base-uri(.), @documents), '~')">
@@ -260,8 +263,16 @@
       <xsl:variable name="baseUri" as="xs:anyURI" select="base-uri(.)"/>
 
       <xsl:if test="$xslt-version = '3.0'">
-        <mode use-accumulators="#all"/>
-        <mode name="{$mode}" use-accumulators="#all"/>
+        <mode use-accumulators="#all">
+          <xsl:if test="$streamable">
+            <xsl:attribute name="streamable">yes</xsl:attribute>
+          </xsl:if>
+        </mode>
+        <mode name="{$mode}" use-accumulators="#all">
+          <xsl:if test="$streamable">
+            <xsl:attribute name="streamable">yes</xsl:attribute>
+          </xsl:if>
+        </mode>
       </xsl:if>
 
       <template name="{$mode}">
