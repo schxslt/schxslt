@@ -87,6 +87,8 @@
       <output indent="yes"/>
 
       <xsl:copy-of select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:copy-of select="xsl:include[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:copy-of select="xsl:import[not(preceding-sibling::sch:pattern)]"/>
 
       <template match="/">
 
