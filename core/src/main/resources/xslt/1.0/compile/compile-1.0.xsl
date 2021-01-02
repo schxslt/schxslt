@@ -86,6 +86,8 @@
 
       <output indent="yes"/>
 
+      <xsl:copy-of select="xsl:key[not(preceding-sibling::sch:pattern)]"/>
+
       <template match="/">
 
         <variable name="schxslt:report">
