@@ -88,7 +88,7 @@
   <xsl:template name="schxslt-api:successful-report">
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
     <xsl:param name="location-function" as="xs:string" required="yes" tunnel="yes"/>
-    <svrl:successful-report location="{$location-function}({($report/@subject, $report/../@subject, '.')[1]})">
+    <svrl:successful-report location="{{{$location-function}({($report/@subject, $report/../@subject, '.')[1]})}}">
       <xsl:sequence select="($report/@role, $report/@flag, $report/@id)"/>
       <attribute name="test">
         <xsl:value-of select="$report/@test"/>
