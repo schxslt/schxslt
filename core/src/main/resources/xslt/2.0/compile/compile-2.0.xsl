@@ -294,8 +294,8 @@
                             <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
                           </xsl:call-template>
                         </for-each>
-                        <apply-templates mode="{$mode}" select="."/>
                       </schxslt:pattern>
+                      <apply-templates mode="{$mode}" select="."/>
                     </xsl:for-each>
                   </source-document>
                 </for-each>
@@ -313,8 +313,8 @@
                           <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
                         </xsl:call-template>
                       </for-each>
-                      <apply-templates mode="{$mode}" select="$document"/>
                     </schxslt:pattern>
+                    <apply-templates mode="{$mode}" select="$document"/>
                   </xsl:for-each>
                 </for-each>
               </xsl:otherwise>
@@ -331,8 +331,8 @@
                     <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
                   </xsl:call-template>
                 </for-each>
-                <apply-templates mode="{$mode}" select="/"/>
               </schxslt:pattern>
+              <apply-templates mode="{$mode}" select="/"/>
             </xsl:for-each>
           </xsl:otherwise>
         </xsl:choose>
