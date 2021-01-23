@@ -28,6 +28,7 @@
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
   <xsl:param name="schxslt.compile.typed-variables" as="xs:boolean" select="true()"/>
   <xsl:param name="schxslt.compile.streamable" as="xs:boolean" select="false()"/>
+  <xsl:param name="schxslt.compile.base-uri-fixup" as="xs:boolean" select="true()"/>
 
   <xsl:template match="/sch:schema">
     <xsl:call-template name="schxslt:compile">
