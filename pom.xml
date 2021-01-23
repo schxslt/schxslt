@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>name.dmaus.schxslt</groupId>
   <artifactId>schxslt-parent</artifactId>
-  <version>1.6.2</version>
+  <version>1.7-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>SchXslt Parent</name>
