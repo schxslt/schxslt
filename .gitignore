@@ -1,6 +1,7 @@
 *-compiled.xsl
 *-compiled.xspec
 *.sch.xsl
+*.versionsBackup
 xspec/
 target/
 xar-resources
