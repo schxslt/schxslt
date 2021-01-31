@@ -4,6 +4,8 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
+  <xsl:import href="shared.xsl"/>
+
   <!-- Entry for recursive inclusion -->
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:include">
@@ -32,10 +34,9 @@
   <!-- Copy outermost element and keep it's base URI -->
   <xsl:template match="sch:schema" mode="schxslt:include">
     <xsl:copy>
-      <xsl:if test="exists(schxslt:base-uri(.))">
-        <xsl:attribute name="xml:base" select="schxslt:base-uri(.)"/>
-      </xsl:if>
-      <xsl:sequence select="@* except @xml:base"/>
+      <xsl:call-template name="schxslt:copy-attributes">
+        <xsl:with-param name="context" as="element()" select="."/>
+      </xsl:call-template>
       <xsl:apply-templates mode="schxslt:include"/>
     </xsl:copy>
   </xsl:template>
@@ -54,10 +55,9 @@
     <xsl:if test="(local-name($element) eq local-name(..)) and (namespace-uri($element) eq 'http://purl.oclc.org/dsdl/schematron')">
       <xsl:for-each select="$element/*">
         <xsl:copy>
-          <xsl:sequence select="@* except @xml:base"/>
-          <xsl:if test="exists(schxslt:base-uri(.))">
-            <xsl:attribute name="xml:base" select="schxslt:base-uri(.)"/>
-          </xsl:if>
+          <xsl:call-template name="schxslt:copy-attributes">
+            <xsl:with-param name="context" as="element()" select="."/>
+          </xsl:call-template>
           <xsl:sequence select="node()"/>
         </xsl:copy>
       </xsl:for-each>
@@ -70,10 +70,9 @@
     <xsl:variable name="element" select="if ($include instance of element()) then $include else $include/*"/>
     <xsl:for-each select="$element">
       <xsl:copy>
-        <xsl:sequence select="@* except @xml:base"/>
-        <xsl:if test="exists(schxslt:base-uri(.))">
-          <xsl:attribute name="xml:base" select="schxslt:base-uri(.)"/>
-        </xsl:if>
+        <xsl:call-template name="schxslt:copy-attributes">
+          <xsl:with-param name="context" as="element()" select="."/>
+        </xsl:call-template>
         <xsl:sequence select="node()"/>
       </xsl:copy>
     </xsl:for-each>

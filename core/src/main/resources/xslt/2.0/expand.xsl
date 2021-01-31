@@ -5,6 +5,8 @@
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:import href="shared.xsl"/>
+
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:expand">
       <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
@@ -15,10 +17,9 @@
   <xsl:template name="schxslt:expand">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
     <sch:schema>
-      <xsl:if test="exists(base-uri($schema))">
-        <xsl:attribute name="xml:base" select="base-uri($schema)"/>
-      </xsl:if>
-      <xsl:sequence select="$schema/@* except $schema/@xml:base"/>
+      <xsl:call-template name="schxslt:copy-attributes">
+        <xsl:with-param name="context" as="element()" select="$schema"/>
+      </xsl:call-template>
       <xsl:apply-templates mode="schxslt:expand" select="$schema/node()">
         <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
       </xsl:apply-templates>
@@ -83,4 +84,5 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+
 </xsl:transform>
