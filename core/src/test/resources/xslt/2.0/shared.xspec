@@ -1,0 +1,27 @@
+<xspec:description xmlns:xspec="http://www.jenitennison.com/xslt/xspec"
+             xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+             xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             stylesheet="../../../../main/resources/xslt/2.0/shared.xsl">
+
+  <xspec:scenario label="Copying attributes">
+    <xspec:scenario label="with base URI fixup enabled">
+      <xspec:call template="schxslt:copy-attributes">
+        <xspec:param name="context" as="element()">
+          <element xmlns="" attribute="value"/>
+        </xspec:param>
+      </xspec:call>
+      <xspec:expect label="the base URI is added or modified" test="count($xspec:result) = 2"/>
+    </xspec:scenario>
+    <xspec:scenario label="with base URI fixup disabled">
+      <xspec:call template="schxslt:copy-attributes">
+        <xspec:param name="context" as="element()">
+          <element xmlns="" attribute="value"/>
+        </xspec:param>
+        <xspec:param name="base-uri-fixup" as="xs:boolean" select="false()"/>
+      </xspec:call>
+      <xspec:expect label="the base URI is preserved" test="count($xspec:result) = 1"/>
+    </xspec:scenario>
+  </xspec:scenario>
+
+</xspec:description>

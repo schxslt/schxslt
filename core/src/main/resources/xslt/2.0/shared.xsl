@@ -7,10 +7,18 @@
     <xsl:param name="context" as="element()" required="yes"/>
     <xsl:param name="base-uri-fixup" as="xs:boolean" select="true()"/>
 
-    <xsl:if test="exists(base-uri($context))">
-      <xsl:attribute name="xml:base" select="base-uri($context)"/>
-    </xsl:if>
-    <xsl:sequence select="$context/@* except $context/@xml:base"/>
+    <xsl:variable name="xmlbase" as="attribute(xml:base)?">
+      <xsl:choose>
+        <xsl:when test="$base-uri-fixup and base-uri($context)">
+          <xsl:attribute name="xml:base" select="base-uri($context)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="$context/@xml:base"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:sequence select="($context/@* except $context/@xml:base, $xmlbase)"/>
 
   </xsl:template>
 
