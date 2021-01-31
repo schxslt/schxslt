@@ -14,15 +14,15 @@
   <!-- Copy the outermost element and preserve it's base URI -->
   <xsl:template name="schxslt:expand">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <xsl:copy>
-      <xsl:if test="exists(base-uri())">
-        <xsl:attribute name="xml:base" select="base-uri()"/>
+    <sch:schema>
+      <xsl:if test="exists(base-uri($schema))">
+        <xsl:attribute name="xml:base" select="base-uri($schema)"/>
       </xsl:if>
-      <xsl:sequence select="@* except @xml:base"/>
+      <xsl:sequence select="$schema/@* except $schema/@xml:base"/>
       <xsl:apply-templates mode="schxslt:expand" select="$schema/node()">
         <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
       </xsl:apply-templates>
-    </xsl:copy>
+    </sch:schema>
   </xsl:template>
 
   <!-- Copy all other elements -->
