@@ -101,12 +101,12 @@
           </xsl:call-template>
           <xsl:choose>
             <xsl:when test="$effective-phase = '#ALL'">
-              <xsl:for-each select="sch:pattern">
+              <xsl:for-each select="sch:pattern[sch:rule]">
                 <call-template name="{generate-id()}"/>
               </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:for-each select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern]">
+              <xsl:for-each select="sch:pattern[@id = current()/sch:phase[@id = $effective-phase]/sch:active/@pattern][sch:rule]">
                 <call-template name="{generate-id()}"/>
               </xsl:for-each>
             </xsl:otherwise>
