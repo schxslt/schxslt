@@ -4,6 +4,8 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
+  <xsl:param name="schxslt.base-uri-fixup" as="xs:boolean" select="true()"/>
+
   <!-- Entry for recursive inclusion -->
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:include">
@@ -34,6 +36,7 @@
     <xsl:copy>
       <xsl:call-template name="schxslt:copy-attributes">
         <xsl:with-param name="context" as="element()" select="."/>
+        <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
       </xsl:call-template>
       <xsl:apply-templates mode="schxslt:include"/>
     </xsl:copy>
@@ -55,6 +58,7 @@
         <xsl:copy>
           <xsl:call-template name="schxslt:copy-attributes">
             <xsl:with-param name="context" as="element()" select="."/>
+            <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
           </xsl:call-template>
           <xsl:sequence select="node()"/>
         </xsl:copy>
@@ -70,6 +74,7 @@
       <xsl:copy>
         <xsl:call-template name="schxslt:copy-attributes">
           <xsl:with-param name="context" as="element()" select="."/>
+          <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
         </xsl:call-template>
         <xsl:sequence select="node()"/>
       </xsl:copy>

@@ -5,6 +5,8 @@
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:param name="schxslt.base-uri-fixup" as="xs:boolean" select="true()"/>
+
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:expand">
       <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
@@ -17,6 +19,7 @@
     <sch:schema>
       <xsl:call-template name="schxslt:copy-attributes">
         <xsl:with-param name="context" as="element()" select="$schema"/>
+        <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
       </xsl:call-template>
       <xsl:apply-templates mode="schxslt:expand" select="$schema/node()">
         <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
