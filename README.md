@@ -7,14 +7,16 @@ license.
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1495494.svg)](https://doi.org/10.5281/zenodo.1495494)
 [![Build Status](https://travis-ci.org/schxslt/schxslt.svg?branch=master)](https://travis-ci.org/schxslt/schxslt)
 
-SchXslt is a Schematron processor implemented entirely in XSLT. It transforms a Schemtron schema document to an XSLT
+SchXslt is a Schematron processor implemented entirely in XSLT. It transforms a Schematron schema document into an XSLT
 stylesheet that you apply to the document(s) to be validated.
 
 Limitations
 --
 
-As of date SchXslt does not properly implement the scoping rules of pattern and phase variables (see
-[#135](https://github.com/schxslt/schxslt/issues/135) and [#136](https://github.com/schxslt/schxslt/issues/136)).
+As of date SchXslt does not properly implement :
+* the scoping rules of pattern (see
+[#135](https://github.com/schxslt/schxslt/issues/135))
+* and phase variables (see [#136](https://github.com/schxslt/schxslt/issues/136)).
 
 Schema, pattern, and phase variables are all implemented as global XSLT variables. As a consequence the name of a
 schema, pattern, or phase variable must be unique in the entire schema.
