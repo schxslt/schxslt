@@ -5,8 +5,6 @@
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:import href="shared.xsl"/>
-
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:expand">
       <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
@@ -84,5 +82,24 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+
+  <xsl:template name="schxslt:copy-attributes" as="attribute()*">
+    <xsl:param name="context" as="element()" required="yes"/>
+    <xsl:param name="base-uri-fixup" as="xs:boolean" select="true()"/>
+
+    <xsl:variable name="xmlbase" as="attribute(xml:base)?">
+      <xsl:choose>
+        <xsl:when test="$base-uri-fixup and base-uri($context)">
+          <xsl:attribute name="xml:base" select="base-uri($context)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="$context/@xml:base"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:sequence select="($context/@* except $context/@xml:base, $xmlbase)"/>
+
+  </xsl:template>
 
 </xsl:transform>

@@ -4,8 +4,6 @@
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494">
 
-  <xsl:import href="shared.xsl"/>
-
   <!-- Entry for recursive inclusion -->
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:include">
@@ -83,5 +81,24 @@
     <xsl:variable name="uri" as="xs:anyURI?" select="base-uri($node)"/>
     <xsl:sequence select="if (matches($uri, '^[a-zA-Z.+-]+:/')) then string($uri) else ()"/>
   </xsl:function>
+
+  <xsl:template name="schxslt:copy-attributes" as="attribute()*">
+    <xsl:param name="context" as="element()" required="yes"/>
+    <xsl:param name="base-uri-fixup" as="xs:boolean" select="true()"/>
+
+    <xsl:variable name="xmlbase" as="attribute(xml:base)?">
+      <xsl:choose>
+        <xsl:when test="$base-uri-fixup and base-uri($context)">
+          <xsl:attribute name="xml:base" select="base-uri($context)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="$context/@xml:base"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:sequence select="($context/@* except $context/@xml:base, $xmlbase)"/>
+
+  </xsl:template>
 
 </xsl:transform>
