@@ -212,6 +212,14 @@
       <xsl:with-param name="bindings" select="sch:let" as="element(sch:let)*"/>
     </xsl:call-template>
 
+    <xsl:if test="@burst">
+      <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
+        <apply-templates select="{@burst}(.)" mode="{@burst}.{$mode}"/>
+      </template>
+    </xsl:if>
+
+    <xsl:variable name="mode" as="xs:string" select="if (@burst) then concat($mode, '.', @burst) else $mode"/>
+
     <template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
       <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
 
