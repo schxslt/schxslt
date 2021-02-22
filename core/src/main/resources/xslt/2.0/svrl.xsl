@@ -24,7 +24,7 @@
       <xsl:for-each select="$schema/sch:p">
         <svrl:text>
           <xsl:sequence select="(@id, @class, @icon)"/>
-          <xsl:apply-templates select="node()" mode="#current"/>
+          <xsl:apply-templates select="node()" mode="schxslt:message-template"/>
         </svrl:text>
       </xsl:for-each>
 
@@ -142,7 +142,7 @@
     <xsl:call-template name="schxslt:copy-properties"/>
     <xsl:if test="text() | *">
       <svrl:text>
-        <xsl:apply-templates select="node()" mode="#current"/>
+        <xsl:apply-templates select="node()" mode="schxslt:message-template"/>
       </svrl:text>
     </xsl:if>
   </xsl:template>
@@ -156,7 +156,7 @@
           <xsl:when test="self::text()">
             <xsl:if test="normalize-space()">
               <svrl:text>
-                <xsl:apply-templates select="." mode="#current"/>
+                <xsl:apply-templates select="." mode="schxslt:message-template"/>
               </svrl:text>
             </xsl:if>
           </xsl:when>
@@ -198,10 +198,16 @@
       <svrl:diagnostic-reference diagnostic="{.}">
         <svrl:text>
           <xsl:sequence select="$diagnostic/@*"/>
-          <xsl:apply-templates select="$diagnostic/node()" mode="#current"/>
+          <xsl:apply-templates select="$diagnostic/node()" mode="schxslt:message-template"/>
         </svrl:text>
       </svrl:diagnostic-reference>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="sch:dir | sch:emph | sch:span" mode="schxslt:message-template">
+    <xsl:element name="svrl:{local-name()}">
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
+    </xsl:element>
   </xsl:template>
 
 </xsl:transform>
