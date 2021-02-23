@@ -29,7 +29,7 @@
 
             <xsl:choose>
               <xsl:when test="$spec?documents">
-                <runtime:for-each select="{$spec?document}">
+                <runtime:for-each select="{$spec?documents}">
                   <runtime:source-document href="." streamable="{if ($spec?streaming) then 'yes' else 'no'}">
                     <xsl:choose>
                       <xsl:when test="$spec?burst">
