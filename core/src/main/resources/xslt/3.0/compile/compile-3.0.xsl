@@ -4,6 +4,7 @@
                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
                xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
+               xmlns:schxslt-error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:schxslt-report="https://doi.org/10.5281/zenodo.1495494#report"
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -14,12 +15,48 @@
 
   <xsl:mode name="schxslt:copy-verbatim" on-no-match="deep-copy"/>
 
-  <xsl:template match="sch:schema">
-    <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema(sch:pattern)"/>
+  <xsl:import href="api-3.0.xsl"/>
+
+  <xsl:template match="/sch:schema">
+    <xsl:call-template name="schxslt:compile">
+      <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="schxslt:compile" as="element(xsl:stylesheet)">
+    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
+    <xsl:param name="options" as="map(xs:string, item()*)" select="map{}"/>
+
+    <xsl:variable name="phase" as="xs:string" select="schxslt:effective-phase(string($options?phase), string($schema/@defaultPhase))"/>
+    <xsl:variable name="patterns" as="element(sch:pattern)*">
+      <xsl:choose>
+        <xsl:when test="$phase ne '#ALL'">
+          <xsl:sequence select="$schema/sch:pattern[@id = $schema/sch:phase[@id = $phase]/sch:active/@pattern]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="$schema/sch:pattern"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:if test="empty($patterns)">
+      <xsl:message terminate="yes" expand-text="yes">
+        The phase {$phase} did not select any pattern.
+      </xsl:message>
+    </xsl:if>
+
+    <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema($patterns)"/>
 
     <runtime:stylesheet version="3.0">
 
       <runtime:output indent="true"/>
+
+      <xsl:apply-templates select="$schema/sch:let">
+        <xsl:with-param name="use-param" as="xs:boolean" select="true()"/>
+      </xsl:apply-templates>
+
+      <xsl:apply-templates select="$schema/sch:phase[@id = $phase]/sch:let"/>
+      <xsl:apply-templates select="$patterns/sch:let"/>
 
       <runtime:template match="/">
         <schxslt-report:report>
@@ -30,30 +67,22 @@
             <xsl:choose>
               <xsl:when test="$spec?documents">
                 <runtime:for-each select="{$spec?documents}">
-                  <runtime:source-document href="." streamable="{if ($spec?streaming) then 'yes' else 'no'}">
-                    <xsl:choose>
-                      <xsl:when test="$spec?burst">
-                        <runtime:apply-templates select="." mode="{$mode}.dispatch"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <runtime:apply-templates select="." mode="{$mode}"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
+                  <runtime:source-document href=".">
+                    <xsl:attribute name="streamable" select="if ($spec?streaming) then 'yes' else 'no'"/>
+                    <xsl:call-template name="schxslt:apply-rule">
+                      <xsl:with-param name="mode" as="xs:string" select="$mode"/>
+                      <xsl:with-param name="burst" as="xs:string?" select="$spec?burst"/>
+                    </xsl:call-template>
                   </runtime:source-document>
                 </runtime:for-each>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:choose>
-                  <xsl:when test="$spec?burst">
-                    <runtime:apply-templates select="." mode="{$mode}.dispatch"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <runtime:apply-templates select="." mode="{$mode}"/>
-                  </xsl:otherwise>
-                </xsl:choose>
+                <xsl:call-template name="schxslt:apply-rule">
+                  <xsl:with-param name="mode" as="xs:string" select="$mode"/>
+                  <xsl:with-param name="burst" as="xs:string?" select="$spec?burst"/>
+                </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
-
           </xsl:for-each>
         </schxslt-report:report>
       </runtime:template>
@@ -73,13 +102,13 @@
         <xsl:for-each select="$spec?rules">
           <!-- When using burst mode, we have a mode that dispatches the burst. -->
           <xsl:if test="$spec?burst">
-            <runtime:template match="{@context}" priority="{position()}" mode="{$mode}.dispatch">
+            <runtime:template match="{@context}" priority="{count(following-sibling::sch:rule)}" mode="{$mode}.dispatch">
               <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
               <runtime:apply-templates select="{$spec?burst}(.)" mode="{$mode}"/>
             </runtime:template>
           </xsl:if>
 
-          <runtime:template match="{@context}" priority="{position()}" mode="{$mode}">
+          <runtime:template match="{@context}" priority="{count(following-sibling::sch:rule)}" mode="{$mode}">
             <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
             <runtime:param name="schxslt:pattern" as="xs:string*"/>
 
@@ -156,6 +185,24 @@
     </runtime:element>
   </xsl:template>
 
+  <xsl:function name="schxslt:effective-phase" as="xs:string">
+    <xsl:param name="phase" as="xs:string"/>
+    <xsl:param name="default" as="xs:string"/>
+    <!--
+         If no phase is given, the give phase is '#DEFAULT', or the
+         give phase is the empty string we use the default phase or
+         '#ALL' if no default phase is defined.
+    -->
+    <xsl:choose>
+      <xsl:when test="$phase = ('', '#DEFAULT')">
+        <xsl:value-of select="if ($default) then $default else '#ALL'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$phase"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
+
   <xsl:function name="schxslt:analyze-schema" as="map(xs:string, map(xs:string, item()*))">
     <xsl:param name="schema" as="element(sch:pattern)+"/>
 
@@ -173,5 +220,18 @@
       </xsl:for-each-group>
     </xsl:map>
   </xsl:function>
+
+  <xsl:template name="schxslt:apply-rule" as="element(xsl:apply-templates)">
+    <xsl:param name="mode" as="xs:string" required="yes"/>
+    <xsl:param name="burst" as="xs:string?"/>
+    <xsl:choose>
+      <xsl:when test="$burst">
+        <runtime:apply-templates select="." mode="{$mode}.dispatch"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <runtime:apply-templates select="." mode="{$mode}"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:transform>
