@@ -62,8 +62,9 @@
       <xsl:call-template name="schxslt:assert-unique-variables">
         <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:let"/>
       </xsl:call-template>
-      <xsl:call-template name="schxslt:let-param">
+      <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:let"/>
+        <xsl:with-param name="create-param" as="xs:boolean" select="true()"/>
       </xsl:call-template>
 
       <xsl:call-template name="schxslt:assert-unique-variables">
@@ -244,34 +245,20 @@
 
   <xsl:template name="schxslt:let-variable" as="element(xsl:variable)*">
     <xsl:param name="decls" as="element(sch:let)*" required="yes"/>
+    <xsl:param name="create-param" as="xs:boolean" select="false()"/>
     <xsl:for-each select="$decls">
-      <runtime:variable>
+      <xsl:element name="xsl:{if ($create-param) then 'param' else 'variable'}">
         <xsl:sequence select="@as, @xml:base, @name"/>
-        <xsl:call-template name="schxslt:let-value"/>
-      </runtime:variable>
+        <xsl:choose>
+          <xsl:when test="@value">
+            <xsl:attribute name="select" select="@value"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="node()" mode="schxslt:copy-verbatim"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:element>
     </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template name="schxslt:let-param" as="element(xsl:param)*">
-    <xsl:param name="decls" as="element(sch:let)*" required="yes"/>
-    <xsl:for-each select="$decls">
-      <runtime:param>
-        <xsl:sequence select="@as, @xml:base, @name"/>
-        <xsl:call-template name="schxslt:let-value"/>
-      </runtime:param>
-    </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template name="schxslt:let-value" as="item()*">
-    <xsl:context-item use="required" as="element(sch:let)"/>
-    <xsl:choose>
-      <xsl:when test="@value">
-        <xsl:attribute name="select" select="@value"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="node()" mode="schxslt:copy-verbatim"/>
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="schxslt:apply-rule" as="element(xsl:apply-templates)">
