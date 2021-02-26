@@ -14,12 +14,16 @@
   <xsl:output indent="yes"/>
 
   <xsl:mode name="schxslt:copy-verbatim" on-no-match="deep-copy"/>
+  <xsl:mode name="schxslt:message-template" on-no-match="shallow-copy"/>
 
   <xsl:import href="api-3.0.xsl"/>
+
+  <xsl:param name="phase" as="xs:string" select="''"/>
 
   <xsl:template match="/sch:schema">
     <xsl:call-template name="schxslt:compile">
       <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+      <xsl:with-param name="options" as="map(xs:string, item()*)" select="map{'phase': $phase}"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -232,6 +236,18 @@
         <runtime:apply-templates select="." mode="{$mode}"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="sch:name" mode="schxslt:message-template">
+    <runtime:value-of select="{if (@path) then @path else 'name()'}">
+      <xsl:sequence select="@xml:base"/>
+    </runtime:value-of>
+  </xsl:template>
+
+  <xsl:template match="sch:value-of" mode="schxslt:message-template">
+    <runtime:value-of select="{@select}">
+      <xsl:sequence select="@xml:base"/>
+    </runtime:value-of>
   </xsl:template>
 
 </xsl:transform>
