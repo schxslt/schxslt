@@ -110,11 +110,6 @@
       <template match="/">
         <xsl:sequence select="$schematron/sch:phase[@id eq $effective-phase]/@xml:base"/>
 
-        <xsl:call-template name="schxslt:let-variable">
-          <xsl:with-param name="bindings" select="$schematron/sch:phase[@id eq $effective-phase]/sch:let"/>
-          <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
-        </xsl:call-template>
-
         <variable name="metadata" as="element()?">
           <xsl:call-template name="schxslt-api:metadata">
             <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
