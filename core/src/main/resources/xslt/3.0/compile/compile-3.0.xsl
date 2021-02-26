@@ -52,15 +52,26 @@
     <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema($patterns)"/>
 
     <runtime:stylesheet version="3.0">
+      <xsl:for-each select="sch:ns">
+        <xsl:namespace name="{@prefix}" select="@uri"/>
+      </xsl:for-each>
+      <xsl:sequence select="$schema/@xml:base"/>
 
       <runtime:output indent="true"/>
 
-      <xsl:apply-templates select="$schema/sch:let">
-        <xsl:with-param name="use-param" as="xs:boolean" select="true()"/>
-      </xsl:apply-templates>
+      <xsl:call-template name="schxslt:assert-unique-variables">
+        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:let"/>
+      </xsl:call-template>
+      <xsl:call-template name="schxslt:let-param">
+        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:let"/>
+      </xsl:call-template>
 
-      <xsl:apply-templates select="$schema/sch:phase[@id = $phase]/sch:let"/>
-      <xsl:apply-templates select="$patterns/sch:let"/>
+      <xsl:call-template name="schxslt:assert-unique-variables">
+        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
+      </xsl:call-template>
+      <xsl:call-template name="schxslt:let-variable">
+        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
+      </xsl:call-template>
 
       <runtime:template match="/">
         <schxslt-report:report>
@@ -116,7 +127,12 @@
             <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
             <runtime:param name="schxslt:pattern" as="xs:string*"/>
 
-            <xsl:apply-templates select="sch:let"/>
+            <xsl:call-template name="schxslt:assert-unique-variables">
+              <xsl:with-param name="decls" as="element(sch:let)*" select="sch:let"/>
+            </xsl:call-template>
+            <xsl:call-template name="schxslt:let-variable">
+              <xsl:with-param name="decls" as="element(sch:let)*" select="sch:let"/>
+            </xsl:call-template>
 
             <runtime:choose>
               <runtime:when test="$schxslt:pattern[. = '{generate-id(..)}']">
@@ -145,23 +161,9 @@
 
   </xsl:template>
 
-  <xsl:template match="sch:let">
-    <xsl:param name="use-param" as="xs:boolean" select="false()"/>
-    <xsl:element name="{if ($use-param) then 'param' else 'variable'}">
-      <xsl:sequence select="@as, @xml:base, @name"/>
-      <xsl:choose>
-        <xsl:when test="@value">
-          <xsl:attribute name="select" select="@value"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="node()" mode="schxslt:copy-verbatim"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:element>
-  </xsl:template>
-
   <xsl:template match="sch:assert | sch:report">
     <runtime:if test="{if (self::sch:report) then @test else 'not(' || @test || ')'}">
+      <xsl:sequence select="@xml:base"/>
       <schxslt-report:failed-constraint>
         <runtime:attribute name="{local-name()}">
           <xsl:value-of select="@test"/>
@@ -224,6 +226,53 @@
       </xsl:for-each-group>
     </xsl:map>
   </xsl:function>
+
+  <xsl:template name="schxslt:assert-unique-variables" as="empty-sequence()">
+    <xsl:param name="decls" as="element(sch:let)*" required="yes"/>
+    <xsl:if test="count($decls) ne count(distinct-values($decls/@name))">
+      <xsl:message terminate="yes">
+        It is an error for a variable to be multiply defined
+        <xsl:for-each-group select="$decls" group-by="@name">
+          <xsl:sort select="current-grouping-key()"/>
+          <xsl:if test="count(current-group()) gt 1">
+            <xsl:value-of select="current-grouping-key()"/>
+          </xsl:if>
+        </xsl:for-each-group>
+      </xsl:message>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="schxslt:let-variable" as="element(xsl:variable)*">
+    <xsl:param name="decls" as="element(sch:let)*" required="yes"/>
+    <xsl:for-each select="$decls">
+      <runtime:variable>
+        <xsl:sequence select="@as, @xml:base, @name"/>
+        <xsl:call-template name="schxslt:let-value"/>
+      </runtime:variable>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="schxslt:let-param" as="element(xsl:param)*">
+    <xsl:param name="decls" as="element(sch:let)*" required="yes"/>
+    <xsl:for-each select="$decls">
+      <runtime:param>
+        <xsl:sequence select="@as, @xml:base, @name"/>
+        <xsl:call-template name="schxslt:let-value"/>
+      </runtime:param>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="schxslt:let-value" as="item()*">
+    <xsl:context-item use="required" as="element(sch:let)"/>
+    <xsl:choose>
+      <xsl:when test="@value">
+        <xsl:attribute name="select" select="@value"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="node()" mode="schxslt:copy-verbatim"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template name="schxslt:apply-rule" as="element(xsl:apply-templates)">
     <xsl:param name="mode" as="xs:string" required="yes"/>
