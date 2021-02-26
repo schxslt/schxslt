@@ -24,7 +24,7 @@
       <xsl:for-each select="$schema/sch:p">
         <svrl:text>
           <xsl:sequence select="(@id, @class, @icon)"/>
-          <xsl:apply-templates select="node()" mode="#current"/>
+          <xsl:apply-templates select="node()" mode="schxslt:message-template"/>
         </svrl:text>
       </xsl:for-each>
 
@@ -50,7 +50,7 @@
   <xsl:template name="schxslt-api:fired-rule">
     <xsl:param name="rule" as="element(sch:rule)" required="yes"/>
     <svrl:fired-rule>
-      <xsl:sequence select="($rule/@id, $rule/@role, $rule/@flag)"/>
+      <xsl:sequence select="($rule/@id, $rule/@role, $rule/@flag, $rule/@see, $rule/@icon, $rule/@fpi)"/>
       <attribute name="context">
         <xsl:value-of select="$rule/@context"/>
       </attribute>
@@ -64,7 +64,7 @@
     </xsl:variable>
     <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
     <svrl:suppressed-rule>
-      <xsl:sequence select="($rule/@id, $rule/@role, $rule/@flag)"/>
+      <xsl:sequence select="($rule/@id, $rule/@role, $rule/@flag, $rule/@see, $rule/@icon, $rule/@fpi)"/>
       <attribute name="context">
         <xsl:value-of select="$rule/@context"/>
       </attribute>
@@ -73,9 +73,8 @@
 
   <xsl:template name="schxslt-api:failed-assert">
     <xsl:param name="assert" as="element(sch:assert)" required="yes"/>
-    <svrl:failed-assert location="{{path({($report/@subject, $report/../@subject, '.')[1]})}}">
-      <!-- <svrl:failed-assert location="{{path({($assert/@subject, $assert/../@subject, '.')[1]})}}"> -->
-      <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id)"/>
+    <svrl:failed-assert location="{{path({($assert/@subject, $assert/../@subject, '.')[1]})}}">
+      <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id, $assert/@see, $assert/@icon, $assert/@fpi)"/>
       <attribute name="test">
         <xsl:value-of select="$assert/@test"/>
       </attribute>
@@ -88,7 +87,7 @@
   <xsl:template name="schxslt-api:successful-report">
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
     <svrl:successful-report location="{{path({($report/@subject, $report/../@subject, '.')[1]})}}">
-      <xsl:sequence select="($report/@role, $report/@flag, $report/@id)"/>
+      <xsl:sequence select="($report/@role, $report/@flag, $report/@id, $report/@see, $report/@icon, $report/@fpi)"/>
       <attribute name="test">
         <xsl:value-of select="$report/@test"/>
       </attribute>
@@ -141,7 +140,7 @@
     <xsl:call-template name="schxslt:copy-properties"/>
     <xsl:if test="text() | *">
       <svrl:text>
-        <xsl:apply-templates select="node()" mode="#current"/>
+        <xsl:apply-templates select="node()" mode="schxslt:message-template"/>
       </svrl:text>
     </xsl:if>
   </xsl:template>
@@ -155,7 +154,7 @@
           <xsl:when test="self::text()">
             <xsl:if test="normalize-space()">
               <svrl:text>
-                <xsl:apply-templates select="." mode="#current"/>
+                <xsl:apply-templates select="." mode="schxslt:message-template"/>
               </svrl:text>
             </xsl:if>
           </xsl:when>
@@ -197,10 +196,16 @@
       <svrl:diagnostic-reference diagnostic="{.}">
         <svrl:text>
           <xsl:sequence select="$diagnostic/@*"/>
-          <xsl:apply-templates select="$diagnostic/node()" mode="#current"/>
+          <xsl:apply-templates select="$diagnostic/node()" mode="schxslt:message-template"/>
         </svrl:text>
       </svrl:diagnostic-reference>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="sch:dir | sch:emph | sch:span" mode="schxslt:message-template">
+    <xsl:element name="svrl:{local-name()}">
+      <xsl:apply-templates select="node() | @*" mode="#current"/>
+    </xsl:element>
   </xsl:template>
 
 </xsl:transform>
