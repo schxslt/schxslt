@@ -89,6 +89,7 @@
       <xsl:sequence select="$schematron/xsl:function[not(preceding-sibling::sch:pattern)]"/>
       <xsl:if test="$xslt-version eq '3.0'">
         <xsl:sequence select="$schematron/xsl:accumulator[not(preceding-sibling::sch:pattern)]"/>
+        <xsl:sequence select="$schematron/xsl:use-package[not(preceding-sibling::sch:pattern)]"/>
       </xsl:if>
 
       <!-- See https://github.com/dmj/schxslt/issues/25 -->
