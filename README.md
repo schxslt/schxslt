@@ -13,10 +13,9 @@ stylesheet that you apply to the document(s) to be validated.
 Limitations
 --
 
-As of date SchXslt does not properly implement :
-* the scoping rules of pattern (see
-[#135](https://github.com/schxslt/schxslt/issues/135))
-* and phase variables (see [#136](https://github.com/schxslt/schxslt/issues/136)).
+As of date SchXslt does not properly implement the scoping rules of pattern (see
+[#135](https://github.com/schxslt/schxslt/issues/135)) and phase variables (see
+[#136](https://github.com/schxslt/schxslt/issues/136)).
 
 Schema, pattern, and phase variables are all implemented as global XSLT variables. As a consequence the name of a
 schema, pattern, or phase variable must be unique in the entire schema.
@@ -24,6 +23,27 @@ schema, pattern, or phase variable must be unique in the entire schema.
 Due to the constrains of XSLT 1.0 and the way rules are implemented it is not possible to use a variable inside a rule
 context expression of a Schematron using the XSLT 1.0 query binding (see
 [#138](https://github.com/schxslt/schxslt/issues/138)).
+
+Schematron enhancements
+--
+
+SchXslt implements the following Schematron enhancements:
+
+### Typed variables
+
+[Proposal 1](https://github.com/Schematron/schematron-enhancement-proposals/issues/1)
+
+### Base URI fixup
+
+[Proposal 2](https://github.com/Schematron/schematron-enhancement-proposals/issues/2)
+
+### Globally available abstract rules
+
+[Proposal 3](https://github.com/Schematron/schematron-enhancement-proposals/issues/3)
+
+### Addition XSLT elements
+
+[Proposal 4](https://github.com/Schematron/schematron-enhancement-proposals/issues/4)
 
 Installation
 --
