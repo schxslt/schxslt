@@ -254,11 +254,13 @@
     <xsl:param name="streamable" as="xs:boolean" required="yes"/>
     <xsl:param name="xslt-version" as="xs:string" tunnel="yes" required="yes"/>
 
-    <mode use-accumulators="#all">
-      <xsl:if test="$streamable">
-        <xsl:attribute name="streamable">yes</xsl:attribute>
-      </xsl:if>
-    </mode>
+    <xsl:if test="$xslt-version = '3.0'">
+      <mode use-accumulators="#all">
+        <xsl:if test="$streamable">
+          <xsl:attribute name="streamable">yes</xsl:attribute>
+        </xsl:if>
+      </mode>
+    </xsl:if>
 
     <xsl:for-each-group select="$patterns" group-by="string-join((base-uri(.), @documents), '~')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
