@@ -12,9 +12,7 @@
       <xsl:with-param name="schematron" as="element(sch:schema)">
         <xsl:call-template name="schxslt:expand">
           <xsl:with-param name="schema" as="element(sch:schema)">
-            <xsl:call-template name="schxslt:include">
-              <xsl:with-param name="schematron" as="element(sch:schema)" select="."/>
-            </xsl:call-template>
+              <xsl:apply-templates select="." mode="schxslt:include"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:with-param>
