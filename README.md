@@ -33,17 +33,51 @@ SchXslt implements the following Schematron enhancements:
 
 [Proposal 1](https://github.com/Schematron/schematron-enhancement-proposals/issues/1)
 
+The Schematron specification does not allow for annotating variables with the expected type of its value. Type
+annotations are helpful to make the most of XSLT 3.0. Using them is current best practice.
+
+This proposal adds support for an ```@as``` attribute on variable declarations.
+
 ### Base URI fixup
 
 [Proposal 2](https://github.com/Schematron/schematron-enhancement-proposals/issues/2)
 
-### Globally available abstract rules
+The Schematron specification defines two elements that handle the inclusion of external definitions, ```include``` and
+```extends```, but doe not clarify how this inclusion effects relative URI references in the inserted content.
+
+This proposal implements base URI fixup as defined in [XInclude 4.5.5](https://www.w3.org/TR/xinclude/#base).
+
+Base URI fixup is enabled by default. You can disable it by setting the parameter ```schxslt.base-uri-fixup``` to
+boolean ```false``` when calling the stylesheets that performs inclusions. For convenience, you can run the stylesheet
+```include-no-baseuri-fixup.xsl``` which runs the inclusion phase with base URI fixup turned off.
+
+### Global abstract rules
 
 [Proposal 3](https://github.com/Schematron/schematron-enhancement-proposals/issues/3)
+
+The Schematron specification limits the the reuse of abstract rules to the current pattern element. The ```@href
+attribute``` on ```extends``` was introduced in 2016 to overcome this limitation but requires a schema author to
+externalize abstract rules for them to be used.
+
+This proposal extends Schematron with a top-level ```rules``` element to hold abstract rules that are globally
+referencable by the ```@rule``` attribute of ```extends```.
 
 ### Addition XSLT elements
 
 [Proposal 4](https://github.com/Schematron/schematron-enhancement-proposals/issues/4)
+
+The Schematron specification allows the XSLT elements ```function``` and ```key``` to be used in a Schematron
+schema. This makes sense because both are required to set up the query language environment. The ```key``` element
+prepares data structures for the ```key()``` function and the ```function``` element allows the use of user defined
+functions.
+
+This proposal adds support for the following XSLT elements:
+
+* xsl:accumulator (XSLT 3.0)
+* xsl:import (XSLT 1.0, XSLT 2.0, XSLT 3.0)
+* xsl:import-schema (XSLT 2.0, XSLT 3.0)
+* xsl:include (XSLT 1.0, XSLT 2.0, XSLT 3.0)
+* xsl:use-package (XSLT 3.0)
 
 Installation
 --
