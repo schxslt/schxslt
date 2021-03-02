@@ -26,7 +26,7 @@
   <xsl:include href="../version.xsl"/>
 
   <xsl:param name="phase" as="xs:string">#DEFAULT</xsl:param>
-  <xsl:param name="schxslt.compile.typed-variables" as="xs:boolean" select="true()"/>
+  <xsl:variable name="schxslt.compile.typed-variables" as="xs:boolean" select="true()"/>
   <xsl:param name="schxslt.compile.streamable" as="xs:boolean" select="false()"/>
 
   <xsl:template match="/sch:schema">
