@@ -6,6 +6,30 @@
 
   <xsl:param name="schxslt.base-uri-fixup" as="xs:boolean" select="true()"/>
 
+  <!-- Entry for recursive inclusion -->
+  <xsl:template match="sch:schema">
+    <xsl:call-template name="schxslt:include">
+      <xsl:with-param name="schematron" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <!-- Recursive inclusion -->
+  <xsl:template name="schxslt:include">
+    <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
+    <xsl:variable name="result" as="element(sch:schema)">
+      <xsl:apply-templates select="$schematron" mode="schxslt:include"/>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$result//sch:include or $result//sch:extends[@href]">
+        <xsl:call-template name="schxslt:include">
+          <xsl:with-param name="schematron" select="$result" as="element(sch:schema)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="$result"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <!-- Copy outermost element and keep it's base URI -->
   <xsl:template match="sch:schema" mode="schxslt:include">
@@ -31,22 +55,13 @@
     <xsl:variable name="element" select="if ($extends instance of element()) then $extends else $extends/*"/>
     <xsl:if test="(local-name($element) eq local-name(..)) and (namespace-uri($element) eq 'http://purl.oclc.org/dsdl/schematron')">
       <xsl:for-each select="$element/*">
-          <xsl:choose>
-              <!-- Recursive inclusion -->
-              <xsl:when test=".[self::sch:extends or self::sch:include][@href]">
-                  <xsl:apply-templates select="." mode="schxslt:include"/>
-              </xsl:when>
-              <xsl:otherwise>
-                  <xsl:copy>
-                      <xsl:call-template name="schxslt:copy-attributes">
-                          <xsl:with-param name="context" as="element()" select="."/>
-                          <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
-                      </xsl:call-template>
-                      <xsl:sequence select="node()"/>
-                  </xsl:copy>
-              </xsl:otherwise>
-          </xsl:choose>
-        
+        <xsl:copy>
+          <xsl:call-template name="schxslt:copy-attributes">
+            <xsl:with-param name="context" as="element()" select="."/>
+            <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
+          </xsl:call-template>
+          <xsl:sequence select="node()"/>
+        </xsl:copy>
       </xsl:for-each>
     </xsl:if>
   </xsl:template>
@@ -56,22 +71,13 @@
     <xsl:variable name="include" select="doc(if (exists(schxslt:base-uri(.))) then resolve-uri(@href, schxslt:base-uri(.)) else resolve-uri(@href))"/>
     <xsl:variable name="element" select="if ($include instance of element()) then $include else $include/*"/>
     <xsl:for-each select="$element">
-        <xsl:choose>
-            <!-- Recursive inclusion -->
-            <xsl:when test="$element[self::sch:extends or self::sch:include][@href]">
-                <xsl:apply-templates select="$element" mode="schxslt:include"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy>
-                    <xsl:call-template name="schxslt:copy-attributes">
-                        <xsl:with-param name="context" as="element()" select="."/>
-                        <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
-                    </xsl:call-template>
-                    <xsl:sequence select="node()"/>
-                </xsl:copy>
-            </xsl:otherwise>
-        </xsl:choose>
-        
+      <xsl:copy>
+        <xsl:call-template name="schxslt:copy-attributes">
+          <xsl:with-param name="context" as="element()" select="."/>
+          <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
+        </xsl:call-template>
+        <xsl:sequence select="node()"/>
+      </xsl:copy>
     </xsl:for-each>
   </xsl:template>
 
