@@ -43,7 +43,7 @@ This proposal adds support for an ```@as``` attribute on variable declarations.
 [Proposal 2](https://github.com/Schematron/schematron-enhancement-proposals/issues/2)
 
 The Schematron specification defines two elements that handle the inclusion of external definitions, ```include``` and
-```extends```, but doe not clarify how this inclusion effects relative URI references in the inserted content.
+```extends```, but does not clarify how this inclusion effects relative URI references in the inserted content.
 
 This proposal implements base URI fixup as defined in [XInclude 4.5.5](https://www.w3.org/TR/xinclude/#base).
 
@@ -101,7 +101,7 @@ Using SchXslt
 ### XSLT Stylesheets
 
 The simplest way to use SchXslt is to download the ZIP file with just the stylesheets from the
-[releaes](https://github.com/schxslt/schxslt/releases) page. To validate documents with your Schematron you first
+[releases](https://github.com/schxslt/schxslt/releases) page. To validate documents with your Schematron you first
 transform it with the ```pipeline-for-svrl.xsl``` stylesheet. This creates the XSL transformation that creates a
 validation report when applied to a document.
 
