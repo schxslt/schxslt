@@ -45,17 +45,38 @@
 
   <!-- Replace with contents of external definition -->
   <xsl:template match="sch:extends[@href]" mode="schxslt:include">
-    <xsl:variable name="extends" select="document(@href)"/>
+    <xsl:variable name="location"
+                  select="if (ancestor::*/@schxslt:base-uri) then resolve-uri(@href, ancestor::*/@schxslt:base-uri[1]) else @href"/>
+    <xsl:variable name="extends" select="document($location)"/>
     <xsl:variable name="element" select="if ($extends instance of element()) then $extends else $extends/*"/>
     <xsl:if test="(local-name($element) eq local-name(..)) and (namespace-uri($element) eq 'http://purl.oclc.org/dsdl/schematron')">
-      <xsl:sequence select="$element/*"/>
+      <xsl:variable name="base-uri" as="xs:string?" select="base-uri($element)"/>
+      <xsl:for-each select="$element/*">
+        <xsl:copy>
+          <xsl:sequence select="@*"/>
+          <xsl:if test="$base-uri">
+            <xsl:attribute name="schxslt:base-uri" select="$base-uri"/>
+          </xsl:if>
+        </xsl:copy>
+      </xsl:for-each>
     </xsl:if>
   </xsl:template>
 
   <!-- Replace with external definition -->
   <xsl:template match="sch:include" mode="schxslt:include">
-    <xsl:variable name="include" select="document(@href)"/>
-    <xsl:sequence select="if ($include instance of element()) then $include else $include/*"/>
+    <xsl:variable name="location"
+                  select="if (ancestor::*/@schxslt:base-uri) then resolve-uri(@href, ancestor::*/@schxslt:base-uri[1]) else @href"/>
+    <xsl:variable name="include" select="document($location)"/>
+    <xsl:variable name="element" select="if ($include instance of element()) then $include else $include/*"/>
+    <xsl:variable name="base-uri" as="xs:string?" select="base-uri($element)"/>
+    <xsl:for-each select="$element">
+      <xsl:copy>
+        <xsl:sequence select="@*"/>
+        <xsl:if test="$base-uri">
+          <xsl:attribute name="schxslt:base-uri" select="$base-uri"/>
+        </xsl:if>
+      </xsl:copy>
+    </xsl:for-each>
   </xsl:template>
 
 </xsl:transform>
