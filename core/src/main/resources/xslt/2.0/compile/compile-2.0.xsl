@@ -281,7 +281,7 @@
             <xsl:choose>
               <xsl:when test="$xslt-version = '3.0'">
                 <for-each select="{@documents}">
-                  <source-document href=".">
+                  <source-document href="{{.}}">
                     <xsl:for-each select="current-group()">
                       <schxslt:pattern id="{generate-id()}">
                         <for-each select=".">
