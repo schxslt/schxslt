@@ -38,19 +38,6 @@ annotations are helpful to make the most of XSLT 3.0. Using them is current best
 
 This proposal adds support for an ```@as``` attribute on variable declarations.
 
-### Base URI fixup
-
-[Proposal 2](https://github.com/Schematron/schematron-enhancement-proposals/issues/2)
-
-The Schematron specification defines two elements that handle the inclusion of external definitions, ```include``` and
-```extends```, but does not clarify how this inclusion effects relative URI references in the inserted content.
-
-This proposal implements base URI fixup as defined in [XInclude 4.5.5](https://www.w3.org/TR/xinclude/#base).
-
-Base URI fixup is enabled by default. You can disable it by setting the parameter ```schxslt.base-uri-fixup``` to
-boolean ```false``` when calling the stylesheets that performs inclusions. For convenience, you can run the stylesheet
-```include-no-baseuri-fixup.xsl``` which runs the inclusion phase with base URI fixup turned off.
-
 ### Global abstract rules
 
 [Proposal 3](https://github.com/Schematron/schematron-enhancement-proposals/issues/3)
