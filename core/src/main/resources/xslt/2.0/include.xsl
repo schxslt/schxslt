@@ -45,7 +45,7 @@
 
   <!-- Replace with contents of external definition -->
   <xsl:template match="sch:extends[@href]" mode="schxslt:include">
-    <xsl:variable name="location" as="xs:string"
+    <xsl:variable name="location"
                   select="if (ancestor::*/@schxslt:base-uri) then resolve-uri(@href, ancestor::*/@schxslt:base-uri[1]) else @href"/>
     <xsl:variable name="extends" select="document($location)"/>
     <xsl:variable name="element" select="if ($extends instance of element()) then $extends else $extends/*"/>
@@ -64,7 +64,7 @@
 
   <!-- Replace with external definition -->
   <xsl:template match="sch:include" mode="schxslt:include">
-    <xsl:variable name="location" as="xs:string"
+    <xsl:variable name="location"
                   select="if (ancestor::*/@schxslt:base-uri) then resolve-uri(@href, ancestor::*/@schxslt:base-uri[1]) else @href"/>
     <xsl:variable name="include" select="document($location)"/>
     <xsl:variable name="element" select="if ($include instance of element()) then $include else $include/*"/>
