@@ -264,7 +264,6 @@
 
     <xsl:for-each-group select="$patterns" group-by="string-join((base-uri(.), @documents), '~')">
       <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
-      <xsl:variable name="baseUri" as="xs:anyURI" select="base-uri(.)"/>
 
       <xsl:if test="$xslt-version = '3.0'">
         <mode name="{$mode}" use-accumulators="#all">
@@ -282,12 +281,9 @@
             <xsl:choose>
               <xsl:when test="$xslt-version = '3.0'">
                 <for-each select="{@documents}">
-                  <source-document href="{{resolve-uri(., '{$baseUri}')}}">
+                  <source-document href=".">
                     <xsl:for-each select="current-group()">
                       <schxslt:pattern id="{generate-id()}">
-                        <if test="exists(base-uri(.))">
-                          <attribute name="documents" select="base-uri(.)"/>
-                        </if>
                         <for-each select=".">
                           <xsl:call-template name="schxslt-api:active-pattern">
                             <xsl:with-param name="pattern" as="element(sch:pattern)" select="."/>
@@ -301,7 +297,7 @@
               </xsl:when>
               <xsl:otherwise>
                 <for-each select="{@documents}">
-                  <variable name="document" as="item()" select="document(resolve-uri(., '{$baseUri}'))"/>
+                  <variable name="document" as="item()" select="document(.)"/>
                   <xsl:for-each select="current-group()">
                     <schxslt:pattern id="{generate-id()}">
                       <if test="exists(base-uri($document))">
