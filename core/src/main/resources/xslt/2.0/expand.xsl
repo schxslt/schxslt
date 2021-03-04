@@ -5,26 +5,17 @@
                xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:param name="schxslt.base-uri-fixup" as="xs:boolean" select="true()"/>
-
   <xsl:template match="sch:schema">
     <xsl:call-template name="schxslt:expand">
       <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
     </xsl:call-template>
   </xsl:template>
 
-  <!-- Copy the outermost element and preserve it's base URI -->
   <xsl:template name="schxslt:expand">
     <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <sch:schema>
-      <xsl:call-template name="schxslt:copy-attributes">
-        <xsl:with-param name="context" as="element()" select="$schema"/>
-        <xsl:with-param name="base-uri-fixup" as="xs:boolean" select="$schxslt.base-uri-fixup"/>
-      </xsl:call-template>
-      <xsl:apply-templates mode="schxslt:expand" select="$schema/node()">
-        <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
-      </xsl:apply-templates>
-    </sch:schema>
+    <xsl:apply-templates select="$schema" mode="schxslt:expand">
+      <xsl:with-param name="abstract-patterns" as="element(sch:pattern)*" tunnel="yes" select="$schema/sch:pattern[@abstract = 'true']"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- Copy all other elements -->
@@ -86,24 +77,5 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
-
-  <xsl:template name="schxslt:copy-attributes" as="attribute()*">
-    <xsl:param name="context" as="element()" required="yes"/>
-    <xsl:param name="base-uri-fixup" as="xs:boolean" select="true()"/>
-
-    <xsl:variable name="xmlbase" as="attribute(xml:base)?">
-      <xsl:choose>
-        <xsl:when test="$base-uri-fixup and base-uri($context)">
-          <xsl:attribute name="xml:base" select="base-uri($context)"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:sequence select="$context/@xml:base"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <xsl:sequence select="($context/@* except $context/@xml:base, $xmlbase)"/>
-
-  </xsl:template>
 
 </xsl:transform>
