@@ -74,6 +74,14 @@
         <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
       </xsl:call-template>
 
+      <xsl:sequence select="$schema/xsl:import-schema[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schema/xsl:include[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schema/xsl:import[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schema/xsl:key[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schema/xsl:function[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schema/xsl:accumulator[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$schema/xsl:use-package[not(preceding-sibling::sch:pattern)]"/>
+
       <runtime:template match="/">
         <schxslt-report:report>
           <xsl:for-each select="map:keys($modes)">
