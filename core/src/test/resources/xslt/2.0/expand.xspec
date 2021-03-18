@@ -27,7 +27,7 @@
       </sch:schema>
     </context>
     <expect label="by replacing the params">
-      <sch:schema xml:base="...">
+      <sch:schema>
         <sch:pattern>
           <sch:rule context="table">
             <sch:assert test="tr"/>

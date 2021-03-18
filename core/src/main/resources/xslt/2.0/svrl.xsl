@@ -60,7 +60,7 @@
   <xsl:template name="schxslt-api:suppressed-rule">
     <xsl:param name="rule" as="element(sch:rule)" required="yes"/>
     <xsl:variable name="message">
-      WARNING: Rule <xsl:value-of select="normalize-space(@id)"/> for context "<xsl:value-of select="@context"/>" shadowed by preceeding rule
+      WARNING: Rule <xsl:value-of select="normalize-space(@id)"/> for context "<xsl:value-of select="@context"/>" shadowed by preceding rule
     </xsl:variable>
     <comment> <xsl:sequence select="normalize-space($message)"/> </comment>
     <svrl:suppressed-rule>
