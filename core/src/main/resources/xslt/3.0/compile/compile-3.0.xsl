@@ -243,7 +243,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="schxslt:let-variable" as="element(xsl:variable)*">
+  <xsl:template name="schxslt:let-variable" as="element()*">
     <xsl:param name="decls" as="element(sch:let)*" required="yes"/>
     <xsl:param name="create-param" as="xs:boolean" select="false()"/>
     <xsl:for-each select="$decls">
