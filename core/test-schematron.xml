@@ -44,7 +44,7 @@
         <value>xslt3</value>
       </array>
     </constructor-arg>
-    <constructor-arg ref="steps-2.0"/>
+    <constructor-arg ref="steps-3.0"/>
   </bean>
 
   <bean id="saxon-pipeline.xslt3" class="name.dmaus.schxslt.testsuite.JavaValidationFactory">
@@ -96,6 +96,16 @@
     <constructor-arg>
       <array value-type="java.lang.String">
         <value>src/main/resources/xslt/2.0/pipeline-for-svrl.xsl</value>
+      </array>
+    </constructor-arg>
+  </bean>
+
+  <bean id="steps-3.0" class="java.util.ArrayList">
+    <constructor-arg>
+      <array value-type="java.lang.String">
+        <value>src/main/resources/xslt/2.0/include.xsl</value>
+        <value>src/main/resources/xslt/2.0/expand.xsl</value>
+        <value>src/main/resources/xslt/3.0/compile-for-svrl.xsl</value>
       </array>
     </constructor-arg>
   </bean>
