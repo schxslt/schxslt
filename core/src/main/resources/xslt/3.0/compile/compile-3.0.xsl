@@ -91,7 +91,7 @@
             <xsl:choose>
               <xsl:when test="$spec?documents">
                 <runtime:for-each select="{$spec?documents}">
-                  <runtime:source-document href=".">
+                  <runtime:source-document href="{{.}}">
                     <xsl:attribute name="streamable" select="if ($spec?streaming) then 'yes' else 'no'"/>
                     <xsl:call-template name="schxslt:apply-rule">
                       <xsl:with-param name="mode" as="xs:string" select="$mode"/>
