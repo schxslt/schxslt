@@ -111,16 +111,18 @@
         </schxslt-report:report>
       </runtime:template>
 
+      <runtime:mode use-accumulators="#all" on-no-match="shallow-skip"/>
+
       <xsl:for-each select="map:keys($modes)">
         <xsl:variable name="mode" as="xs:string" select="."/>
         <xsl:variable name="spec" as="map(xs:string, item()*)" select="$modes($mode)"/>
 
-        <runtime:mode name="{$mode}" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
+        <runtime:mode use-accumulators="#all" name="{$mode}" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
 
         <!-- When using burst mode, we need to create a second mode
              that dispatches the burst. -->
         <xsl:if test="$spec?burst">
-          <runtime:mode name="{$mode}.dispatch" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
+          <runtime:mode use-accumulators="#all" name="{$mode}.dispatch" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
         </xsl:if>
 
         <xsl:for-each select="$spec?rules">
