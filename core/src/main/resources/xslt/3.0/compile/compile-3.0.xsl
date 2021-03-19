@@ -147,14 +147,20 @@
 
             <runtime:choose>
               <runtime:when test="$schxslt:pattern[. = '{generate-id(..)}']">
-                <schxslt-report:suppressed-context context="{@context}">
+                <schxslt-report:suppressed-context>
+                  <runtime:attribute name="context">
+                    <xsl:value-of select="@context"/>
+                  </runtime:attribute>
                   <xsl:call-template name="schxslt-api:suppressed-rule">
                     <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
                   </xsl:call-template>
                 </schxslt-report:suppressed-context>
               </runtime:when>
               <runtime:otherwise>
-                <schxslt-report:context context="{@context}">
+                <schxslt-report:context>
+                  <runtime:attribute name="context">
+                    <xsl:value-of select="@context"/>
+                  </runtime:attribute>
                   <xsl:call-template name="schxslt-api:fired-rule">
                     <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
                   </xsl:call-template>
