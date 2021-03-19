@@ -169,6 +169,10 @@
               </runtime:otherwise>
             </runtime:choose>
 
+            <runtime:next-match>
+              <runtime:with-param name="schxslt:pattern" as="xs:string*" select="($schxslt:pattern, '{generate-id(..)}')"/>
+            </runtime:next-match>
+
           </runtime:template>
 
         </xsl:for-each>
