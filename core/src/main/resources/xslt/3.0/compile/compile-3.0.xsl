@@ -43,44 +43,47 @@
       <xsl:with-param name="decls" as="element(sch:let)*" select="sch:let | sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
     </xsl:call-template>
 
+    <xsl:variable name="environment" as="map(xs:string, item()*)">
+      <xsl:map>
+        <xsl:map-entry key="'base-uri'"   select="@xml:base"/>
+        <xsl:map-entry key="'namespaces'" select="sch:ns"/>
+        <xsl:map-entry key="'parameters'" select="sch:let"/>
+        <xsl:map-entry key="'variables'"  select="sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
+        <xsl:map-entry key="'patterns'"   select="$patterns"/>
+        <xsl:map-entry key="'foreign'"    select="xsl:import-schema | xsl:include | xsl:import | xsl:key | xsl:function | xsl:accumulator | xsl:use-package"/>
+      </xsl:map>
+    </xsl:variable>
+
     <xsl:call-template name="schxslt:compile">
-      <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
       <xsl:with-param name="options" as="map(xs:string, item()*)" select="map{'phase': $phase}"/>
-      <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$patterns"/>
+      <xsl:with-param name="environment" as="map(xs:string, item()*)" select="$environment"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="schxslt:compile" as="element(xsl:stylesheet)">
-    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <xsl:param name="patterns" as="element(sch:pattern)+" required="yes"/>
     <xsl:param name="options" as="map(xs:string, item()*)" select="map{}"/>
+    <xsl:param name="environment" as="map(xs:string, item()*)"/>
 
-    <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema($patterns)"/>
+    <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema($environment?patterns)"/>
 
     <runtime:stylesheet version="3.0">
       <xsl:for-each select="sch:ns">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
-      <xsl:sequence select="$schema/@xml:base"/>
+      <xsl:sequence select="$environment?base-uri"/>
 
       <runtime:output indent="true"/>
 
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:let"/>
+        <xsl:with-param name="decls" as="element(sch:let)*" select="$environment?parameters"/>
         <xsl:with-param name="create-param" as="xs:boolean" select="true()"/>
       </xsl:call-template>
 
       <xsl:call-template name="schxslt:let-variable">
-        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
+        <xsl:with-param name="decls" as="element(sch:let)*" select="$environment?variables"/>
       </xsl:call-template>
 
-      <xsl:sequence select="$schema/xsl:import-schema[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="$schema/xsl:include[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="$schema/xsl:import[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="$schema/xsl:key[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="$schema/xsl:function[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="$schema/xsl:accumulator[not(preceding-sibling::sch:pattern)]"/>
-      <xsl:sequence select="$schema/xsl:use-package[not(preceding-sibling::sch:pattern)]"/>
+      <xsl:sequence select="$environment?foreign"/>
 
       <runtime:template match="/">
         <schxslt-report:report>
