@@ -28,6 +28,10 @@
 
       <runtime:output indent="true"/>
 
+      <xsl:call-template name="schxslt:assert-unique-variables">
+        <xsl:with-param name="decls" as="element(sch:let)*" select="$environment?parameters | $environment?variables"/>
+      </xsl:call-template>
+
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="decls" as="element(sch:let)*" select="$environment?parameters"/>
         <xsl:with-param name="create-param" as="xs:boolean" select="true()"/>
