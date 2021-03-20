@@ -55,13 +55,11 @@
     </xsl:variable>
 
     <xsl:call-template name="schxslt:compile">
-      <xsl:with-param name="options" as="map(xs:string, item()*)" select="map{'phase': $phase}"/>
       <xsl:with-param name="environment" as="map(xs:string, item()*)" select="$environment"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="schxslt:compile" as="element(xsl:stylesheet)">
-    <xsl:param name="options" as="map(xs:string, item()*)" select="map{}"/>
     <xsl:param name="environment" as="map(xs:string, item()*)"/>
 
     <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema($environment?patterns)"/>
