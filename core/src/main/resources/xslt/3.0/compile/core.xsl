@@ -72,7 +72,7 @@
         </schxslt-report:report>
       </runtime:template>
 
-      <runtime:mode use-accumulators="#all" on-no-match="shallow-skip"/>
+      <runtime:mode use-accumulators="#all" on-no-match="shallow-skip" streamable="{if ($schxslt.compile.streamable) then 'yes' else 'no'}"/>
 
       <xsl:for-each select="map:keys($modes)">
         <xsl:variable name="mode" as="xs:string" select="."/>
