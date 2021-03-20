@@ -67,7 +67,7 @@
     <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema($environment?patterns)"/>
 
     <runtime:stylesheet version="3.0">
-      <xsl:for-each select="sch:ns">
+      <xsl:for-each select="$environment?namespaces">
         <xsl:namespace name="{@prefix}" select="@uri"/>
       </xsl:for-each>
       <xsl:sequence select="$environment?base-uri"/>
