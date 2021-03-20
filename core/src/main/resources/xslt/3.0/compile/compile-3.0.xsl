@@ -39,6 +39,10 @@
       </xsl:message>
     </xsl:if>
 
+    <xsl:call-template name="schxslt:assert-unique-variables">
+      <xsl:with-param name="decls" as="element(sch:let)*" select="sch:let | sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
+    </xsl:call-template>
+
     <xsl:call-template name="schxslt:compile">
       <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
       <xsl:with-param name="options" as="map(xs:string, item()*)" select="map{'phase': $phase}"/>
@@ -61,17 +65,11 @@
 
       <runtime:output indent="true"/>
 
-      <xsl:call-template name="schxslt:assert-unique-variables">
-        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:let"/>
-      </xsl:call-template>
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:let"/>
         <xsl:with-param name="create-param" as="xs:boolean" select="true()"/>
       </xsl:call-template>
 
-      <xsl:call-template name="schxslt:assert-unique-variables">
-        <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
-      </xsl:call-template>
       <xsl:call-template name="schxslt:let-variable">
         <xsl:with-param name="decls" as="element(sch:let)*" select="$schema/sch:phase[@id = $phase]/sch:let | $patterns/sch:let"/>
       </xsl:call-template>
