@@ -20,6 +20,8 @@
 
   <xsl:param name="phase" as="xs:string" select="''"/>
 
+  <xsl:param name="schxslt.compile.streamable" as="xs:boolean" select="false()" static="yes"/>
+
   <xsl:template match="/sch:schema">
     <xsl:variable name="phase" as="xs:string" select="schxslt:effective-phase(string($phase), string(@defaultPhase))"/>
     <xsl:variable name="patterns" as="element(sch:pattern)*">
@@ -239,8 +241,8 @@
         <xsl:variable name="mode" as="xs:string" select="generate-id()"/>
         <xsl:map-entry key="$mode">
           <xsl:map>
-            <xsl:map-entry key="'burst'" select="string(@burst)"/>
-            <xsl:map-entry key="'streaming'" select="xs:boolean(@streaming)"/>
+            <xsl:map-entry key="'burst'" select="string(@burst)" use-when="$schxslt.compile.streamable"/>
+            <xsl:map-entry key="'streaming'" select="xs:boolean(@streaming)" use-when="$schxslt.compile.streamable"/>
             <xsl:map-entry key="'documents'" select="../@documents"/>
             <xsl:map-entry key="'rules'" select="current-group()"/>
           </xsl:map>
