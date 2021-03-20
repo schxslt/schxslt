@@ -187,11 +187,17 @@
               <label>Bugs and features w/ Saxon (${saxon.version}), XSLT 3.0</label>
               <directory>src/test/schematron</directory>
               <processorId>saxon.xslt3</processorId>
+              <skip>
+                <param>svrl-metadata</param>
+              </skip>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
               <label>Bugs and features w/ Saxon (${saxon.version}) using the micro pipeline, XSLT 3.0</label>
               <directory>src/test/schematron</directory>
               <processorId>saxon.xslt3</processorId>
+              <skip>
+                <param>svrl-metadata</param>
+              </skip>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
               <label>Bugs and features w/ xsltproc</label>
