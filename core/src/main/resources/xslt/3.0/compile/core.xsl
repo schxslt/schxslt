@@ -89,13 +89,13 @@
         <xsl:for-each select="$spec?rules">
           <!-- When using burst mode, we have a mode that dispatches the burst. -->
           <xsl:if test="$spec?burst">
-            <runtime:template match="{@context}" priority="{count(following-sibling::sch:rule)}" mode="{$mode}.dispatch">
+            <runtime:template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}.dispatch">
               <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
               <runtime:apply-templates select="{$spec?burst}(.)" mode="{$mode}"/>
             </runtime:template>
           </xsl:if>
 
-          <runtime:template match="{@context}" priority="{count(following-sibling::sch:rule)}" mode="{$mode}">
+          <runtime:template match="{@context}" priority="{count(following::sch:rule)}" mode="{$mode}">
             <xsl:sequence select="(@xml:base, ../@xml:base)[1]"/>
             <runtime:param name="schxslt:pattern" as="xs:string*"/>
 
