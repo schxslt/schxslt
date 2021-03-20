@@ -88,7 +88,7 @@
             <runtime:mode use-accumulators="#all" name="{$mode}.dispatch" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
           </xsl:when>
           <xsl:otherwise>
-            <runtime:mode use-accumulators="#all" name="{$mode}.dispatch" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
+            <runtime:mode use-accumulators="#all" name="{$mode}" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
           </xsl:otherwise>
         </xsl:choose>
 
