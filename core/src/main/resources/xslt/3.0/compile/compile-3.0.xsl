@@ -21,24 +21,14 @@
   <xsl:param name="phase" as="xs:string" select="''"/>
 
   <xsl:template match="/sch:schema">
-    <xsl:call-template name="schxslt:compile">
-      <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
-      <xsl:with-param name="options" as="map(xs:string, item()*)" select="map{'phase': $phase}"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template name="schxslt:compile" as="element(xsl:stylesheet)">
-    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
-    <xsl:param name="options" as="map(xs:string, item()*)" select="map{}"/>
-
-    <xsl:variable name="phase" as="xs:string" select="schxslt:effective-phase(string($options?phase), string($schema/@defaultPhase))"/>
+    <xsl:variable name="phase" as="xs:string" select="schxslt:effective-phase(string($phase), string(@defaultPhase))"/>
     <xsl:variable name="patterns" as="element(sch:pattern)*">
       <xsl:choose>
         <xsl:when test="$phase ne '#ALL'">
-          <xsl:sequence select="$schema/sch:pattern[@id = $schema/sch:phase[@id = $phase]/sch:active/@pattern]"/>
+          <xsl:sequence select="sch:pattern[@id = current()/sch:phase[@id = $phase]/sch:active/@pattern]"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:sequence select="$schema/sch:pattern"/>
+          <xsl:sequence select="sch:pattern"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -48,6 +38,18 @@
         The phase {$phase} did not select any pattern.
       </xsl:message>
     </xsl:if>
+
+    <xsl:call-template name="schxslt:compile">
+      <xsl:with-param name="schema" as="element(sch:schema)" select="."/>
+      <xsl:with-param name="options" as="map(xs:string, item()*)" select="map{'phase': $phase}"/>
+      <xsl:with-param name="patterns" as="element(sch:pattern)+" select="$patterns"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="schxslt:compile" as="element(xsl:stylesheet)">
+    <xsl:param name="schema" as="element(sch:schema)" required="yes"/>
+    <xsl:param name="patterns" as="element(sch:pattern)+" required="yes"/>
+    <xsl:param name="options" as="map(xs:string, item()*)" select="map{}"/>
 
     <xsl:variable name="modes" as="map(xs:string, map(xs:string, item()*))" select="schxslt:analyze-schema($patterns)"/>
 
@@ -216,8 +218,8 @@
     <xsl:param name="phase" as="xs:string"/>
     <xsl:param name="default" as="xs:string"/>
     <!--
-         If no phase is given, the give phase is '#DEFAULT', or the
-         give phase is the empty string we use the default phase or
+         If no phase is given, the given phase is '#DEFAULT', or the
+         given phase is the empty string we use the default phase or
          '#ALL' if no default phase is defined.
     -->
     <xsl:choose>
