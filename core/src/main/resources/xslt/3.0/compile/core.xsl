@@ -116,6 +116,9 @@
                     <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
                   </xsl:call-template>
                 </schxslt-report:suppressed-context>
+                <runtime:next-match>
+                  <runtime:with-param name="schxslt:pattern" as="xs:string*" select="$schxslt:pattern"/>
+                </runtime:next-match>
               </runtime:when>
               <runtime:otherwise>
                 <schxslt-report:context>
@@ -127,12 +130,11 @@
                   </xsl:call-template>
                   <xsl:apply-templates select="sch:assert | sch:report"/>
                 </schxslt-report:context>
+                <runtime:next-match>
+                  <runtime:with-param name="schxslt:pattern" as="xs:string*" select="($schxslt:pattern, '{generate-id(..)}')"/>
+                </runtime:next-match>
               </runtime:otherwise>
             </runtime:choose>
-
-            <runtime:next-match>
-              <runtime:with-param name="schxslt:pattern" as="xs:string*" select="($schxslt:pattern, '{generate-id(..)}')"/>
-            </runtime:next-match>
 
           </runtime:template>
 
