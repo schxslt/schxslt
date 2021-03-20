@@ -78,13 +78,19 @@
         <xsl:variable name="mode" as="xs:string" select="."/>
         <xsl:variable name="spec" as="map(xs:string, item()*)" select="$modes($mode)"/>
 
-        <runtime:mode use-accumulators="#all" name="{$mode}" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
-
-        <!-- When using burst mode, we need to create a second mode
-             that dispatches the burst. -->
-        <xsl:if test="$spec?burst">
-          <runtime:mode use-accumulators="#all" name="{$mode}.dispatch" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
-        </xsl:if>
+        <xsl:choose>
+          <!-- When using burst mode, we need to create a second mode
+               that dispatches the burst. The dispatching template is
+               streaming, the other template that checks the
+               constraints is not. -->
+          <xsl:when test="$spec?burst">
+            <runtime:mode use-accumulators="#all" name="{$mode}" on-no-match="shallow-skip" streamable="no"/>
+            <runtime:mode use-accumulators="#all" name="{$mode}.dispatch" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <runtime:mode use-accumulators="#all" name="{$mode}.dispatch" on-no-match="shallow-skip" streamable="{if ($spec?streaming) then 'yes' else 'no'}"/>
+          </xsl:otherwise>
+        </xsl:choose>
 
         <xsl:for-each select="$spec?rules">
           <!-- When using burst mode, we have a mode that dispatches the burst. -->
