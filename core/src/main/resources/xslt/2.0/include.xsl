@@ -24,7 +24,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="sch:include | sch:rule/sch:extends[@href]" mode="schxslt:include">
+  <xsl:template match="sch:include | sch:extends[@href]" mode="schxslt:include">
     <xsl:param name="base-uri" as="xs:string?" tunnel="yes"/>
     <xsl:variable name="url" as="xs:string" select="if (contains(@href, '#')) then substring-before(@href, '#') else @href"/>
     <xsl:variable name="fragment" as="xs:string?" select="substring-after(@href, '#')"/>
