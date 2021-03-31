@@ -44,6 +44,10 @@
       <xsl:sequence select="$environment?foreign"/>
 
       <runtime:template match="/">
+        <runtime:call-template name="schxslt:validate"/>
+      </runtime:template>
+
+      <runtime:template name="schxslt:validate">
         <schxslt-report:report>
           <xsl:for-each select="map:keys($modes)">
             <xsl:variable name="mode" as="xs:string" select="."/>
