@@ -44,10 +44,14 @@
       <xsl:sequence select="$environment?foreign"/>
 
       <runtime:template match="/">
-        <runtime:call-template name="schxslt:validate"/>
+        <runtime:call-template name="schxslt:validate">
+          <runtime:with-param name="instance" select="." as="document-node()"/>
+        </runtime:call-template>
       </runtime:template>
 
       <runtime:template name="schxslt:validate">
+        <runtime:param name="instance" as="node()" required="yes"/>
+
         <schxslt-report:report>
           <xsl:for-each select="map:keys($modes)">
             <xsl:variable name="mode" as="xs:string" select="."/>
@@ -55,10 +59,11 @@
 
             <xsl:choose>
               <xsl:when test="$spec?documents">
-                <runtime:for-each select="{$spec?documents}">
+                <runtime:for-each select="$instance/{$spec?documents}">
                   <runtime:source-document href="{{.}}">
                     <xsl:attribute name="streamable" select="if ($spec?streaming) then 'yes' else 'no'"/>
                     <xsl:call-template name="schxslt:apply-rule">
+                      <xsl:with-param name="runtime-context" as="xs:string">.</xsl:with-param>
                       <xsl:with-param name="mode" as="xs:string" select="$mode"/>
                       <xsl:with-param name="burst" as="xs:string?" select="$spec?burst"/>
                     </xsl:call-template>
@@ -67,6 +72,7 @@
               </xsl:when>
               <xsl:otherwise>
                 <xsl:call-template name="schxslt:apply-rule">
+                  <xsl:with-param name="runtime-context" as="xs:string">$instance</xsl:with-param>
                   <xsl:with-param name="mode" as="xs:string" select="$mode"/>
                   <xsl:with-param name="burst" as="xs:string?" select="$spec?burst"/>
                 </xsl:call-template>
@@ -222,14 +228,15 @@
   </xsl:template>
 
   <xsl:template name="schxslt:apply-rule" as="element(xsl:apply-templates)">
+    <xsl:param name="runtime-context" as="xs:string" required="yes"/>
     <xsl:param name="mode" as="xs:string" required="yes"/>
     <xsl:param name="burst" as="xs:string?"/>
     <xsl:choose>
       <xsl:when test="$burst">
-        <runtime:apply-templates select="." mode="{$mode}.dispatch"/>
+        <runtime:apply-templates select="{$runtime-context}" mode="{$mode}.dispatch"/>
       </xsl:when>
       <xsl:otherwise>
-        <runtime:apply-templates select="." mode="{$mode}"/>
+        <runtime:apply-templates select="{$runtime-context}" mode="{$mode}"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
