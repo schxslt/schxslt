@@ -12,18 +12,22 @@
   <xsl:template match="sch:assert" mode="schxslt:compile">
     <if test="not({@test})">
       <xsl:sequence select="@xml:base"/>
-      <xsl:call-template name="schxslt-api:failed-assert">
-        <xsl:with-param name="assert" as="element(sch:assert)" select="."/>
-      </xsl:call-template>
+      <schxslt:failed-constraint>
+        <xsl:call-template name="schxslt-api:failed-assert">
+          <xsl:with-param name="assert" as="element(sch:assert)" select="."/>
+        </xsl:call-template>
+      </schxslt:failed-constraint>
     </if>
   </xsl:template>
 
   <xsl:template match="sch:report" mode="schxslt:compile">
     <if test="{@test}">
       <xsl:sequence select="@xml:base"/>
-      <xsl:call-template name="schxslt-api:successful-report">
-        <xsl:with-param name="report" as="element(sch:report)" select="."/>
-      </xsl:call-template>
+      <schxslt:failed-constraint>
+        <xsl:call-template name="schxslt-api:successful-report">
+          <xsl:with-param name="report" as="element(sch:report)" select="."/>
+        </xsl:call-template>
+      </schxslt:failed-constraint>
     </if>
   </xsl:template>
 
