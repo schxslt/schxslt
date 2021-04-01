@@ -34,7 +34,7 @@
         </svrl:ns-prefix-in-attribute-values>
       </xsl:for-each>
 
-      <sequence select="$schxslt:report"/>
+      <apply-templates select="$schxslt:report" mode="schxslt:strip-internals"/>
 
     </svrl:schematron-output>
   </xsl:template>
