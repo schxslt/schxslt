@@ -247,9 +247,12 @@
             </xsl:call-template>
             <xsl:apply-templates select="sch:assert | sch:report" mode="schxslt:compile"/>
           </schxslt:rule>
-          <next-match>
-            <with-param name="schxslt:patterns-matched" as="xs:string*" select="($schxslt:patterns-matched, '{generate-id(..)}')"/>
-          </next-match>
+          <variable name="stop-validation" as="xs:boolean" select="false()"/>
+          <if test="not($stop-validation)">
+            <next-match>
+              <with-param name="schxslt:patterns-matched" as="xs:string*" select="($schxslt:patterns-matched, '{generate-id(..)}')"/>
+            </next-match>
+          </if>
         </otherwise>
       </choose>
 
