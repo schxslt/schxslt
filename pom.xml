@@ -58,7 +58,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <saxon.version>9.9.1-6</saxon.version>
+    <saxon.version>10.5</saxon.version>
     <xalan.version>2.7.2</xalan.version>
   </properties>
 
