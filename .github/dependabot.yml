@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: net.sf.saxon:Saxon-HE
+    versions:
+    - "10.3"
+  - dependency-name: name.dmaus.schxslt:testsuite-maven-plugin
+    versions:
+    - "1.8"
