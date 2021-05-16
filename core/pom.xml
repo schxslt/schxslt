@@ -139,6 +139,7 @@
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
+                <param>rule-abstract-02</param>
               </skip>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
@@ -147,6 +148,7 @@
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
+                <param>rule-abstract-02</param>
               </skip>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
@@ -155,6 +157,7 @@
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
+                <param>rule-abstract-02</param>
               </skip>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
@@ -163,6 +166,7 @@
               <skip>
                 <param>let-scope-phase-01</param>
                 <param>let-scope-pattern-01</param>
+                <param>rule-abstract-02</param>
               </skip>
             </testsuite>
             <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
