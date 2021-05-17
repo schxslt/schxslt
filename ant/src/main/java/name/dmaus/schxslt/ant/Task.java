@@ -89,8 +89,12 @@ public class Task extends org.apache.tools.ant.Task
             throw new BuildException("Unable to read " + schema);
         }
 
-        log("Generating validation stylesheet for Schematron '" + schema + "'");
-        validator = new Schematron(new StreamSource(schema), phase);
+        try {
+            log("Generating validation stylesheet for Schematron '" + schema + "'");
+            validator = new Schematron(new StreamSource(schema), phase);
+        } catch (SchematronException e) {
+            throw new BuildException("Unable to compile validation stylesheet", e);
+        }
 
         log("Validating '" + file + "'");
         validate();
