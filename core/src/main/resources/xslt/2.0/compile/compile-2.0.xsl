@@ -150,16 +150,6 @@
         <apply-templates mode="#current" select="node()"/>
       </template>
 
-      <template match="schxslt:*" mode="schxslt:strip-internals">
-        <apply-templates mode="#current"/>
-      </template>
-
-      <template match="node() | @*" mode="schxslt:strip-internals">
-        <copy>
-          <apply-templates select="node() | @*" mode="#current"/>
-        </copy>
-      </template>
-
       <xsl:sequence select="$validation-stylesheet-body"/>
 
       <xsl:if test="$xslt-version eq '2.0' and empty($schematron/xsl:function[schxslt:is-location-function(.)])">
