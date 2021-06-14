@@ -5,3 +5,6 @@
 xspec/
 target/
 xar-resources
+.project
+.classpath
+.settings
