@@ -220,7 +220,7 @@
       </xsl:call-template>
 
       <choose>
-        <when test="$schxslt:patterns-matched[. = '{generate-id(..)}'][1]">
+        <when test="$schxslt:patterns-matched[. = '{generate-id(..)}']">
           <schxslt:rule pattern="{generate-id(..)}">
             <xsl:call-template name="schxslt-api:suppressed-rule">
               <xsl:with-param name="rule" as="element(sch:rule)" select="."/>
@@ -242,7 +242,6 @@
           </next-match>
         </otherwise>
       </choose>
-
     </template>
 
   </xsl:template>
