@@ -14,7 +14,7 @@
       </sch:pattern>
       <sch:properties>
         <sch:property id="prop-1">
-          PROP1: <sch:value-of select="name()"/>
+          <sch:value-of select="name()"/>
         </sch:property>
       </sch:properties>
     </sch:schema>
