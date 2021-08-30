@@ -1,0 +1,25 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="svrl-properties-value-of">
+  <label>The &lt;value-of&gt; element is handled in properties</label>
+  <documents>
+    <primary filename="document.xml">
+      <root xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern>
+        <sch:rule context="/*">
+          <sch:assert test="false()" properties="prop-1"/>
+        </sch:rule>
+      </sch:pattern>
+      <sch:properties>
+        <sch:property id="prop-1">
+          PROP1: <sch:value-of select="name()"/>
+        </sch:property>
+      </sch:properties>
+    </sch:schema>
+  </schemas>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+    <expectation test="normalize-space(//svrl:failed-assert/svrl:property-reference/svrl:text) = 'root'"/>
+  </expectations>
+</testcase>
