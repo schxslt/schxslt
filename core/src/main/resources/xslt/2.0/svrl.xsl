@@ -164,20 +164,9 @@
     <xsl:param name="property" as="element(sch:property)"/>
     <svrl:property-reference property="{.}">
       <xsl:sequence select="($property/@role, $property/@scheme)"/>
-      <xsl:for-each select="$property/node()">
-        <xsl:choose>
-          <xsl:when test="self::text()">
-            <xsl:if test="normalize-space()">
-              <svrl:text>
-                <xsl:apply-templates select="." mode="schxslt:message-template"/>
-              </svrl:text>
-            </xsl:if>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:sequence select="."/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each>
+      <svrl:text>
+        <xsl:apply-templates select="$property/node()" mode="schxslt:message-template"/>
+      </svrl:text>
     </svrl:property-reference>
   </xsl:template>
 
