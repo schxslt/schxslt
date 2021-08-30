@@ -215,11 +215,11 @@
   </xsl:template>
 
   <!-- Message templates -->
-  <xsl:template match="comment() | processing-instruction()" mode="schxslt:message-template">
+  <xsl:template match="comment() | processing-instruction()" mode="schxslt:message-template" priority="-10">
     <xsl:copy-of select="."/>
   </xsl:template>
 
-  <xsl:template match="*" mode="schxslt:message-template">
+  <xsl:template match="*" mode="schxslt:message-template" priority="-10">
     <element namespace="{namespace-uri(.)}" name="{local-name(.)}">
       <xsl:apply-templates select="node() | @*" mode="schxslt:message-template"/>
     </element>
