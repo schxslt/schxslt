@@ -134,10 +134,12 @@
         <variable name="schxslt:report" as="node()*">
           <sequence select="$metadata"/>
           <sequence select="$report"/>
-          <!-- <for-each select="$report/schxslt:pattern"> -->
-          <!--   <sequence select="node()"/> -->
-          <!--   <sequence select="$report/schxslt:rule[@pattern = current()/@id]/node()"/> -->
-          <!-- </for-each> -->
+          <for-each select="$report/schxslt:document">
+            <for-each select="schxslt:pattern">
+              <sequence select="node()"/>
+              <sequence select="../schxslt:rule[@pattern = current()/@id]/node()"/>
+            </for-each>
+          </for-each>
         </variable>
 
         <xsl:call-template name="schxslt-api:report">
