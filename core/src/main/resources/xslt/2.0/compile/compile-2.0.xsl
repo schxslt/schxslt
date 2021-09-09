@@ -289,7 +289,7 @@
             <xsl:choose>
               <xsl:when test="$xslt-version = '3.0'">
                 <for-each select="{@documents}">
-                  <schxslt:document href="{{.}}">
+                  <schxslt:document>
                     <source-document href="{{.}}">
                       <xsl:for-each select="current-group()">
                         <schxslt:pattern id="{generate-id()}">
@@ -307,7 +307,7 @@
               </xsl:when>
               <xsl:otherwise>
                 <for-each select="{@documents}">
-                  <schxslt:document href="{{.}}">
+                  <schxslt:document>
                     <variable name="document" as="item()" select="document(.)"/>
                     <xsl:for-each select="current-group()">
                       <schxslt:pattern id="{generate-id()}">
@@ -328,7 +328,7 @@
             </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
-            <schxslt:document href="{{base-uri(.)}}">
+            <schxslt:document>
               <xsl:for-each select="current-group()">
                 <schxslt:pattern id="{generate-id()}">
                   <if test="exists(base-uri(/))">
