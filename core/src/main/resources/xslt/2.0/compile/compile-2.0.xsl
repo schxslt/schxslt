@@ -133,7 +133,6 @@
         <!-- Unwrap the intermediary report -->
         <variable name="schxslt:report" as="node()*">
           <sequence select="$metadata"/>
-          <sequence select="$report"/>
           <for-each select="$report/schxslt:document">
             <for-each select="schxslt:pattern">
               <sequence select="node()"/>
