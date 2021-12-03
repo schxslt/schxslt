@@ -91,7 +91,7 @@
         <xsl:value-of select="$assert/@test"/>
       </attribute>
       <xsl:call-template name="schxslt:handle-detailed-report">
-        <xsl:with-param name="schema" as="element(sch:schema)" tunnel="yes" select="$assert/../../.."/>
+        <xsl:with-param name="pattern" as="element(sch:pattern)" tunnel="yes" select="$assert/../.."/>
       </xsl:call-template>
     </svrl:failed-assert>
   </xsl:template>
@@ -105,7 +105,7 @@
         <xsl:value-of select="$report/@test"/>
       </attribute>
       <xsl:call-template name="schxslt:handle-detailed-report">
-        <xsl:with-param name="schema" as="element(sch:schema)" tunnel="yes" select="$report/../../.."/>
+        <xsl:with-param name="pattern" as="element(sch:pattern)" tunnel="yes" select="$report/../.."/>
       </xsl:call-template>
     </svrl:successful-report>
   </xsl:template>
@@ -179,11 +179,11 @@
     <param name="schema">Schematron</param>
   </doc>
   <xsl:template name="schxslt:copy-properties">
-    <xsl:param name="schema" as="element(sch:schema)" tunnel="yes"/>
+    <xsl:param name="pattern" as="element(sch:pattern)" tunnel="yes"/>
 
     <xsl:for-each select="tokenize(@properties, ' ')">
       <xsl:call-template name="schxslt:handle-property">
-        <xsl:with-param name="property" select="$schema/sch:properties/sch:property[@id eq current()]"/>
+        <xsl:with-param name="property" select="($pattern/sch:properties/sch:property[@id eq current()], $pattern/../sch:properties/sch:property[@id eq current()])[1]"/>
       </xsl:call-template>
     </xsl:for-each>
   </xsl:template>
@@ -195,10 +195,10 @@
     <param name="schema">Schematron</param>
   </doc>
   <xsl:template name="schxslt:copy-diagnostics">
-    <xsl:param name="schema" as="element(sch:schema)" tunnel="yes"/>
+    <xsl:param name="pattern" as="element(sch:pattern)" tunnel="yes"/>
 
     <xsl:for-each select="tokenize(@diagnostics, ' ')">
-      <xsl:variable name="diagnostic" select="$schema/sch:diagnostics/sch:diagnostic[@id eq current()]"/>
+      <xsl:variable name="diagnostic" select="($pattern/sch:diagnostics/sch:diagnostic[@id eq current()] | $pattern/../sch:diagnostics/sch:diagnostic[@id eq current()])[1]"/>
       <svrl:diagnostic-reference diagnostic="{.}">
         <svrl:text>
           <xsl:sequence select="$diagnostic/@*"/>

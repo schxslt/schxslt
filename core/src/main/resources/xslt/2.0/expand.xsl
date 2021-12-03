@@ -45,11 +45,29 @@
       <xsl:apply-templates select="(if (not(@documents)) then $is-a/@documents else (), $is-a/node())" mode="schxslt:expand">
         <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
       </xsl:apply-templates>
+      <xsl:if test="$is-a/sch:rule/sch:*/@properties">
+        <xsl:variable name="ids" as="xs:string*"
+                      select="for $prop in $is-a/sch:rule/sch:*/@properties return tokenize($prop, '\s+')"/>
+        <sch:properties>
+          <xsl:apply-templates select="../sch:properties/sch:property[@id = $ids]" mode="schxslt:expand">
+            <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
+          </xsl:apply-templates>
+        </sch:properties>
+      </xsl:if>
+      <xsl:if test="$is-a/sch:rule/sch:*/@diagnostics">
+        <xsl:variable name="ids" as="xs:string*"
+                      select="for $diag in $is-a/sch:rule/sch:*/@diagnostics return tokenize($diag, '\s+')"/>
+        <sch:diagnostics>
+          <xsl:apply-templates select="../sch:diagnostics/sch:diagnostic[@id = $ids]" mode="schxslt:expand">
+            <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
+          </xsl:apply-templates>
+        </sch:diagnostics>
+      </xsl:if>
     </xsl:copy>
   </xsl:template>
 
   <!-- Replace placeholders in abstract pattern instance -->
-  <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents | sch:name/@path | sch:let/@value" mode="schxslt:expand">
+  <xsl:template match="sch:assert/@test | sch:report/@test | sch:rule/@context | sch:value-of/@select | sch:pattern/@documents | sch:name/@path | sch:let/@value | xsl:copy-of[ancestor::sch:property]/@select" mode="schxslt:expand">
     <xsl:param name="schxslt:params" as="element(sch:param)*" tunnel="yes"/>
     <xsl:attribute name="{name()}" select="schxslt:replace-params(., $schxslt:params)"/>
   </xsl:template>
