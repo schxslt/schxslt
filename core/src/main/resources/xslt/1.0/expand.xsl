@@ -29,7 +29,7 @@
   <xsl:template match="sch:pattern[@is-a]">
     <xsl:variable name="instanceId" select="generate-id()"/>
     <xsl:copy>
-      <xsl:apply-templates select="@*" mode="schxslt:pattern-instance">
+      <xsl:apply-templates select="@* | key('schxslt:abstract-patterns', @is-a)/@documents" mode="schxslt:pattern-instance">
         <xsl:with-param name="instanceId" select="$instanceId"/>
       </xsl:apply-templates>
       <xsl:apply-templates select="key('schxslt:abstract-patterns', @is-a)/node()" mode="schxslt:pattern-instance">
@@ -92,7 +92,6 @@
     </xsl:if>
 
   </xsl:template>
-
 
   <xsl:template match="node() | @*" mode="schxslt:pattern-instance">
     <xsl:param name="instanceId"/>
