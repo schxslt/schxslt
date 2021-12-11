@@ -1,6 +1,0 @@
-language: java
-before_install:
-  - sudo apt-get -y install xsltproc
-cache:
-  directories:
-  - $HOME/.m2
