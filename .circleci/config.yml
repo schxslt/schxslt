@@ -11,7 +11,7 @@ jobs:
       - image: circleci/openjdk:stretch
     steps:
       - checkout
-      - run: mvn clean install 
+      - run: ./mvn clean install 
 
 workflows:
   test:
