@@ -5,13 +5,9 @@ version: 2.1
 orbs:
   maven: circleci/maven@0.0.12
 
-jobs:
-  maven/test:
-    docker:
-      - image: circleci/openjdk:stretch
-    steps:
-      - checkout
-      - run: ./mvn clean install 
+dependencies:
+  override:
+    - mvn install -DskipTests
 
 workflows:
   test:
