@@ -3,7 +3,7 @@
   <parent>
     <groupId>name.dmaus.schxslt</groupId>
     <artifactId>schxslt-parent</artifactId>
-    <version>1.8.5</version>
+    <version>1.8.6</version>
   </parent>
 
   <artifactId>schxslt</artifactId>
