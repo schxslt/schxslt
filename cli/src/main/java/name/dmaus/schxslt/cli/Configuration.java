@@ -115,7 +115,7 @@ public class Configuration
     {
         System.out.println("SchXslt CLI v" + getVersion());
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("name.dmaus.schxslt.cli.Main", options, true);
+        formatter.printHelp("name.dmaus.schxslt.cli.Application", options, true);
     }
 
     private String getVersion ()
