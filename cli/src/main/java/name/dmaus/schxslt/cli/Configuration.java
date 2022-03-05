@@ -30,29 +30,36 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
 import java.io.File;
 
-public class Configuration
+/**
+ * Commandline application configuration.
+ */
+public final class Configuration
 {
-    final private DefaultParser parser = new DefaultParser();
-    final private Options options = new Options();
+    private static final String OPTION_DOCUMENT = "d";
+    private static final String OPTION_OUTPUT = "o";
+    private static final String OPTION_PHASE = "p";
+    private static final String OPTION_REPL = "r";
+    private static final String OPTION_SCHEMA = "s";
+    private static final String OPTION_VERBOSE = "v";
+
+    private final DefaultParser parser = new DefaultParser();
+    private final Options options = new Options();
 
     private CommandLine arguments;
 
     public Configuration ()
     {
-        options.addOption("p", "phase", true, "Validation phase");
-        options.addOption("d", "document", true, "Path to document");
-        options.addOption("r", "repl", false, "Run as REPL");
-        options.addOption("v", "verbose", false, "Verbose output");
-        options.addOption("o", "output", true, "Output file (SVRL report)");
-        options.addRequiredOption("s", "schematron", true, "Path to schema");
+        options.addOption(OPTION_PHASE, "phase", true, "Validation phase");
+        options.addOption(OPTION_DOCUMENT, "document", true, "Path to document");
+        options.addOption(OPTION_REPL, "repl", false, "Run as REPL");
+        options.addOption(OPTION_VERBOSE, "verbose", false, "Verbose output");
+        options.addOption(OPTION_OUTPUT, "output", true, "Output file (SVRL report)");
+        options.addRequiredOption(OPTION_SCHEMA, "schematron", true, "Path to schema");
     }
 
-    public void parse (final String[] args)
+    public boolean parse (final String[] args)
     {
         try {
             arguments = parser.parse(options, args);
@@ -65,37 +72,38 @@ public class Configuration
         } catch (ParseException e) {
             System.err.println(e.getMessage());
             printHelp();
-            System.exit(1);
+            return false;
         }
+        return true;
     }
 
     public boolean isRepl ()
     {
-        return arguments.hasOption("r");
+        return arguments.hasOption(OPTION_REPL);
     }
 
     public boolean hasDocument ()
     {
-        return arguments.hasOption("d");
+        return arguments.hasOption(OPTION_DOCUMENT);
     }
 
     public File getDocument ()
     {
-        return new File(arguments.getOptionValue("d"));
+        return new File(arguments.getOptionValue(OPTION_DOCUMENT));
     }
 
     public File getOutputFile ()
     {
-        if (arguments.hasOption("o")) {
-            return new File(arguments.getOptionValue("o"));
+        if (arguments.hasOption(OPTION_OUTPUT)) {
+            return new File(arguments.getOptionValue(OPTION_OUTPUT));
         }
         return null;
     }
 
     public String getPhase ()
     {
-        if (arguments.hasOption("p")) {
-            return arguments.getOptionValue("p");
+        if (arguments.hasOption(OPTION_PHASE)) {
+            return arguments.getOptionValue(OPTION_PHASE);
         } else {
             return "#ALL";
         }
@@ -103,12 +111,12 @@ public class Configuration
 
     public File getSchematron ()
     {
-        return new File(arguments.getOptionValue("s"));
+        return new File(arguments.getOptionValue(OPTION_SCHEMA));
     }
 
     public Boolean beVerbose ()
     {
-        return arguments.hasOption("v");
+        return arguments.hasOption(OPTION_VERBOSE);
     }
 
     private void printHelp ()

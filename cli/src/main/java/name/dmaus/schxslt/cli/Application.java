@@ -32,40 +32,25 @@ import java.io.File;
 import java.io.Console;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import javax.xml.transform.dom.DOMSource;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 
 import org.w3c.dom.Document;
 
-public class Application
+/**
+ * Commandline application.
+ */
+public final class Application
 {
-    public static void main (final String[] args) throws SchematronException
-    {
-        Configuration configuration = new Configuration();
-        configuration.parse(args);
-
-        StreamSource schema = new StreamSource(configuration.getSchematron());
-
-        Schematron schematron = new Schematron(schema, configuration.getPhase());
-        Application application = new Application(schematron, configuration.beVerbose(), configuration.getOutputFile());
-
-        if (configuration.hasDocument()) {
-            application.execute(configuration.getDocument());
-        } else if (configuration.isRepl()) {
-            application.execute(System.console());
-        } else {
-            application.execute(System.in);
-        }
-    }
+    private static final String STDIN = "<stdin>";
 
     private File output;
     private Boolean verbose;
@@ -89,12 +74,31 @@ public class Application
         this.schematron = schematron;
     }
 
+    public static void main (final String[] args) throws SchematronException
+    {
+        Configuration configuration = new Configuration();
+        if (configuration.parse(args)) {
+            StreamSource schema = new StreamSource(configuration.getSchematron());
+
+            Schematron schematron = new Schematron(schema, configuration.getPhase());
+            Application application = new Application(schematron, configuration.beVerbose(), configuration.getOutputFile());
+
+            if (configuration.hasDocument()) {
+                application.execute(configuration.getDocument());
+            } else if (configuration.isRepl()) {
+                application.execute(System.console());
+            } else {
+                application.execute(System.in);
+            }
+        }
+    }
+
     public void execute (final File input) throws SchematronException
     {
-        StreamSource in = new StreamSource(input);
-        in.setSystemId(input);
+        StreamSource instream = new StreamSource(input);
+        instream.setSystemId(input);
 
-        Result result = schematron.validate(in);
+        Result result = schematron.validate(instream);
         printResult(result, input.getAbsolutePath());
         if (output != null) {
             save(result.getValidationReport());
@@ -104,7 +108,7 @@ public class Application
     public void execute (final InputStream input) throws SchematronException
     {
         Result result = schematron.validate(new StreamSource(input));
-        printResult(result, "<stdin>");
+        printResult(result, STDIN);
         if (output != null) {
             save(result.getValidationReport());
         }
@@ -112,14 +116,12 @@ public class Application
 
     public void execute (final Console console) throws SchematronException
     {
-        if (console == null) {
-            return;
-        }
-
-        while (true) {
-            InputStream input = readConsole(console);
-            Result result = schematron.validate(new StreamSource(input));
-            printResult(result, "<stdin>");
+        if (console != null) {
+            while (true) {
+                InputStream input = readConsole(console);
+                Result result = schematron.validate(new StreamSource(input));
+                printResult(result, STDIN);
+            }
         }
     }
 
@@ -135,7 +137,7 @@ public class Application
 
     private InputStream readConsole (final Console console)
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         String line;
 
         do {
@@ -145,15 +147,21 @@ public class Application
             }
         } while (line != null);
 
-        return new ByteArrayInputStream(buf.toString().getBytes());
+        return new ByteArrayInputStream(buf.toString().getBytes(Charset.defaultCharset()));
     }
 
     private void printResult (final Result result, final String filename)
     {
-        System.out.format("[%s] %s%n", result.isValid() ? "valid" : "invalid", filename);
+        String status;
+        if (result.isValid()) {
+            status = "valid";
+        } else {
+            status = "invalid";
+        }
+        System.out.format("[%s] %s%n", status, filename);
         if (verbose) {
             for (String message : result.getValidationMessages()) {
-                System.out.format("[%s] %s %s%n", result.isValid() ? "valid" : "invalid", filename, message);
+                System.out.format("[%s] %s %s%n", status, filename, message);
             }
         }
     }
