@@ -24,6 +24,7 @@
       </xsl:message>
     </xsl:if>
     <xsl:copy-of select="(ancestor::sch:pattern|ancestor::sch:schema/sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()"/>
+    <xsl:apply-templates select="(ancestor::sch:pattern|ancestor::sch:schema/sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/sch:extends"/>
   </xsl:template>
 
   <xsl:template match="sch:pattern[@is-a]">
