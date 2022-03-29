@@ -34,6 +34,7 @@
   <!-- Instantiate an abstract rule -->
   <xsl:template match="sch:extends[@rule]" mode="schxslt:expand">
     <xsl:sequence select="ancestor::sch:schema/(sch:pattern | sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()"/>
+    <xsl:apply-templates select="ancestor::sch:schema/(sch:pattern | sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/sch:extends" mode="#current"/>
   </xsl:template>
 
   <!-- Instantiate an abstract pattern -->
