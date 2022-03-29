@@ -1,4 +1,4 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-xxx">
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-252">
   <label>Extending an abstract rule is recursive</label>
   <documents>
     <primary filename="document.xml">
@@ -15,8 +15,9 @@
           <sch:extends rule="abstract-rule-1"/>
           <sch:assert test="true()"/>
         </sch:rule>
-        <sch:rule context="element">
+        <sch:rule context="*">
           <sch:extends rule="abstract-rule-2"/>
+          <sch:assert test="true()"/>
         </sch:rule>
       </sch:pattern>
     </sch:schema>
