@@ -49,10 +49,14 @@
       </xsl:if>
       <xsl:choose>
         <xsl:when test="$pattern/sch:title">
-          <xsl:attribute name="name" select="$pattern/sch:title"/>
+          <xsl:attribute name="name">
+            <xsl:value-of select="$pattern/sch:title"/>
+          </xsl:attribute>
         </xsl:when>
         <xsl:when test="$pattern/@id">
-          <xsl:attribute name="name" select="$pattern/@id"/>
+          <xsl:attribute name="name">
+            <xsl:value-of select="$pattern/@id"/>
+          </xsl:attribute>
         </xsl:when>
       </xsl:choose>
     </svrl:active-pattern>
