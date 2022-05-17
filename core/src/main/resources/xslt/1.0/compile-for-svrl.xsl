@@ -290,6 +290,7 @@
 
   <xsl:template match="sch:dir | sch:emph | sch:span" mode="schxslt:message-template">
     <xsl:element name="svrl:{local-name()}">
+      <xsl:copy-of select="@xml:*"/>
       <xsl:apply-templates select="node() | @*" mode="schxslt:message-template"/>
     </xsl:element>
   </xsl:template>
