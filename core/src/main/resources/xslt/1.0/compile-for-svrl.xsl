@@ -22,7 +22,7 @@
       </xsl:if>
       <xsl:for-each select="$schema/sch:p">
         <svrl:text>
-          <xsl:copy-of select="@id | @class | @icon"/>
+          <xsl:copy-of select="@id | @class | @icon | @xml:*"/>
           <xsl:apply-templates select="node()" mode="schxslt:message-template"/>
         </svrl:text>
       </xsl:for-each>
@@ -43,7 +43,7 @@
     <xsl:param name="pattern"/>
 
     <svrl:active-pattern>
-      <xsl:copy-of select="$pattern/@id | $pattern/@role"/>
+      <xsl:copy-of select="$pattern/@id | $pattern/@role | $pattern/@xml:*"/>
       <xsl:if test="$pattern/@documents">
         <attribute name="documents"><value-of select="normalize-space()"/></attribute>
       </xsl:if>
@@ -67,7 +67,7 @@
     <xsl:param name="rule"/>
 
     <svrl:fired-rule>
-      <xsl:copy-of select="$rule/@id | $rule/@role | $rule/@flag | $rule/@see | $rule/@icon | $rule/@fpi"/>
+      <xsl:copy-of select="$rule/@id | $rule/@role | $rule/@flag | $rule/@see | $rule/@icon | $rule/@fpi | $rule/@xml:*"/>
       <attribute name="context">
         <xsl:value-of select="$rule/@context"/>
       </attribute>
@@ -93,7 +93,7 @@
       </call-template>
     </variable>
     <svrl:failed-assert location="{{normalize-space($location)}}">
-      <xsl:copy-of select="$assert/@role | $assert/@flag | $assert/@id | $assert/@see | $assert/@icon | $assert/@fpi"/>
+      <xsl:copy-of select="$assert/@role | $assert/@flag | $assert/@id | $assert/@see | $assert/@icon | $assert/@fpi | $assert/@xml:*"/>
       <attribute name="test">
         <xsl:value-of select="$assert/@test"/>
       </attribute>
@@ -122,7 +122,7 @@
       </call-template>
     </variable>
     <svrl:successful-report location="{{normalize-space($location)}}">
-      <xsl:copy-of select="$report/@role | $report/@flag | $report/@id | $report/@see | $report/@icon | $report/@fpi"/>
+      <xsl:copy-of select="$report/@role | $report/@flag | $report/@id | $report/@see | $report/@icon | $report/@fpi | $report/@xml:*"/>
       <attribute name="test">
         <xsl:value-of select="$report/@test"/>
       </attribute>
@@ -162,6 +162,7 @@
     </xsl:if>
     <xsl:if test="text() | *">
       <svrl:text>
+        <xsl:copy-of select="@xml:*"/>
         <xsl:apply-templates select="node()" mode="schxslt:message-template"/>
       </svrl:text>
     </xsl:if>
@@ -226,6 +227,7 @@
     <svrl:property-reference property="{$head}">
       <xsl:copy-of select="key('schxslt:properties', $head)/@role"/>
       <xsl:copy-of select="key('schxslt:properties', $head)/@schema"/>
+      <xsl:copy-of select="key('schxslt:properties', $head)/@xml:*"/>
       <svrl:text>
         <xsl:choose>
           <xsl:when test="$pattern/sch:properties/sch:property[@id = $head]">
