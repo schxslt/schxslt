@@ -1,0 +1,42 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-208">
+  <label>Bug 208: Replace abstract pattern parameters in diagnostics and properties</label>
+  <documents>
+    <primary filename="document.xml">
+      <root xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:pattern id="abstract-pattern" abstract="true">
+        <sch:rule context="/">
+          <sch:assert test="false()" diagnostics="diagnostic-1" properties="property-1 property-2 property-3"/>
+        </sch:rule>
+      </sch:pattern>
+      <sch:pattern is-a="abstract-pattern">
+        <sch:param name="placeholder" value="value"/>
+        <sch:param name="path" value="*"/>
+      </sch:pattern>
+      <sch:properties>
+        <sch:property id="property-1">
+          <sch:value-of select="'$placeholder'"/>
+        </sch:property>
+        <sch:property id="property-2">
+          <sch:name path="'$placeholder'"/>
+        </sch:property>
+        <sch:property id="property-3">
+          <xsl:copy-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$path"/>
+        </sch:property>
+      </sch:properties>
+      <sch:diagnostics>
+        <sch:diagnostic id="diagnostic-1">
+          <sch:value-of select="'$placeholder'"/>
+        </sch:diagnostic>
+      </sch:diagnostics>
+    </sch:schema>
+  </schemas>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+    <expectation test="normalize-space(//svrl:diagnostic-reference[@diagnostic = 'diagnostic-1']) = 'value'"/>
+    <expectation test="normalize-space(//svrl:property-reference[@property = 'property-1']) = 'value'"/>
+    <expectation test="count(//svrl:property-reference[@property = 'property-3']/svrl:text/root) = 1"/>
+  </expectations>
+</testcase>
