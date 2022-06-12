@@ -14,7 +14,7 @@
 
     <svrl:schematron-output>
       <xsl:copy-of select="$schema/@xml:*"/>
-      <xsl:copy-of select="$schema/@schemaVersion"/>w
+      <xsl:copy-of select="$schema/@schemaVersion"/>
       <xsl:if test="$phase != '#ALL'">
         <xsl:attribute name="phase"><xsl:value-of select="$phase"/></xsl:attribute>
       </xsl:if>
