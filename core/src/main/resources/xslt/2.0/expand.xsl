@@ -19,7 +19,18 @@
   </xsl:template>
 
   <!-- Copy all other elements -->
-  <xsl:template match="node() | @*" mode="schxslt:expand">
+  <xsl:template match="*" mode="schxslt:expand">
+    <xsl:param name="lang" as="xs:string?"/>
+    <xsl:copy>
+      <xsl:if test="empty(@xml:lang) and schxslt:in-scope-language(.) != $lang">
+        <xsl:attribute name="xml:lang" select="schxslt:in-scope-language(.)"/>
+      </xsl:if>
+      <xsl:apply-templates select="@*" mode="schxslt:expand"/>
+      <xsl:apply-templates select="node()" mode="schxslt:expand"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="comment() | processing-instruction() | @*" mode="schxslt:expand">
     <xsl:copy>
       <xsl:apply-templates select="node() | @*" mode="schxslt:expand"/>
     </xsl:copy>
@@ -84,6 +95,7 @@
         <sch:properties>
           <xsl:apply-templates select="../sch:properties/sch:property[@id = $ids]" mode="schxslt:expand">
             <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
+            <xsl:with-param name="lang" as="xs:string" select="schxslt:in-scope-language(.)"/>
           </xsl:apply-templates>
         </sch:properties>
       </xsl:if>
@@ -93,6 +105,7 @@
         <sch:diagnostics>
           <xsl:apply-templates select="../sch:diagnostics/sch:diagnostic[@id = $ids]" mode="schxslt:expand">
             <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
+            <xsl:with-param name="lang" as="xs:string" select="schxslt:in-scope-language(.)"/>
           </xsl:apply-templates>
         </sch:diagnostics>
       </xsl:if>

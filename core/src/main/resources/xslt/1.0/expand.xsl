@@ -87,6 +87,9 @@
               <xsl:with-param name="ids" select="string(@properties)"/>
               <xsl:with-param name="index" select="'schxslt:properties'"/>
               <xsl:with-param name="instanceId" select="$instanceId"/>
+              <xsl:with-param name="lang">
+                <xsl:call-template name="schxslt:in-scope-language"/>
+              </xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </sch:properties>
@@ -98,6 +101,9 @@
               <xsl:with-param name="ids" select="string(@diagnostics)"/>
               <xsl:with-param name="index" select="'schxslt:diagnostics'"/>
               <xsl:with-param name="instanceId" select="$instanceId"/>
+              <xsl:with-param name="lang">
+                <xsl:call-template name="schxslt:in-scope-language"/>
+              </xsl:with-param>
             </xsl:call-template>
           </xsl:for-each>
         </sch:diagnostics>
@@ -109,6 +115,7 @@
     <xsl:param name="ids"/>
     <xsl:param name="index"/>
     <xsl:param name="instanceId"/>
+    <xsl:param name="lang"/>
 
     <xsl:if test="normalize-space($ids) != ''">
       <xsl:variable name="head">
@@ -124,6 +131,7 @@
 
       <xsl:apply-templates select="key($index, $head)" mode="schxslt:pattern-instance">
         <xsl:with-param name="instanceId" select="$instanceId"/>
+        <xsl:with-param name="lang" select="$lang"/>
       </xsl:apply-templates>
 
       <xsl:if test="contains($ids, ' ')">
@@ -131,6 +139,7 @@
           <xsl:with-param name="ids" select="substring-after($ids, ' ')"/>
           <xsl:with-param name="index" select="$index"/>
           <xsl:with-param name="instanceId" select="$instanceId"/>
+          <xsl:with-param name="lang" select="$lang"/>
         </xsl:call-template>
       </xsl:if>
 
@@ -138,13 +147,30 @@
 
   </xsl:template>
 
-  <xsl:template match="node() | @*" mode="schxslt:pattern-instance">
+  <xsl:template match="*" mode="schxslt:pattern-instance">
     <xsl:param name="instanceId"/>
+    <xsl:param name="lang"/>
+    <xsl:variable name="thisLang">
+      <xsl:call-template name="schxslt:in-scope-language"/>
+    </xsl:variable>
     <xsl:copy>
-      <xsl:apply-templates select="node() | @*" mode="schxslt:pattern-instance">
+      <xsl:if test="not(@xml:lang) and $lang != $thisLang">
+        <xsl:attribute name="xml:lang">
+          <xsl:value-of select="$thisLang"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates select="@*" mode="schxslt:pattern-instance">
+        <xsl:with-param name="instanceId" select="$instanceId"/>
+      </xsl:apply-templates>
+      <xsl:apply-templates select="node()" mode="schxslt:pattern-instance">
         <xsl:with-param name="instanceId" select="$instanceId"/>
       </xsl:apply-templates>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="comment() | processing-instruction() | @*" mode="schxslt:pattern-instance">
+    <xsl:param name="instanceId"/>
+    <xsl:copy/>
   </xsl:template>
 
   <xsl:template match="sch:pattern/@is-a" mode="schxslt:pattern-instance"/>
