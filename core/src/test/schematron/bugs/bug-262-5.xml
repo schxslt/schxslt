@@ -1,0 +1,24 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-262-5">
+  <label>Language fixup when instantiating a diagnostic</label>
+  <documents>
+    <primary filename="document.xml">
+      <root xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="en">
+      <sch:pattern abstract="true" id="abstract-pattern">
+        <sch:rule context="*">
+          <sch:assert test="false()" diagnostics="diag"/>
+        </sch:rule>
+      </sch:pattern>
+      <sch:pattern is-a="abstract-pattern"/>
+      <sch:diagnostics xml:lang="de">
+        <sch:diagnostic id="diag"/>
+      </sch:diagnostics>
+    </sch:schema>
+  </schemas>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+    <expectation test="//svrl:diagnostic-reference/svrl:text[lang('de')]"/>
+  </expectations>
+</testcase>
