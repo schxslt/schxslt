@@ -68,8 +68,13 @@
   <xsl:template match="sch:pattern[@is-a]" mode="schxslt:expand">
     <xsl:param name="abstract-patterns" tunnel="yes" as="element(sch:pattern)*"/>
     <xsl:variable name="is-a" select="$abstract-patterns[@id = current()/@is-a]"/>
+    <xsl:variable name="sourceLang" as="xs:string" select="schxslt:in-scope-language(.)"/>
+    <xsl:variable name="targetLang" as="xs:string" select="schxslt:in-scope-language($is-a)"/>    
     <xsl:copy>
       <xsl:sequence select="@* except @is-a"/>
+      <xsl:if test="$sourceLang != $targetLang and not(@xml:lang)">
+        <xsl:attribute name="xml:lang" select="$targetLang"/>
+      </xsl:if>
       <xsl:apply-templates select="(if (not(@documents)) then $is-a/@documents else (), $is-a/node())" mode="schxslt:expand">
         <xsl:with-param name="schxslt:params" select="sch:param" tunnel="yes"/>
       </xsl:apply-templates>

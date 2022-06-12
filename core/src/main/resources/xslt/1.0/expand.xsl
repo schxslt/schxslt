@@ -60,7 +60,20 @@
 
   <xsl:template match="sch:pattern[@is-a]">
     <xsl:variable name="instanceId" select="generate-id()"/>
+    <xsl:variable name="sourceLang">
+      <xsl:call-template name="schxslt:in-scope-language"/>
+    </xsl:variable>
+    <xsl:variable name="targetLang">
+      <xsl:call-template name="schxslt:in-scope-language">
+        <xsl:with-param name="context" select="key('schxslt:abstract-patterns', @is-a)"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:copy>
+      <xsl:if test="$sourceLang != $targetLang and not(@xml:lang)">
+        <xsl:attribute name="xml:lang">
+          <xsl:value-of select="$targetLang"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates select="@* | key('schxslt:abstract-patterns', @is-a)/@documents" mode="schxslt:pattern-instance">
         <xsl:with-param name="instanceId" select="$instanceId"/>
       </xsl:apply-templates>
