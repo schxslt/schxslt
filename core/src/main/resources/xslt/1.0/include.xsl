@@ -11,11 +11,23 @@
   <xsl:template match="sch:extends[@href]">
     <xsl:choose>
       <xsl:when test="contains(@href, '#')">
-        <xsl:if test="local-name(..) = local-name(document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')])">
-          <xsl:if test="namespace-uri(document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]) = 'http://purl.oclc.org/dsdl/schematron'">
-            <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]/*"/>
-          </xsl:if>
-        </xsl:if>
+        <xsl:variable name="fragment" select="substring-after(current()/@href, '#')"/>
+        <xsl:choose>
+          <xsl:when test="document(substring-before(@href, '#'), @href)//*[@xml:id = $fragment]">
+            <xsl:if test="local-name(..) = local-name(document(substring-before(@href, '#'), @href)//*[@xml:id = $fragment])">
+              <xsl:if test="namespace-uri(document(substring-before(@href, '#'), @href)//*[@xml:id = $fragment]) = 'http://purl.oclc.org/dsdl/schematron'">
+                <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@xml:id = $fragment]/*"/>
+              </xsl:if>
+            </xsl:if>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:if test="local-name(..) = local-name(document(substring-before(@href, '#'), @href)//*[@id = $fragment])">
+              <xsl:if test="namespace-uri(document(substring-before(@href, '#'), @href)//*[@id = $fragment]) = 'http://purl.oclc.org/dsdl/schematron'">
+                <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@id = $fragment]/*"/>
+              </xsl:if>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:if test="local-name(..) = local-name(document(@href)/*) and namespace-uri(document(@href)/*) = 'http://purl.oclc.org/dsdl/schematron'">
@@ -28,7 +40,15 @@
   <xsl:template match="sch:include">
     <xsl:choose>
       <xsl:when test="contains(@href, '#')">
-        <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@xml:id = substring-after(current()/@href, '#')]"/>
+        <xsl:variable name="fragment" select="substring-after(current()/@href, '#')"/>
+        <xsl:choose>
+          <xsl:when test="document(substring-before(@href, '#'), @href)//*[@xml:id = $fragment]">
+            <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@xml:id = $fragment]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="document(substring-before(@href, '#'), @href)//*[@id = $fragment]"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="document(@href)"/>
