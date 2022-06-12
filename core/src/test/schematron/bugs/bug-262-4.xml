@@ -6,7 +6,7 @@
     </primary>
     <secondary filename="subschema.sch">
       <sch:pattern xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="de">
-        <sch:rule>
+        <sch:rule id="rule">
           <sch:assert test="false()"/>
         </sch:rule>
       </sch:pattern>
@@ -16,7 +16,7 @@
     <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="en">
       <sch:pattern>
         <sch:rule context="*">
-          <sch:extends href="subschema.sch"/>
+          <sch:extends href="subschema.sch#rule"/>
         </sch:rule>
       </sch:pattern>
     </sch:schema>
