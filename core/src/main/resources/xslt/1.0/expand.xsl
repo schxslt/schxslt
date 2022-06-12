@@ -23,7 +23,38 @@
         The current pattern defines no abstract rule named '<xsl:value-of select="@rule"/>'.
       </xsl:message>
     </xsl:if>
-    <xsl:copy-of select="(ancestor::sch:pattern|ancestor::sch:schema/sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()"/>
+
+    <xsl:variable name="sourceLang">
+      <xsl:call-template name="schxslt:in-scope-language"/>
+    </xsl:variable>
+    <xsl:variable name="targetLang">
+      <xsl:call-template name="schxslt:in-scope-language">
+        <xsl:with-param name="context" select="(ancestor::sch:pattern|ancestor::sch:schema/sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$sourceLang = $targetLang">
+        <xsl:copy-of select="(ancestor::sch:pattern|ancestor::sch:schema/sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="(ancestor::sch:pattern|ancestor::sch:schema/sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()">
+          <xsl:choose>
+            <xsl:when test="self::* and not(@xml:lang)">
+              <xsl:copy>
+                <xsl:attribute name="xml:lang">
+                  <xsl:value-of select="$targetLang"/>
+                </xsl:attribute>
+                <xsl:copy-of select="@*"/>
+                <xsl:copy-of select="node()"/>
+              </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:copy-of select="."/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="(ancestor::sch:pattern|ancestor::sch:schema/sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/sch:extends"/>
   </xsl:template>
 
@@ -189,6 +220,11 @@
       </xsl:otherwise>
     </xsl:choose>
 
+  </xsl:template>
+
+  <xsl:template name="schxslt:in-scope-language">
+    <xsl:param name="context" select="."/>
+    <xsl:value-of select="$context/ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
   </xsl:template>
 
 </xsl:transform>

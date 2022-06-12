@@ -38,7 +38,29 @@
         The current pattern defines no abstract rule named '<xsl:value-of select="@rule"/>'.
       </xsl:message>
     </xsl:if>
-    <xsl:sequence select="ancestor::sch:schema/(sch:pattern | sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()"/>
+    <xsl:variable name="sourceLang" as="xs:string" select="schxslt:in-scope-language(.)"/>
+    <xsl:variable name="targetLang" as="xs:string" select="schxslt:in-scope-language(ancestor::sch:schema/(sch:pattern | sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule])"/>
+    <xsl:choose>
+      <xsl:when test="$sourceLang = $targetLang">
+        <xsl:sequence select="ancestor::sch:schema/(sch:pattern | sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="ancestor::sch:schema/(sch:pattern | sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/node()">
+          <xsl:choose>
+            <xsl:when test="self::* and not(@xml:lang)">
+              <xsl:copy>
+                <xsl:attribute name="xml:lang" select="$targetLang"/>
+                <xsl:sequence select="@*"/>
+                <xsl:sequence select="node()"/>
+              </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:sequence select="."/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="ancestor::sch:schema/(sch:pattern | sch:rules)/sch:rule[@abstract = 'true'][@id = current()/@rule]/sch:extends" mode="#current"/>
   </xsl:template>
 
@@ -92,6 +114,11 @@
         <xsl:value-of select="schxslt:replace-params($src, $params[position() > 1])"/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:function>
+
+  <xsl:function name="schxslt:in-scope-language" as="xs:string?">
+    <xsl:param name="context" as="node()"/>
+    <xsl:value-of select="$context/ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
   </xsl:function>
 
 </xsl:transform>
