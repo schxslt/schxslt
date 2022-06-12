@@ -95,7 +95,7 @@
     </variable>
     <svrl:failed-assert location="{{normalize-space($location)}}">
       <xsl:copy-of select="$assert/@role | $assert/@flag | $assert/@id | $assert/@see | $assert/@icon | $assert/@fpi"/>
-      <xsl:copy-of select="$assert/@xml:id | $assert/ancestor-or-self::*[@xml:lang]/@xml:lang | $assert/ancestor-or-self::*[@xml:space]/@xml:space"/>
+      <xsl:copy-of select="$assert/@xml:id | $assert/ancestor-or-self::*[@xml:lang]/@xml:lang"/>
       <attribute name="test">
         <xsl:value-of select="$assert/@test"/>
       </attribute>
@@ -125,7 +125,7 @@
     </variable>
     <svrl:successful-report location="{{normalize-space($location)}}">
       <xsl:copy-of select="$report/@role | $report/@flag | $report/@id | $report/@see | $report/@icon | $report/@fpi"/>
-      <xsl:copy-of select="$report/@xml:id | $report/ancestor-or-self::*[@xml:lang]/@xml:lang | $report/ancestor-or-self::*[@xml:space]/@xml:space"/>
+      <xsl:copy-of select="$report/@xml:id | $report/ancestor-or-self::*[@xml:lang]/@xml:lang"/>
       <attribute name="test">
         <xsl:value-of select="$report/@test"/>
       </attribute>
