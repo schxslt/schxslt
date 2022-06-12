@@ -91,6 +91,7 @@
     <xsl:param name="location-function" as="xs:string" required="yes" tunnel="yes"/>
     <svrl:failed-assert location="{{{$location-function}({($assert/@subject, $assert/../@subject, '.')[1]})}}">
       <xsl:sequence select="($assert/@role, $assert/@flag, $assert/@id, $assert/@see, $assert/@icon, $assert/@fpi, $assert/@xml:*)"/>
+      <xsl:sequence select="$assert/@xml:id | $assert/ancestor-or-self::*[@xml:lang]/@xml:lang | $assert/ancestor-or-self::*[@xml:space]/@xml:space"/>
       <attribute name="test">
         <xsl:value-of select="$assert/@test"/>
       </attribute>
@@ -104,7 +105,8 @@
     <xsl:param name="report" as="element(sch:report)" required="yes"/>
     <xsl:param name="location-function" as="xs:string" required="yes" tunnel="yes"/>
     <svrl:successful-report location="{{{$location-function}({($report/@subject, $report/../@subject, '.')[1]})}}">
-      <xsl:sequence select="($report/@role, $report/@flag, $report/@id, $report/@see, $report/@icon, $report/@fpi, $report/@xml:*)"/>
+      <xsl:sequence select="($report/@role, $report/@flag, $report/@id, $report/@see, $report/@icon, $report/@fpi)"/>
+      <xsl:sequence select="$report/@xml:id | $report/ancestor-or-self::*[@xml:lang]/@xml:lang | $report/ancestor-or-self::*[@xml:space]/@xml:space"/>
       <attribute name="test">
         <xsl:value-of select="$report/@test"/>
       </attribute>
