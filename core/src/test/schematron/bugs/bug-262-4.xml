@@ -5,9 +5,11 @@
       <root xmlns=""/>
     </primary>
     <secondary filename="subschema.sch">
-      <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="de">
-        <sch:assert test="false()"/>
-      </sch:rule>
+      <sch:pattern xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="de">
+        <sch:rule>
+          <sch:assert test="false()"/>
+        </sch:rule>
+      </sch:pattern>
     </secondary>
   </documents>
   <schemas>
