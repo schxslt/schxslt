@@ -16,6 +16,7 @@
     <xsl:param name="phase" as="xs:string" required="yes"/>
 
     <svrl:schematron-output>
+      <xsl:sequence select="$schema/@xml:*"/>
       <xsl:sequence select="$schema/@schemaVersion"/>
       <xsl:if test="$phase ne '#ALL'">
         <xsl:attribute name="phase" select="$phase"/>
