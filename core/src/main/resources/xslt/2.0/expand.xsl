@@ -69,7 +69,7 @@
     <xsl:param name="abstract-patterns" tunnel="yes" as="element(sch:pattern)*"/>
     <xsl:variable name="is-a" select="$abstract-patterns[@id = current()/@is-a]"/>
     <xsl:variable name="sourceLang" as="xs:string" select="schxslt:in-scope-language(.)"/>
-    <xsl:variable name="targetLang" as="xs:string" select="schxslt:in-scope-language($is-a)"/>    
+    <xsl:variable name="targetLang" as="xs:string" select="schxslt:in-scope-language($is-a)"/>
     <xsl:copy>
       <xsl:sequence select="@* except @is-a"/>
       <xsl:if test="$sourceLang != $targetLang and not(@xml:lang)">
@@ -121,7 +121,7 @@
     </xsl:choose>
   </xsl:function>
 
-  <xsl:function name="schxslt:in-scope-language" as="xs:string?">
+  <xsl:function name="schxslt:in-scope-language" as="xs:string">
     <xsl:param name="context" as="node()"/>
     <xsl:value-of select="$context/ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
   </xsl:function>
