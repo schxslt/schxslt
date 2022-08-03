@@ -29,6 +29,7 @@
   <xsl:variable name="schxslt.compile.typed-variables" as="xs:boolean" select="true()"/>
   <xsl:param name="schxslt.compile.streamable" as="xs:boolean" select="false()"/>
   <xsl:param name="schxslt.compile.metadata" as="xs:boolean" select="true()"/>
+  <xsl:param name="schxslt.compile.initial-document-function" as="xs:string" select="'document'"/>
 
   <xsl:template match="/sch:schema">
     <xsl:call-template name="schxslt:compile">
@@ -109,43 +110,60 @@
         <xsl:with-param name="typed-variables" as="xs:boolean" select="$schxslt.compile.typed-variables"/>
       </xsl:call-template>
 
+      <param name="schxslt.validate.initial-document-uri" as="xs:string?"/>
+
+      <template name="main">
+        <apply-templates select="{$schxslt.compile.initial-document-function}($schxslt.validate.initial-document-uri)"/>
+      </template>
+
       <template match="root()">
         <xsl:sequence select="$schematron/sch:phase[@id eq $effective-phase]/@xml:base"/>
+        <param name="schxslt.validate.recursive-call" as="xs:boolean" select="false()"/>
 
-        <variable name="metadata" as="element()?">
-          <xsl:if test="$schxslt.compile.metadata">
-            <xsl:call-template name="schxslt-api:metadata">
+        <choose>
+          <when test="not($schxslt.validate.recursive-call) and (normalize-space($schxslt.validate.initial-document-uri) != '')">
+            <apply-templates select="{$schxslt.compile.initial-document-function}($schxslt.validate.initial-document-uri)">
+              <with-param name="schxslt.validate.recursive-call" as="xs:boolean" select="true()"/>
+            </apply-templates>
+          </when>
+          <otherwise>
+
+            <variable name="metadata" as="element()?">
+              <xsl:if test="$schxslt.compile.metadata">
+                <xsl:call-template name="schxslt-api:metadata">
+                  <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
+                  <xsl:with-param name="source" as="element(rdf:Description)" select="$version"/>
+                  <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
+                </xsl:call-template>
+              </xsl:if>
+            </variable>
+
+            <variable name="report" as="element(schxslt:report)">
+              <schxslt:report>
+                <xsl:for-each select="distinct-values($validation-stylesheet-body/@name)">
+                  <call-template name="{.}"/>
+                </xsl:for-each>
+              </schxslt:report>
+            </variable>
+
+            <!-- Unwrap the intermediary report -->
+            <variable name="schxslt:report" as="node()*">
+              <sequence select="$metadata"/>
+              <for-each select="$report/schxslt:document">
+                <for-each select="schxslt:pattern">
+                  <sequence select="node()"/>
+                  <sequence select="../schxslt:rule[@pattern = current()/@id]/node()"/>
+                </for-each>
+              </for-each>
+            </variable>
+
+            <xsl:call-template name="schxslt-api:report">
               <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
-              <xsl:with-param name="source" as="element(rdf:Description)" select="$version"/>
+              <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
               <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
             </xsl:call-template>
-          </xsl:if>
-        </variable>
-
-        <variable name="report" as="element(schxslt:report)">
-          <schxslt:report>
-            <xsl:for-each select="distinct-values($validation-stylesheet-body/@name)">
-              <call-template name="{.}"/>
-            </xsl:for-each>
-          </schxslt:report>
-        </variable>
-
-        <!-- Unwrap the intermediary report -->
-        <variable name="schxslt:report" as="node()*">
-          <sequence select="$metadata"/>
-          <for-each select="$report/schxslt:document">
-            <for-each select="schxslt:pattern">
-              <sequence select="node()"/>
-              <sequence select="../schxslt:rule[@pattern = current()/@id]/node()"/>
-            </for-each>
-          </for-each>
-        </variable>
-
-        <xsl:call-template name="schxslt-api:report">
-          <xsl:with-param name="schema" as="element(sch:schema)" select="$schematron"/>
-          <xsl:with-param name="phase" as="xs:string" select="$effective-phase"/>
-          <xsl:with-param name="xslt-version" as="xs:string" tunnel="yes" select="$xslt-version"/>
-        </xsl:call-template>
+          </otherwise>
+        </choose>
 
       </template>
 
