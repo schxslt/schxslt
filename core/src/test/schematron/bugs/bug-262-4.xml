@@ -1,0 +1,27 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-262-3">
+  <label>Language fixup when including an external definition via sch:extends</label>
+  <documents>
+    <primary filename="document.xml">
+      <root xmlns=""/>
+    </primary>
+    <secondary filename="subschema.sch">
+      <sch:pattern xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="de">
+        <sch:rule id="rule">
+          <sch:assert test="false()"/>
+        </sch:rule>
+      </sch:pattern>
+    </secondary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="en">
+      <sch:pattern>
+        <sch:rule context="*">
+          <sch:extends href="subschema.sch#rule"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+    <expectation test="//svrl:failed-assert[lang('de')]"/>
+  </expectations>
+</testcase>

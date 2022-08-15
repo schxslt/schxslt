@@ -1,0 +1,23 @@
+<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-262-1">
+  <label>Language fixup when extending an abstract rule</label>
+  <documents>
+    <primary filename="document.xml">
+      <root xmlns=""/>
+    </primary>
+  </documents>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="en">
+      <sch:pattern>
+        <sch:rule abstract="true" id="abstract-rule" xml:lang="de">
+          <sch:assert test="false()"/>
+        </sch:rule>
+        <sch:rule context="*">
+          <sch:extends rule="abstract-rule"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
+    <expectation test="//svrl:failed-assert[lang('de')]"/>
+  </expectations>
+</testcase>

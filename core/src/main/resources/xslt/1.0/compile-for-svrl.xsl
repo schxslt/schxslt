@@ -188,12 +188,13 @@
 
     <svrl:diagnostic-reference diagnostic="{$head}">
       <svrl:text>
-        <xsl:copy-of select="key('schxslt:diagnostics', $head)/@*"/>
         <xsl:choose>
           <xsl:when test="$pattern/sch:diagnostics/sch:diagnostic[@id = $head]">
+            <xsl:copy-of select="$pattern/sch:diagnostics/sch:diagnostic[@id = $head]/@*"/>
             <xsl:apply-templates select="$pattern/sch:diagnostics/sch:diagnostic[@id = $head]/node()" mode="schxslt:message-template"/>
           </xsl:when>
           <xsl:otherwise>
+            <xsl:copy-of select="key('schxslt:diagnostics', $head)/@*"/>
             <xsl:apply-templates select="key('schxslt:diagnostics', $head)/node()" mode="schxslt:message-template"/>
           </xsl:otherwise>
         </xsl:choose>
@@ -230,13 +231,15 @@
     <svrl:property-reference property="{$head}">
       <xsl:copy-of select="key('schxslt:properties', $head)/@role"/>
       <xsl:copy-of select="key('schxslt:properties', $head)/@schema"/>
-      <xsl:copy-of select="key('schxslt:properties', $head)/@xml:*"/>
+
       <svrl:text>
         <xsl:choose>
           <xsl:when test="$pattern/sch:properties/sch:property[@id = $head]">
+            <xsl:copy-of select="$pattern/sch:properties/sch:property[@id = $head]/@*"/>
             <xsl:apply-templates select="$pattern/sch:properties/sch:property[@id = $head]/node()" mode="schxslt:message-template"/>
           </xsl:when>
           <xsl:otherwise>
+            <xsl:copy-of select="key('schxslt:properties', $head)/@xml:*"/>
             <xsl:apply-templates select="key('schxslt:properties', $head)/node()" mode="schxslt:message-template"/>
           </xsl:otherwise>
         </xsl:choose>
