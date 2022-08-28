@@ -112,7 +112,7 @@
 
       <param name="schxslt.validate.initial-document-uri" as="xs:string?"/>
 
-      <template name="main">
+      <template name="schxslt.validate">
         <apply-templates select="{$schxslt.compile.initial-document-function}($schxslt.validate.initial-document-uri)"/>
       </template>
 
