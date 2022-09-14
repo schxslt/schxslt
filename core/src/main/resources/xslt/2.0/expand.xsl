@@ -87,9 +87,16 @@
         <xsl:value-of select="$src"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:variable name="value" select="replace(replace($params[1]/@value, '\\', '\\\\'), '\$', '\\\$')"/>
-        <xsl:variable name="src" select="replace($src, concat('(\W*)\$', $params[1]/@name, '(\W*)'), concat('$1', $value, '$2'))"/>
-        <xsl:value-of select="schxslt:replace-params($src, $params[position() > 1])"/>
+        <xsl:variable name="paramsSorted" as="element(sch:param)*">
+          <xsl:for-each select="$params">
+            <xsl:sort select="string-length(@name)" order="descending"/>
+            <xsl:sequence select="."/>
+          </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="value" select="replace(replace($paramsSorted[1]/@value, '\\', '\\\\'), '\$', '\\\$')"/>
+        <xsl:variable name="src" select="replace($src, concat('(\W*)\$', $paramsSorted[1]/@name, '(\W*)'), concat('$1', $value, '$2'))"/>
+        <xsl:value-of select="schxslt:replace-params($src, $paramsSorted[position() > 1])"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
