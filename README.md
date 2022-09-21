@@ -138,7 +138,21 @@ TBD
 
 ### Command line
 
-TBD
+Every release of SchXslt provides the compiled command line application with all dependencies as
+```schxslt-cli.jar```. To use the application run it with Java from the command line.
+
+```
+java -jar schxslt-cli.jar
+
+SchXslt CLI v1.9.2
+usage: name.dmaus.schxslt.cli.Application [-d <arg>] [-o <arg>] [-p <arg>] [-r] -s <arg> [-v]
+ -d,--document <arg>     Path to document
+ -o,--output <arg>       Output file (SVRL report)
+ -p,--phase <arg>        Validation phase
+ -r,--repl               Run as REPL
+ -s,--schematron <arg>   Path to schema
+ -v,--verbose            Verbose output
+```
 
 Building
 --
