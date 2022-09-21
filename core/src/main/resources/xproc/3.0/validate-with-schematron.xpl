@@ -10,11 +10,11 @@
   <p:input  port="source"/>
   <p:input  port="schema"/>
 
-  <p:output port="result" pipe="source@validate-with-schematron"/>
+  <p:output port="result" pipe="source@validate-with-schematron" primary="true"/>
   <p:output port="report" pipe="result@validate"/>
 
   <schxslt:compile-schematron name="compile-schematron" phase="{$phase}">
-    <p:with-input pipe="source@validate-with-schematron"/>
+    <p:with-input pipe="schema@validate-with-schematron"/>
   </schxslt:compile-schematron>
 
   <p:xslt name="validate">
