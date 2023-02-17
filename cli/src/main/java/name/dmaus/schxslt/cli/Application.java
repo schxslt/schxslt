@@ -88,6 +88,10 @@ public final class Application
                 if (configuration.hasOutputFile()) {
                     save(result.getValidationReport(), configuration.getOutputFile());
                 }
+                if (result.isValid()) {
+                    System.exit(0);
+                }
+                System.exit(configuration.getExitCode());
             }
         } else {
             System.exit(EX_USAGE);
