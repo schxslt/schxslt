@@ -100,6 +100,11 @@ public final class Configuration
         return null;
     }
 
+    public boolean hasOutputFile ()
+    {
+        return arguments.hasOption(OPTION_OUTPUT);
+    }
+
     public String getPhase ()
     {
         if (arguments.hasOption(OPTION_PHASE)) {
