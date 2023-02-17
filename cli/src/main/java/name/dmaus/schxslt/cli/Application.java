@@ -51,8 +51,8 @@ import org.w3c.dom.Document;
 public final class Application
 {
     private static final String STDIN = "<stdin>";
+    private static final int EX_USAGE = 64;
 
-    private File output;
     private Boolean verbose;
     private Schematron schematron;
 
@@ -67,13 +67,6 @@ public final class Application
         this.schematron = schematron;
     }
 
-    public Application (Schematron schematron, Boolean verbose, File output)
-    {
-        this.output = output;
-        this.verbose = verbose;
-        this.schematron = schematron;
-    }
-
     public static void main (final String[] args) throws SchematronException
     {
         Configuration configuration = new Configuration();
@@ -81,37 +74,45 @@ public final class Application
             StreamSource schema = new StreamSource(configuration.getSchematron());
 
             Schematron schematron = new Schematron(schema, configuration.getPhase());
-            Application application = new Application(schematron, configuration.beVerbose(), configuration.getOutputFile());
+            Application application = new Application(schematron, configuration.beVerbose());
 
+            Result result = null;
             if (configuration.hasDocument()) {
-                application.execute(configuration.getDocument());
+                result = application.execute(configuration.getDocument());
             } else if (configuration.isRepl()) {
                 application.execute(System.console());
             } else {
-                application.execute(System.in);
+                result = application.execute(System.in);
             }
+            if (result != null) {
+                if (configuration.hasOutputFile()) {
+                    save(result.getValidationReport(), configuration.getOutputFile());
+                }
+                if (result.isValid()) {
+                    System.exit(0);
+                }
+                System.exit(configuration.getExitCode());
+            }
+        } else {
+            System.exit(EX_USAGE);
         }
     }
 
-    public void execute (final File input) throws SchematronException
+    public Result execute (final File input) throws SchematronException
     {
         StreamSource instream = new StreamSource(input);
         instream.setSystemId(input);
 
         Result result = schematron.validate(instream);
         printResult(result, input.getAbsolutePath());
-        if (output != null) {
-            save(result.getValidationReport());
-        }
+        return result;
     }
 
-    public void execute (final InputStream input) throws SchematronException
+    public Result execute (final InputStream input) throws SchematronException
     {
         Result result = schematron.validate(new StreamSource(input));
         printResult(result, STDIN);
-        if (output != null) {
-            save(result.getValidationReport());
-        }
+        return result;
     }
 
     public void execute (final Console console) throws SchematronException
@@ -125,7 +126,7 @@ public final class Application
         }
     }
 
-    private void save (Document document)
+    private static void save (Document document, File output)
     {
         try {
             Transformer serializer = TransformerFactory.newInstance().newTransformer();

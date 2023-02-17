@@ -38,6 +38,7 @@ import java.io.File;
 public final class Configuration
 {
     private static final String OPTION_DOCUMENT = "d";
+    private static final String OPTION_EXITCODE = "e";
     private static final String OPTION_OUTPUT = "o";
     private static final String OPTION_PHASE = "p";
     private static final String OPTION_REPL = "r";
@@ -53,6 +54,7 @@ public final class Configuration
     {
         options.addOption(OPTION_PHASE, "phase", true, "Validation phase");
         options.addOption(OPTION_DOCUMENT, "document", true, "Path to document");
+        options.addOption(OPTION_EXITCODE, "exitcode", true, "Use exit code to indicate invalid document (default is 0)");
         options.addOption(OPTION_REPL, "repl", false, "Run as REPL");
         options.addOption(OPTION_VERBOSE, "verbose", false, "Verbose output");
         options.addOption(OPTION_OUTPUT, "output", true, "Output file (SVRL report)");
@@ -68,6 +70,11 @@ public final class Configuration
             }
             if (hasDocument() && isRepl()) {
                 throw new ParseException("Cannot run a REPL when a document is provided");
+            }
+            try {
+                getExitCode();
+            } catch (NumberFormatException e) {
+                throw new ParseException("Provided exit code is not an integer");
             }
         } catch (ParseException e) {
             System.err.println(e.getMessage());
@@ -100,6 +107,11 @@ public final class Configuration
         return null;
     }
 
+    public boolean hasOutputFile ()
+    {
+        return arguments.hasOption(OPTION_OUTPUT);
+    }
+
     public String getPhase ()
     {
         if (arguments.hasOption(OPTION_PHASE)) {
@@ -112,6 +124,14 @@ public final class Configuration
     public File getSchematron ()
     {
         return new File(arguments.getOptionValue(OPTION_SCHEMA));
+    }
+
+    public int getExitCode ()
+    {
+        if (arguments.hasOption(OPTION_EXITCODE)) {
+            return Integer.parseInt(arguments.getOptionValue(OPTION_EXITCODE));
+        }
+        return 0;
     }
 
     public Boolean beVerbose ()
