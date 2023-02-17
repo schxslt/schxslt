@@ -101,7 +101,7 @@ public final class Application
         Result result = schematron.validate(instream);
         printResult(result, input.getAbsolutePath());
         if (output != null) {
-            save(result.getValidationReport());
+            save(result.getValidationReport(), output);
         }
     }
 
@@ -110,7 +110,7 @@ public final class Application
         Result result = schematron.validate(new StreamSource(input));
         printResult(result, STDIN);
         if (output != null) {
-            save(result.getValidationReport());
+            save(result.getValidationReport(), output);
         }
     }
 
@@ -125,7 +125,7 @@ public final class Application
         }
     }
 
-    private void save (Document document)
+    private static void save (Document document, File output)
     {
         try {
             Transformer serializer = TransformerFactory.newInstance().newTransformer();
