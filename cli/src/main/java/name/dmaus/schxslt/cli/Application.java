@@ -51,6 +51,7 @@ import org.w3c.dom.Document;
 public final class Application
 {
     private static final String STDIN = "<stdin>";
+    private static final int EX_USAGE = 64;
 
     private File output;
     private Boolean verbose;
@@ -90,6 +91,8 @@ public final class Application
             } else {
                 application.execute(System.in);
             }
+        } else {
+            System.exit(EX_USAGE);
         }
     }
 
