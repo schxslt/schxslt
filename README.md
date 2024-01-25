@@ -1,11 +1,10 @@
 SchXslt \[ʃˈɛksl̩t\] – An XSLT-based Schematron processor
 ==
 
-SchXslt is copyright (c) 2018–2021 by David Maus &lt;dmaus@dmaus.name&gt; and released under the terms of the MIT
+SchXslt is copyright (c) by David Maus &lt;dmaus@dmaus.name&gt; and released under the terms of the MIT
 license.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1495494.svg)](https://doi.org/10.5281/zenodo.1495494)
-[![Build Status](https://travis-ci.org/schxslt/schxslt.svg?branch=master)](https://travis-ci.org/schxslt/schxslt)
 
 SchXslt is a Schematron processor implemented entirely in XSLT. It transforms a Schematron schema document into an XSLT
 stylesheet that you apply to the document(s) to be validated.
