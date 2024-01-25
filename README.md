@@ -66,7 +66,7 @@ This proposal adds support for the following XSLT elements:
 * xsl:include (XSLT 1.0, XSLT 2.0, XSLT 3.0)
 * xsl:use-package (XSLT 3.0)
 
-Installation
+Installing SchXslt
 --
 
 Depending on your environment there are several ways to install SchXslt.
@@ -81,6 +81,35 @@ Depending on your environment there are several ways to install SchXslt.
 
 * If you use [BaseX](https://basex.org) or [eXist](https://exist-db.org) you can download installable XQuery modulesq
   from [this repository's release page](https://github.com/schxslt/schxslt/releases) as well.
+
+Building SchXslt
+--
+
+SchXslt uses the [Maven](https://maven.apache.org) build tool to create installable packages. To create the packages for
+yourself clone this repository, install [Maven](https://maven.apache.org) and run it with the ```package``` phase.
+
+```
+dmaus@carbon ~ % git clone --recursive https://github.com/schxslt/schxslt.git
+Cloning into 'schxslt'...
+remote: Enumerating objects: 450, done.
+remote: Counting objects: 100% (450/450), done.
+remote: Compressing objects: 100% (298/298), done.
+remote: Total 3789 (delta 172), reused 374 (delta 111), pack-reused 3339
+Receiving objects: 100% (3789/3789), 470.87 KiB | 1.05 MiB/s, done.
+Resolving deltas: 100% (1607/1607), done.
+
+dmaus@carbon ~ % mvn package
+```
+
+This runs the unit tests and creates the following files:
+
+* ant/target/ant-schxslt-{VERSION}.jar (Java archive)
+* core/target/schxslt-{VERSION}.jar (Java archive)
+* core/target/schxslt-{VERSION}-xslt-only.zip (ZIP file with stylesheets)
+* exist/target/schxslt-exist-{VERSION}.xar (XQuery package for eXist)
+* basex/target/schxslt-basex-{VERSION}.xar (XQuery package for BaseX)
+
+Where {VERSION} is replaced with the current SchXslt version.
 
 Using SchXslt
 --
@@ -134,50 +163,45 @@ return
 
 ### Ant
 
-TBD
+The Ant module implements a task for [Apache Ant](https://ant.apache.org/) that performs Schematron validation with
+SchXslt. Download or compile the Jar file and define a new task using ```name.dmaus.schxslt.ant.Task``` as class name.
+
+```
+<project name="Test" basedir="." default="build">
+  <taskdef name="schematron" classname="name.dmaus.schxslt.ant.Task" classpath="/path/to/ant-schxslt-{VERSION}.jar"/>
+  <target name="build">
+    <schematron schema="schema.sch" file="document.xml" report="report.xml" phase="myPhase"/>
+  </target>
+</project>
+```
+
+The task supports the following options:
+
+<table>
+    <tbody>
+        <tr>
+            <th>file</th>
+            <td>Path to the file to be validated</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <th>schema</th>
+            <td>Path to the file containing the Schematron</td>
+            <td>-</td>
+        </tr>
+        <tr>
+            <th>phase</th>
+            <td>Validation phase</td>
+            <td>#ALL</td>
+        </tr>
+        <tr>
+            <th>report</th>
+            <td>Path to the file that the SVRL report should be written to</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
 
 ### Command line
 
-Every release of SchXslt provides the compiled command line application with all dependencies as
-```schxslt-cli.jar```. To use the application run it with Java from the command line.
-
-```
-java -jar schxslt-cli.jar
-
-SchXslt CLI v1.9.2
-usage: name.dmaus.schxslt.cli.Application [-d <arg>] [-o <arg>] [-p <arg>] [-r] -s <arg> [-v]
- -d,--document <arg>     Path to document
- -o,--output <arg>       Output file (SVRL report)
- -p,--phase <arg>        Validation phase
- -r,--repl               Run as REPL
- -s,--schematron <arg>   Path to schema
- -v,--verbose            Verbose output
-```
-
-Building
---
-
-SchXslt uses the [Maven](https://maven.apache.org) build tool to create installable packages. To create the packages for
-yourself clone this repository, install [Maven](https://maven.apache.org) and run it with the ```package``` phase.
-
-```
-dmaus@carbon ~ % git clone --recursive https://github.com/schxslt/schxslt.git
-Cloning into 'schxslt'...
-remote: Enumerating objects: 450, done.
-remote: Counting objects: 100% (450/450), done.
-remote: Compressing objects: 100% (298/298), done.
-remote: Total 3789 (delta 172), reused 374 (delta 111), pack-reused 3339
-Receiving objects: 100% (3789/3789), 470.87 KiB | 1.05 MiB/s, done.
-Resolving deltas: 100% (1607/1607), done.
-
-dmaus@carbon ~ % mvn package
-```
-
-This runs the unit tests and creates the following files:
-
-* core/target/schxslt-{VERSION}.jar (Java archive)
-* core/target/schxslt-{VERSION}-xslt-only.zip (ZIP file with stylesheets)
-* exist/target/schxslt-exist-{VERSION}.xar (XQuery package for eXist)
-* basex/target/schxslt-basex-{VERSION}.xar (XQuery package for BaseX)
-
-Where {VERSION} is replaced with the current SchXslt version.
+TBD
