@@ -28,6 +28,8 @@ import name.dmaus.schxslt.Result;
 import name.dmaus.schxslt.Schematron;
 import name.dmaus.schxslt.SchematronException;
 
+import name.dmaus.schxslt.adapter.SchXslt;
+
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
@@ -91,7 +93,7 @@ public class Task extends org.apache.tools.ant.Task
 
         try {
             log("Generating validation stylesheet for Schematron '" + schema + "'");
-            validator = new Schematron(new StreamSource(schema), phase);
+            validator = new Schematron(new SchXslt(), new StreamSource(schema), phase);
         } catch (SchematronException e) {
             throw new BuildException("Unable to compile validation stylesheet", e);
         }

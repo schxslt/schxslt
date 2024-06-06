@@ -201,6 +201,8 @@ The task supports the following options:
     </tbody>
 </table>
 
+SchXslt Ant uses [XML Resolver](https://xmlresolver.org) to support XML Catalog resolvers.
+
 ### Command line
 
 TBD
