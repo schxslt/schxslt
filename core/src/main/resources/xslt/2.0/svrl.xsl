@@ -66,6 +66,10 @@
         <attribute name="context">
           <xsl:value-of select="$rule/@context"/>
         </attribute>
+        <variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+        <if test="exists($documentUri)">
+          <attribute name="document" select="$documentUri"/>
+        </if>
       </svrl:fired-rule>
     </xsl:if>
   </xsl:template>
@@ -82,6 +86,10 @@
         <attribute name="context">
           <xsl:value-of select="$rule/@context"/>
         </attribute>
+        <variable name="documentUri" as="xs:anyURI?" select="document-uri()"/>
+        <if test="exists($documentUri)">
+          <attribute name="document" select="$documentUri"/>
+        </if>
       </svrl:suppressed-rule>
     </xsl:if>
   </xsl:template>
