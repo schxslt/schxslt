@@ -40,7 +40,7 @@
   <xsl:template name="schxslt:compile">
     <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
 
-    <xsl:variable name="xslt-version" as="xs:string" select="schxslt:xslt-version($schematron)"/>
+    <xsl:variable name="xslt-version" as="xs:string" select="schxslt:xslt-version($schematron, 'xslt')"/>
     <xsl:variable name="effective-phase" select="schxslt:effective-phase($schematron, $phase)" as="xs:string"/>
     <xsl:variable name="active-patterns" select="schxslt:active-patterns($schematron, $effective-phase)" as="element(sch:pattern)+"/>
 

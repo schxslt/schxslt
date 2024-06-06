@@ -61,10 +61,13 @@
 
   <xsl:function name="schxslt:xslt-version" as="xs:string">
     <xsl:param name="schema" as="element(sch:schema)"/>
+    <xsl:param name="defaultQueryBinding" as="xs:string"/>
 
-    <xsl:if test="not(lower-case($schema/@queryBinding) = ('xslt2', 'xslt3'))">
+    <xsl:variable name="queryBinding" as="xs:string"
+                  select="lower-case(($schema/@queryBinding, $defaultQueryBinding)[1])"/>
+    <xsl:if test="not($queryBinding = ('xslt2', 'xslt3'))">
       <xsl:variable name="message">
-        The query language '<xsl:value-of select="($schema/@queryBinding, 'xslt')[1]"/>' is not supported.
+        The query language '<xsl:value-of select="$queryBinding"/>' is not supported.
       </xsl:variable>
       <xsl:message terminate="yes" select="error(xs:QName('error:E0002'), normalize-space($message))"/>
     </xsl:if>

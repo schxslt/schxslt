@@ -37,7 +37,17 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:if test="@queryBinding and translate(@queryBinding, 'XSLT', 'xslt') != 'xslt'">
+    <xsl:variable name="queryBinding">
+      <xsl:choose>
+        <xsl:when test="@queryBinding">
+          <xsl:value-of select="translate(@queryBinding, 'XSLT', 'xslt')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'xslt'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$queryBinding != 'xslt'">
       <xsl:message terminate="yes">
         This Schematron processor only supports the 'xslt' query binding
       </xsl:message>
