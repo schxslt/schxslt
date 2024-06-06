@@ -30,6 +30,7 @@
   <xsl:param name="schxslt.compile.streamable" as="xs:boolean" select="false()"/>
   <xsl:param name="schxslt.compile.metadata" as="xs:boolean" select="true()"/>
   <xsl:param name="schxslt.compile.initial-document-function" as="xs:string" select="'document'"/>
+  <xsl:param name="schxslt.compile.default-query-binding" as="xs:string" select="'xslt'"/>
 
   <xsl:template match="/sch:schema">
     <xsl:call-template name="schxslt:compile">
@@ -40,7 +41,7 @@
   <xsl:template name="schxslt:compile">
     <xsl:param name="schematron" as="element(sch:schema)" required="yes"/>
 
-    <xsl:variable name="xslt-version" as="xs:string" select="schxslt:xslt-version($schematron, 'xslt')"/>
+    <xsl:variable name="xslt-version" as="xs:string" select="schxslt:xslt-version($schematron, $schxslt.compile.default-query-binding)"/>
     <xsl:variable name="effective-phase" select="schxslt:effective-phase($schematron, $phase)" as="xs:string"/>
     <xsl:variable name="active-patterns" select="schxslt:active-patterns($schematron, $effective-phase)" as="element(sch:pattern)+"/>
 

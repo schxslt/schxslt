@@ -18,6 +18,7 @@
   <xsl:param name="phase">#DEFAULT</xsl:param>
   <xsl:param name="schxslt.compile.metadata" select="true()"/>
   <xsl:param name="schxslt.compile.initial-document-function" select="'document'"/>
+  <xsl:param name="schxslt.compile.default-query-binding" select="'xslt'"/>
 
   <xsl:template match="/sch:schema">
 
@@ -43,7 +44,7 @@
           <xsl:value-of select="translate(@queryBinding, 'XSLT', 'xslt')"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="'xslt'"/>
+          <xsl:value-of select="$schxslt.compile.default-query-binding"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
