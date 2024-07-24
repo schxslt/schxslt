@@ -230,7 +230,7 @@
 
     <svrl:property-reference property="{$head}">
       <xsl:copy-of select="key('schxslt:properties', $head)/@role"/>
-      <xsl:copy-of select="key('schxslt:properties', $head)/@schema"/>
+      <xsl:copy-of select="key('schxslt:properties', $head)/@scheme"/>
 
       <svrl:text>
         <xsl:choose>
