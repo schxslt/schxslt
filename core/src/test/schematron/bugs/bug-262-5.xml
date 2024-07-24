@@ -1,12 +1,5 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-262-5">
-  <label>Language fixup when instantiating a diagnostic</label>
-  <documents>
-    <primary filename="document.xml">
-      <root xmlns=""/>
-    </primary>
-  </documents>
-  <schemas>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" xml:lang="en">
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="invalid" xmlns="https://doi.org/10.5281/zenodo.5679629#"><label>Language fixup when instantiating a diagnostic</label><schemas><sch:schema xml:lang="en" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern abstract="true" id="abstract-pattern">
         <sch:rule context="*">
           <sch:assert test="false()" diagnostics="diag"/>
@@ -16,9 +9,4 @@
       <sch:diagnostics xml:lang="de">
         <sch:diagnostic id="diag"/>
       </sch:diagnostics>
-    </sch:schema>
-  </schemas>
-  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
-    <expectation test="//svrl:diagnostic-reference/svrl:text[lang('de')]"/>
-  </expectations>
-</testcase>
+    </sch:schema></schemas><documents><document filename="document.xml"><root xmlns=""/></document></documents><assertions xmlns:svrl="http://purl.oclc.org/dsdl/svrl"><assertion assert="//svrl:diagnostic-reference/svrl:text[lang('de')]"/></assertions></testcase>

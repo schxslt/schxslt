@@ -1,22 +1,8 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="svrl-curly-bracket-in-rule-context">
-  <label>Literal curly brackets can be used in a rule context expression</label>
-  <reference>https://github.com/schxslt/schxslt/issues/113</reference>
-  <documents>
-    <primary filename="document.xml">
-      <element xmlns=""/>
-    </primary>
-  </documents>
-  <schemas>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="invalid" xmlns="https://doi.org/10.5281/zenodo.5679629#"><label>Literal curly brackets can be used in a rule context expression</label><schemas><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern>
         <sch:rule context="/*['}foo{' = '}foo{']">
           <sch:assert test="false()"/>
         </sch:rule>
       </sch:pattern>
-    </sch:schema>
-  </schemas>
-  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
-    <expectation test="//svrl:fired-rule/@context = &quot;/*['}foo{' = '}foo{']&quot;"/>
-  </expectations>
-</testcase>
-
+    </sch:schema></schemas><documents><document filename="document.xml"><element xmlns=""/></document></documents><assertions xmlns:svrl="http://purl.oclc.org/dsdl/svrl"><assertion assert="//svrl:fired-rule/@context = &#34;/*['}foo{' = '}foo{']&#34;"/></assertions></testcase>

@@ -1,20 +1,11 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="valid" id="let-xsl-element-content">
-  <label>XSLT instructions in the element content of a variable are not executed</label>
-  <documents>
-    <primary filename="document.xml">
-      <root xmlns=""/>
-    </primary>
-  </documents>
-  <schemas>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="valid" xmlns="https://doi.org/10.5281/zenodo.5679629#"><label>XSLT instructions in the element content of a variable are not executed</label><schemas><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern>
         <sch:let name="variable">
-          <xsl:element xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name=""/>
+          <xsl:element name="" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"/>
         </sch:let>
         <sch:rule context="/">
           <sch:assert test="true()"/>
         </sch:rule>
       </sch:pattern>
-    </sch:schema>
-  </schemas>
-</testcase>
+    </sch:schema></schemas><documents><document filename="document.xml"><root xmlns=""/></document></documents></testcase>

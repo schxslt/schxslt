@@ -1,12 +1,5 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="invalid" id="bug-216">
-  <label>Bug 216: Rules following a rule matching / are suppressed</label>
-  <documents>
-    <primary filename="document.xml">
-      <root xmlns=""/>
-    </primary>
-  </documents>
-  <schemas>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="invalid" xmlns="https://doi.org/10.5281/zenodo.5679629#"><label>Bug 216: Rules following a rule matching / are suppressed</label><schemas><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern>
         <sch:rule context="/">
           <sch:assert test="true()"/>
@@ -15,6 +8,4 @@
           <sch:assert test="false()"/>
         </sch:rule>
       </sch:pattern>
-    </sch:schema>
-  </schemas>
-</testcase>
+    </sch:schema></schemas><documents><document filename="document.xml"><root xmlns=""/></document></documents></testcase>

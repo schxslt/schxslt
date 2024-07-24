@@ -1,12 +1,5 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="error" id="bug-224">
-  <label>Bug 224: Signal an error if a rule extends a non-abstract rule</label>
-  <documents>
-    <primary filename="document.xml">
-      <root xmlns=""/>
-    </primary>
-  </documents>
-  <schemas>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="error" xmlns="https://doi.org/10.5281/zenodo.5679629#"><label>Bug 224: Signal an error if a rule extends a non-abstract rule</label><schemas><sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern>
         <sch:rule id="r-1" context="/">
           <sch:assert test="true()"/>
@@ -15,6 +8,4 @@
           <sch:extends rule="r-1"/>
         </sch:rule>
       </sch:pattern>
-    </sch:schema>
-  </schemas>
-</testcase>
+    </sch:schema></schemas><documents><document filename="document.xml"><root xmlns=""/></document></documents></testcase>

@@ -81,141 +81,135 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
-        <groupId>name.dmaus.schxslt</groupId>
-        <artifactId>testsuite-maven-plugin</artifactId>
-        <version>1.8.2</version>
+        <groupId>name.dmaus.schxslt.testsuite.harness</groupId>
+        <artifactId>harness-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
         <dependencies>
+          <!-- https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE -->
           <dependency>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
-            <version>${saxon.version}</version>
+            <version>12.4</version>
           </dependency>
           <!-- https://mvnrepository.com/artifact/xalan/xalan -->
           <dependency>
             <groupId>xalan</groupId>
             <artifactId>xalan</artifactId>
-            <version>${xalan.version}</version>
+            <version>2.7.3</version>
+          </dependency>
+          <!-- https://mvnrepository.com/artifact/xalan/serializer -->
+          <dependency>
+            <groupId>xalan</groupId>
+            <artifactId>serializer</artifactId>
+            <version>2.7.3</version>
+          </dependency>
+
+          <dependency>
+            <groupId>org.xmlresolver</groupId>
+            <artifactId>xmlresolver</artifactId>
+            <version>6.0.4</version>
+          </dependency>
+          <dependency>
+            <groupId>name.dmaus.schxslt</groupId>
+            <artifactId>schematron-conformance</artifactId>
+            <version>2.0-SNAPSHOT</version>
           </dependency>
         </dependencies>
         <configuration>
-          <config>test-schematron.xml</config>
-          <testsuites>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
-              <label>Schematron Conformance Tests for Xalan (${xalan.version})</label>
-              <processorId>xalan</processorId>
+          <executions>
+            <execution>
+              <label>ISO Schematron Conformance, XSLT 2.0</label>
+              <factoryClassName>net.sf.saxon.TransformerFactoryImpl</factoryClassName>
+              <queryBinding>xslt3</queryBinding>
+              <stylesheets>
+                <param>core/src/main/resources/xslt/2.0/pipeline-for-svrl.xsl</param>
+              </stylesheets>
               <skip>
-                <param>include-baseuri-fixup</param>
-                <param>extends-baseuri-fixup</param>
-                <param>pattern-subordinate-document-01</param>
-                <param>pattern-subordinate-document-02</param>
-                <param>svrl-suppressed-rule</param>
-                <param>rule-context-variable-01</param>
-                <param>rule-context-variable-02</param>
-                <param>rule-context-variable-03</param>
-                <param>let-scope-phase-01</param>
-                <param>let-scope-pattern-01</param>
+                <param>rule-abstract-scope-error</param>
+                <param>svrl-active-pattern-documents</param>
+                <param>extends-href-fragment-xml-id-preserve-ns</param>
+                <param>include-href-fragment-xml-id-preserve-ns</param>
+                <param>let-value-element-content</param>
               </skip>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
-              <label>Schematron Conformance Tests for xsltproc</label>
-              <processorId>xsltproc</processorId>
+              <locations>
+                <conformanceLocation>
+                  <location>iso-schematron-xslt-3.xml</location>
+                </conformanceLocation>
+                <filesystemLocation>
+                  <location>core/src/test/schematron/issues.xml</location>
+                </filesystemLocation>
+              </locations>
+            </execution>
+            <execution>
+              <label>ISO Schematron Conformance, XSLT 2.0</label>
+              <factoryClassName>net.sf.saxon.TransformerFactoryImpl</factoryClassName>
+              <queryBinding>xslt2</queryBinding>
+              <stylesheets>
+                <param>core/src/main/resources/xslt/2.0/pipeline-for-svrl.xsl</param>
+              </stylesheets>
               <skip>
-                <param>include-baseuri-fixup</param>
-                <param>extends-baseuri-fixup</param>
-                <param>pattern-subordinate-document-01</param>
-                <param>pattern-subordinate-document-02</param>w
-                <param>svrl-suppressed-rule</param>
-                <param>rule-context-variable-01</param>
-                <param>rule-context-variable-02</param>
-                <param>rule-context-variable-03</param>
-                <param>let-scope-phase-01</param>
-                <param>let-scope-pattern-01</param>
+                <param>rule-abstract-scope-error</param>
+                <param>svrl-active-pattern-documents</param>
+                <param>extends-href-fragment-xml-id-preserve-ns</param>
+                <param>include-href-fragment-xml-id-preserve-ns</param>
+                <param>let-value-element-content</param>
               </skip>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
-              <label>Schematron Conformance Tests for Saxon HE (${saxon.version})</label>
-              <processorId>saxon</processorId>
+              <locations>
+                <conformanceLocation>
+                  <location>iso-schematron-xslt-2.xml</location>
+                </conformanceLocation>
+                <filesystemLocation>
+                  <location>core/src/test/schematron/issues.xml</location>
+                </filesystemLocation>
+              </locations>
+            </execution>
+            <execution>
+              <label>ISO Schematron Conformance, XSLT 1.0</label>
+              <factoryClassName>org.apache.xalan.processor.TransformerFactoryImpl</factoryClassName>
+              <queryBinding>xslt</queryBinding>
+              <stylesheets>
+                <param>core/src/main/resources/xslt/1.0/include.xsl</param>
+                <param>core/src/main/resources/xslt/1.0/expand.xsl</param>
+                <param>core/src/main/resources/xslt/1.0/compile-for-svrl.xsl</param>
+              </stylesheets>
               <skip>
-                <param>let-scope-phase-01</param>
-                <param>let-scope-pattern-01</param>
-                <param>rule-abstract-02</param>
+                <param>rule-abstract-scope-error</param>
+                <param>svrl-active-pattern-documents</param>
+                <param>extends-href-fragment-xml-id-preserve-ns</param>
+                <param>include-href-fragment-xml-id-preserve-ns</param>
+                <param>let-value-element-content</param>
+                <param>svrl-active-pattern-documents-primary</param>
+                <param>svrl-active-pattern-documents</param>
+                <param>svrl-fired-rule-document-primary</param>
+                <param>svrl-fired-rule-document</param>
+                <!-- As of 07/2024 running this test with Xalan/Xerces
+                     results in an fatal error 'Unknown nodetype: pi'
+                     -->
+                <param>rule-context-pi</param>
               </skip>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
-              <label>Schematron Conformance Tests for Saxon HE (${saxon.version}) using the micro pipeline</label>
-              <processorId>saxon-pipeline</processorId>
-              <skip>
-                <param>let-scope-phase-01</param>
-                <param>let-scope-pattern-01</param>
-                <param>rule-abstract-02</param>
-              </skip>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
-              <label>Schematron Conformance Tests for Saxon HE (${saxon.version}), XSLT 3.0</label>
-              <processorId>saxon.xslt3</processorId>
-              <skip>
-                <param>let-scope-phase-01</param>
-                <param>let-scope-pattern-01</param>
-                <param>rule-abstract-02</param>
-              </skip>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.ConformanceTestsuiteSpec">
-              <label>Schematron Conformance Tests for Saxon HE (${saxon.version}) using the micro pipeline, XSLT 3.0</label>
-              <processorId>saxon-pipeline.xslt3</processorId>
-              <skip>
-                <param>let-scope-phase-01</param>
-                <param>let-scope-pattern-01</param>
-                <param>rule-abstract-02</param>
-              </skip>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
-              <label>Bugs and features w/ Xalan (${xalan.version})</label>
-              <directory>src/test/schematron</directory>
-              <processorId>xalan</processorId>
-              <skip>
-                <param>svrl-suppressed-rule</param>
-              </skip>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
-              <label>Bugs and features w/ Saxon (${saxon.version})</label>
-              <directory>src/test/schematron</directory>
-              <processorId>saxon</processorId>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
-              <label>Bugs and features w/ Saxon (${saxon.version}) using the micro pipeline</label>
-              <directory>src/test/schematron</directory>
-              <processorId>saxon</processorId>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
-              <label>Bugs and features w/ Saxon (${saxon.version}), XSLT 3.0</label>
-              <directory>src/test/schematron</directory>
-              <processorId>saxon.xslt3</processorId>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
-              <label>Bugs and features w/ Saxon (${saxon.version}) using the micro pipeline, XSLT 3.0</label>
-              <directory>src/test/schematron</directory>
-              <processorId>saxon.xslt3</processorId>
-            </testsuite>
-            <testsuite implementation="name.dmaus.schxslt.testsuite.maven.DirectoryTestsuiteSpec">
-              <label>Bugs and features w/ xsltproc</label>
-              <directory>src/test/schematron</directory>
-              <processorId>xsltproc</processorId>
-              <skip>
-                <param>svrl-suppressed-rule</param>
-              </skip>
-            </testsuite>
-          </testsuites>
+              <locations>
+                <conformanceLocation>
+                  <location>iso-schematron-xslt-1.xml</location>
+                </conformanceLocation>
+                <filesystemLocation>
+                  <location>core/src/test/schematron/issues.xml</location>
+                </filesystemLocation>
+              </locations>
+            </execution>
+          </executions>
         </configuration>
         <executions>
           <execution>
             <phase>test</phase>
             <goals>
-              <goal>test-schematron</goal>
+              <goal>run-testsuites</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>

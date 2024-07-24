@@ -1,12 +1,5 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" expect="valid" id="svrl-suppressed-rule">
-  <label>Processor reports suppressed rules</label>
-  <documents>
-    <primary filename="document.xml">
-      <element xmlns=""/>
-    </primary>
-  </documents>
-  <schemas>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="valid" xmlns="https://doi.org/10.5281/zenodo.5679629#"><label>Processor reports suppressed rules</label><schemas><sch:schema queryBinding="xslt2" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern>
         <sch:rule context="*">
           <sch:assert test="true()"/>
@@ -15,8 +8,7 @@
           <sch:assert test="false()"/>
         </sch:rule>
       </sch:pattern>
-    </sch:schema>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt3">
+    </sch:schema><sch:schema queryBinding="xslt3" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <sch:pattern>
         <sch:rule context="*">
           <sch:assert test="true()"/>
@@ -25,9 +17,4 @@
           <sch:assert test="false()"/>
         </sch:rule>
       </sch:pattern>
-    </sch:schema>
-  </schemas>
-  <expectations xmlns:svrl="http://purl.oclc.org/dsdl/svrl">
-    <expectation test="count(//svrl:suppressed-rule[@id = 'suppressed']) = 1"/>
-  </expectations>
-</testcase>
+    </sch:schema></schemas><documents><document filename="document.xml"><element xmlns=""/></document></documents><assertions xmlns:svrl="http://purl.oclc.org/dsdl/svrl"><assertion assert="count(//svrl:suppressed-rule[@id = 'suppressed']) = 1"/></assertions></testcase>

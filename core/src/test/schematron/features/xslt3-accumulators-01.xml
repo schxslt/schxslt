@@ -1,14 +1,5 @@
-<testcase xmlns="tag:dmaus@dmaus.name,2019:Schematron:Testsuite" id="xslt3-accumulators-01" expect="valid" features="xslt3">
-  <label>XSLT accumulators can be defined and used in a schema</label>
-  <documents>
-    <primary filename="document.xml">
-      <document xmlns="">
-        <element/>
-      </document>
-    </primary>
-  </documents>
-  <schemas>
-    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt3">
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="valid" xmlns="https://doi.org/10.5281/zenodo.5679629#"><label>XSLT accumulators can be defined and used in a schema</label><schemas><sch:schema queryBinding="xslt3" xmlns:sch="http://purl.oclc.org/dsdl/schematron">
       <xsl:accumulator name="accumulator" initial-value="0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
         <xsl:accumulator-rule match="*" select="$value + 1"/>
       </xsl:accumulator>
@@ -17,6 +8,6 @@
           <sch:assert test="accumulator-after('accumulator') eq 2"/>
         </sch:rule>
       </sch:pattern>
-    </sch:schema>
-  </schemas>
-</testcase>
+    </sch:schema></schemas><documents><document filename="document.xml"><document xmlns="">
+        <element/>
+      </document></document></documents></testcase>
