@@ -1,0 +1,20 @@
+<testsuite xmlns="https://doi.org/10.5281/zenodo.5679629#">
+  <label>SchXslt Bugs and Features</label>
+  <testcase href="bugs/bug-208.xml"/>
+  <testcase href="bugs/bug-216.xml"/>
+  <testcase href="bugs/bug-224.xml"/>
+  <testcase href="bugs/bug-252.xml"/>
+  <testcase href="bugs/bug-262-1.xml"/>
+  <testcase href="bugs/bug-262-2.xml"/>
+  <testcase href="bugs/bug-262-3.xml"/>
+  <testcase href="bugs/bug-262-4.xml"/>
+  <testcase href="bugs/bug-262-5.xml"/>
+  <testcase href="bugs/bug-262-6.xml"/>
+  <testcase href="bugs/bug-264.xml"/>
+  <testcase href="bugs/bug-341.xml"/>
+  <testcase href="bugs/let-xsl-element-content.xml"/>
+  <testcase href="bugs/svrl-curly-bracket-in-assert-test.xml"/>
+  <testcase href="bugs/svrl-curly-bracket-in-report-test.xml"/>
+  <testcase href="bugs/svrl-curly-bracket-in-rule-context.xml"/>
+  <testcase href="bugs/svrl-properties-value-of.xml"/>
+</testsuite>

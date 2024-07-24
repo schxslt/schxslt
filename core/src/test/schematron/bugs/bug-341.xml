@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase expect="valid" xmlns="https://doi.org/10.5281/zenodo.5679629#">
+  <label>Variables in empty patterns are copied to validation stylesheet (see https://github.com/schxslt/schxslt/issues/341)</label>
+  <schemas>
+    <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+      <sch:include href="include.sch"/>
+      <sch:pattern>
+        <sch:rule context="/">
+          <sch:assert test="$variable = 'value'"/>
+        </sch:rule>
+      </sch:pattern>
+    </sch:schema>
+  </schemas>
+  <documents>
+    <document filename="document.xml">
+      <element xmlns=""/>
+    </document>
+    <document filename="include.sch">
+      <sch:pattern xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+        <sch:let name="variable" value="'value'"/>
+      </sch:pattern>
+    </document>
+  </documents>
+</testcase>
