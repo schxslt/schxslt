@@ -239,7 +239,7 @@
             <xsl:apply-templates select="$pattern/sch:properties/sch:property[@id = $head]/node()" mode="schxslt:message-template"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:copy-of select="key('schxslt:properties', $head)/@xml:*"/>
+            <xsl:copy-of select="key('schxslt:properties', $head)/@*"/>
             <xsl:apply-templates select="key('schxslt:properties', $head)/node()" mode="schxslt:message-template"/>
           </xsl:otherwise>
         </xsl:choose>
