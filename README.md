@@ -103,6 +103,7 @@ dmaus@carbon ~ % mvn package
 This runs the unit tests and creates the following files:
 
 * ant/target/ant-schxslt-{VERSION}.jar (Java archive)
+* cli/target/schxslt-cli.jar (Java archive)
 * core/target/schxslt-{VERSION}.jar (Java archive)
 * core/target/schxslt-{VERSION}-xslt-only.zip (ZIP file with stylesheets)
 * exist/target/schxslt-exist-{VERSION}.xar (XQuery package for eXist)
@@ -205,4 +206,29 @@ SchXslt Ant uses [XML Resolver](https://xmlresolver.org) to support XML Catalog 
 
 ### Command line
 
-TBD
+The CLI module provides a command line program for performing Schematron validation with SchXslt. Download or compile
+the Jar file ```schxslt-cli.jar```.
+
+To validate the XML document ```document.xml``` against the schema in ```schema.sch``` with the report written to
+```report.xml``` you can run:
+
+```
+java -jar schxslt-cli.jar -d document.xml -s schema.sch -o report.xml
+```
+
+The command line option ```-h``` lists all available options.
+
+```
+SchXslt CLI v1.10
+usage: name.dmaus.schxslt.cli.Application [-d <arg>] [-e <arg>] [-o <arg>]
+       [-p <arg>] [-r] -s <arg> [-v]
+ -d,--document <arg>     Path to document
+ -e,--exitcode <arg>     Use exit code to indicate invalid document
+                         (default is 0)
+ -o,--output <arg>       Output file (SVRL report)
+ -p,--phase <arg>        Validation phase
+ -r,--repl               Run as REPL
+ -s,--schematron <arg>   Path to schema
+ -v,--verbose            Verbose output
+```
+
