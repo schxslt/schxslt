@@ -23,6 +23,11 @@ Due to the constrains of XSLT 1.0 and the way rules are implemented it is not po
 context expression of a Schematron using the XSLT 1.0 query binding (see
 [#138](https://github.com/schxslt/schxslt/issues/138)).
 
+When an external construct is incorporated with ```sch:include``` or ```sch:extends``` by its ```@xml:id``` attribute,
+the namespace bindings of the include target document are not preserved (#343 #344).
+
+The ```svrl:active-patterns/@documents``` attribute does not contain the URIs of the subordinate documents (#342).
+
 Schematron enhancements
 --
 
