@@ -59,7 +59,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <saxon.version>9.9.1-6</saxon.version>
-    <xalan.version>2.7.2</xalan.version>
+    <xalan.version>2.7.3</xalan.version>
   </properties>
 
   <profiles>
